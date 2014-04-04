@@ -1,6 +1,14 @@
 import simplejson
 import transit_types
 
+class Cache(object):
+    def __init__(self):
+        self.idx = 0
+        self.cache
+    def cache_tag(self, itm):
+
+
+    def reset_cache():
 
 
 def parse_value(itm):
@@ -12,6 +20,7 @@ def parse_value(itm):
             key = itm.keys()[0]
             if key.startswith("~#"):
                 tag = key[2:]
+                cache_tag(tag)
                 try:
                     parser = tag_parsers[tag]
                 except KeyError as ex:
@@ -19,6 +28,7 @@ def parse_value(itm):
                     raise Exception("No tag parser for " + str(key))
 
                 return parser(itm[key])
+            assert False, key
         return parse_map(itm)
     elif isinstance(itm, str):
         return parse_string(itm)
@@ -47,6 +57,7 @@ def parse_set(itm):
     acc = []
     for i in itm:
         acc.append(parse_value(i))
+    print itm
     return transit_types.Set(acc)
 
 def parse_string(itm):
@@ -77,7 +88,7 @@ tag_parsers = {"'": lambda x: x,
                "i": int,
                "set": parse_set,
                "c": lambda x: x,
-               "list": lambda x: tuple,
+               "list": parse_list,
                "cmap": parse_cmap}
 
 
