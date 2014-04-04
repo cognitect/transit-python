@@ -53,34 +53,10 @@ class _KWS(object):
 kws = _KWS()
 
 
-class Set(collections.Set, set):
-    def __init__(self, itms):
-        self.itms = itms
+class Set(set):
+    def __hash__(self):
+        return reduce(lambda x, y: hash(x) ^ hash(y), self, 0)
 
-    def __iter__(self):
-        return self.itms.__iter__()
-
-    def __contains__(self, item):
-        return item in self.itms
-
-    def __len__(self):
-        return len(self.itms)
-
-    def __le__(self, other):
-        return self == other
-
-    def __eq__(self, other):
-        if not (isinstance(other, Set) or isinstance(other, set)):
-            return False
-
-        if not len(self) == len(other):
-            return False
-
-        for x in other:
-            if x not in self:
-                return False
-
-        return True
 
 class Dict(dict):
     def __hash__(self):

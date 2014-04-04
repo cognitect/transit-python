@@ -5,8 +5,8 @@ from transit.transit_types import Set, Dict, Vector
 def test_set_equality():
     assert Set([]) == set()
     assert not Set([Set([])]) == set()
-    assert not Set([{}]) == set()
-    assert Set([{}]) == Set([{}])
+    assert not Set([Dict([])]) == set()
+    assert Set([Dict([])]) == Set([Dict([])])
     assert set() == Set([])
 
 def test_dict_equality():
