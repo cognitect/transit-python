@@ -17,6 +17,24 @@ class Keyword(object):
     def __str__(self):
         return ":" + self.str
 
+class Symbol(object):
+    def __init__(self, value):
+        assert isinstance(value, str)
+        self.str = value
+
+    def __eq__(self, other):
+        assert isinstance(other, Symbol)
+        return self.str == other.str
+
+    def __call__(self, mp):
+        return mp[self]
+
+    def __repr__(self):
+        return self.str
+
+    def __str__(self):
+        return self.str
+
 kw_cache = {}
 
 class _KWS(object):

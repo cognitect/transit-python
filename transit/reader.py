@@ -20,6 +20,8 @@ def parse_value(itm):
 
                 return parser(itm[key])
         return parse_map(itm)
+    elif isinstance(itm, str):
+        return parse_string(itm)
 
     return itm
 
@@ -47,13 +49,32 @@ def parse_set(itm):
         acc.append(parse_value(i))
     return transit_types.Set(acc)
 
+def parse_string(itm):
+    if itm[0] == "~":
+        tag = itm[1]
+        try:
+            parser = tag_parsers[tag]
+        except KeyError as ex:
+            raise Exception("No tag parser for " + itm)
+
+        return parser(itm[2:])
+    return itm
+
 def parse_array(itm):
     return transit_types.Vector(map(parse_value, itm))
 
 def parse_list(itm):
     return transit_types.Vector(map(parse_value, itm))
 
+def parse_keyword(itm):
+    return transit_types.kws(itm)
+
 tag_parsers = {"'": lambda x: x,
+               "~": lambda x: "~" + x,
+               "^": lambda x: "^" + x,
+               ":": parse_keyword,
+               "$": transit_types.Symbol,
+               "i": int,
                "set": parse_set,
                "c": lambda x: x,
                "list": lambda x: tuple,
