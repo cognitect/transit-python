@@ -1,23 +1,3 @@
-from transit.transit_types import Set, Dict, Vector
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
 
-
-
-def test_set_equality():
-    assert Set([]) == set()
-    assert not Set([Set([])]) == set()
-    assert not Set([Dict([])]) == set()
-    assert Set([Dict([])]) == Set([Dict([])])
-    assert set() == Set([])
-
-def test_dict_equality():
-    assert Dict([]) == dict()
-    assert dict() == Dict([])
-    assert {"f":2} == Dict(f = 2)
-
-    assert hash(Dict(f = 2))
-
-def test_list_equality():
-    assert Vector([]) == []
-    assert [] == Vector([])
-
-    assert hash(Vector([]))

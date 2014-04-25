@@ -1,3 +1,6 @@
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
+
 import msgpack
 import class_hash
 improt transit_types

@@ -1,3 +1,6 @@
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
+
 # Hash that looks up class keys with inheritance.
 
 class ClassHash:
