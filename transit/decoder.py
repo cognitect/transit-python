@@ -1,11 +1,9 @@
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
 
-import simplejson
 import transit_types
 from transit_types import TaggedValue
 from constants import *
-import iso8601
 import uuid
 import re
 
@@ -14,7 +12,11 @@ from rolling_cache import RollingCache, is_cacheable, is_cache_key
 def identity(x):
     return x
 
-default_options = {"decoders": {},
+default_options = {"decoders": {"_": lambda _: None,
+                                ":": transit_types.Symbol,
+                                "?": lambda x : x == "t",
+                                "i": int,
+                                "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
 
@@ -36,7 +38,7 @@ class Decoder(object):
 
     def _decode(self, node, cache, as_map_key):
         tp = type(node)
-        if tp is str:
+        if tp is str or tp is unicode:
             return self.decode_string(node, cache, as_map_key)
         elif tp is dict:
             return self.decode_hash(node, cache, as_map_key)
@@ -57,8 +59,8 @@ class Decoder(object):
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) == 1:
             key = self._decode(hash.keys()[0], cache, True)
-            if isinstance(key, str) and TAG_re.match(key):
-                decoder = self.decoders.get(key[1:], None)
+            if isinstance(key, (str, unicode)) and TAG_re.match(key):
+                decoder = self.decoders.get(key[2:], None)
                 if decoder:
                     return decoder(self._decode(hash.values()[0], cache, as_map_key))
                 else:
@@ -75,7 +77,7 @@ class Decoder(object):
 
     def parse_string(self, string, cache, as_map_key):
         if ESC_re.match(string):
-            m = str[1]
+            m = string[1]
             if m == ESC or m == SUB or m == RES:
                 return string[1:]
             elif m == "#":
