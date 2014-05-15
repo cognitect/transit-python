@@ -64,12 +64,12 @@ class _KWS(object):
 
 kws = _KWS()
 
-class TaggedData(object):
+class TaggedValue(object):
     def __init__(self, tag, data):
         self.tag = tag
         self.data = data
     def __eq__(self, other):
-        if isinstance(other, TaggedData):
+        if isinstance(other, TaggedValue):
             return self.tag == other.tag and \
                    self.data == other.data
         return False
@@ -78,34 +78,36 @@ class TaggedData(object):
         return not (self == other)
 
     def __hash__(self):
-        return reduce(lambda a, b: hash(a) ^ hash(b), self.data, 0)
+        if isinstance(self.data, list):
+            return reduce(lambda a, b: hash(a) ^ hash(b), self.data, 0)
+        return hash(self.data)
 
     def __str__(self):
         return repr(self)
 
     def __repr__(self):
-        return "#"+self.tag + repr(self.data)
+        return "#"+self.tag + " " + repr(self.data)
 
-class Set(TaggedData):
+class Set(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "set", data)
+        TaggedValue.__init__(self, "set", data)
 
-class CMap(TaggedData):
+class CMap(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "cmap", data)
+        TaggedValue.__init__(self, "cmap", data)
 
-class Vector(TaggedData):
+class Vector(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "vector", data)
+        TaggedValue.__init__(self, "vector", data)
 
-class Array(TaggedData):
+class Array(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "array", data)
+        TaggedValue.__init__(self, "array", data)
 
-class List(TaggedData):
+class List(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "list", data)
+        TaggedValue.__init__(self, "list", data)
 
-class URI(TaggedData):
+class URI(TaggedValue):
     def __init__(self, data):
-        TaggedData.__init__(self, "uri", data)
+        TaggedValue.__init__(self, "uri", data)
