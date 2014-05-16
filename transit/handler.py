@@ -1,5 +1,5 @@
 from constants import *
-
+import class_hash
 
 class NoneHandler:
   def tag(self, _):
@@ -55,13 +55,14 @@ class MapHandler:
 
 class Handler:
   def __init__(self):
-    self.handlers = class_hash.ClassHash()
-    self.handlers.put(type(None), NoneHandler())
-    self.handlers.put(type(True), BooleanHandler())
-    self.handlers.put(str, StringHandler())
-    self.handlers.put(list, ArrayHandler())
-    self.handlers.put(dict, MapHandler())
-    self.handlers.put(int, IntHandler())
+    self.handlers = class_hash.ClassDict()
+    self.handlers[type(None)] = NoneHandler()
+    self.handlers[type(True)] = BooleanHandler()
+    self.handlers[str] = StringHandler()
+    self.handlers[list] = ArrayHandler()
+    self.handlers[tuple] = ArrayHandler()
+    self.handlers[dict] = MapHandler()
+    self.handlers[int] = IntHandler()
 
-  def get(self, obj):
-    return self.handlers.get(obj.__class__)
+  def __getitem__(self, item):
+    return self.handlers[item.__class__]

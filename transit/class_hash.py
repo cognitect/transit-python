@@ -2,19 +2,33 @@
 ## All rights reserved.
 
 # Hash that looks up class keys with inheritance.
+import collections
 
-class ClassHash:
-  def __init__(self):
-    print "init"
-    self.values = {}
+class ClassDict(collections.MutableMapping):
+    """A dictionary that looks up class keys with inheritance"""
 
-  def put(self, typ, value):
-    self.values[typ] = value
+    def __init__(self, *args, **kwargs):
+        self.store = dict()
+        self.update(dict(*args, **kwargs))
 
-  def get(self, typ):
-    types = typ.mro()
-    for t in types:
-      value = self.values.get(t)
-      if value:
-        return value
-    return None
+    def __getitem__(self, key):
+        key = isinstance(key, type) and key or type(key)
+        types = key.mro()
+        for t in types:
+            value = t in self.store and self.store[t]
+            if value:
+                return value
+        raise KeyError("No handler found for: " + str(key))
+        return None
+
+    def __setitem__(self, key, value):
+        self.store[key] = value
+
+    def __delitem__(self, key):
+        del self.store[key]
+
+    def __iter__(self):
+        return iter(self.store)
+
+    def __len__(self):
+        return len(self.store)
