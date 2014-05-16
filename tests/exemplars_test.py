@@ -3,6 +3,7 @@
 import unittest
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import MsgPackMarshaler, JsonMarshaler
+from transit.transit_types import Keyword, Symbol
 from StringIO import StringIO
 
 class ExemplarBaseTest(unittest.TestCase):
@@ -48,6 +49,9 @@ exemplar("false", False)
 exemplar("zero", 0)
 exemplar("one", 1)
 exemplar("one_string", "hello")
-
+exemplar("one_keyword", Keyword("hello"))
 
 exemplar("ints", tuple(range(128)))
+
+if __name__=='__main__':
+    unittest.main()

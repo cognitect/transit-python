@@ -5,23 +5,23 @@ import collections
 
 class Keyword(object):
     def __init__(self, value):
-        assert isinstance(value, str)
+        assert isinstance(value, str) or isinstance(value, unicode)
         self.str = value
 
     def __hash__(self):
         return hash(self.str)
 
     def __eq__(self, other):
-        return self is other
+        return self.str == other.str
 
     def __call__(self, mp):
         return mp[self]
 
     def __repr__(self):
-        return ":" + self.str
+        return "<Keyword " + self.str + ">"
 
     def __str__(self):
-        return ":" + self.str
+        return self.str
 
 class Symbol(object):
     def __init__(self, value):

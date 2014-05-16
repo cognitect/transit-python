@@ -13,7 +13,7 @@ def identity(x):
     return x
 
 default_options = {"decoders": {"_": lambda _: None,
-                                ":": transit_types.Symbol,
+                                ":": transit_types.Keyword,
                                 "?": lambda x : x == "t",
                                 "i": int,
                                 "'": identity},
