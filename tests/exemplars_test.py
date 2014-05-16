@@ -50,6 +50,7 @@ exemplar("zero", 0)
 exemplar("one", 1)
 exemplar("one_string", "hello")
 exemplar("one_keyword", Keyword("hello"))
+exemplar("one_symbol", Symbol("hello"))
 
 exemplar("ints", tuple(range(128)))
 

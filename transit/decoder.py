@@ -14,6 +14,7 @@ def identity(x):
 
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
+                                "$": transit_types.Symbol,
                                 "?": lambda x : x == "t",
                                 "i": int,
                                 "'": identity},
