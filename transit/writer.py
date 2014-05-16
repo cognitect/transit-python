@@ -208,6 +208,81 @@ class MsgPackMarshaler(Marshaler):
         self.packer.reset()
 
 
+class JsonMarshaler(Marshaler):
+    JSON_MAX_INT = pow(2, 63)
+    JSON_MIN_INT = -pow(2, 63)
+
+    default_opts = {"prefer_strings": False,
+                    "max_int": JSON_MAX_INT,
+                    "min_int": JSON_MIN_INT,
+                    "quote_scalars": False}
+
+    ## Yes this is basically a custom JSON encoder,
+    ## but I couldn't find an existing solution that worked
+    ## well with the lazy writing method we have in this
+    ## project. 
+
+    def __init__(self, io, opts={}):
+        self.io = io
+        nopts = JsonMarshaler.default_opts.copy()
+        nopts.update(opts)
+        self.started = [True]
+        Marshaler.__init__(self, nopts)
+
+    def push_level(self):
+        self.started.append(True)
+
+    def pop_level(self):
+        self.started.pop()
+
+    def write_sep(self):
+        if self.started[-1]:
+            self.started[-1] = False
+        else:
+            self.io.write(",")
+
+    def emit_array_start(self, size):
+        self.write_sep()
+        self.io.write("[")
+        self.push_level()
+
+
+    def emit_array_end(self):
+        self.pop_level()
+        self.io.write("]")
+
+    def emit_map_start(self, size):
+        self.write_sep()
+        self.io.write("{")
+        self.pop_level()
+
+    def emit_map_end(self):
+        self.pop_level()
+        self.io.write("}")
+
+    def emit_object(self, obj, as_map_key=False):
+        tp = type(obj)
+        self.write_sep()
+        if tp == int:
+            self.io.write(str(obj))
+        elif tp == float:
+            self.io.write(str(obj))
+        elif tp == bool:
+            self.io.write("true" if obj else "false")
+        elif obj == None:
+            self.io.write("null")
+        elif tp == str:
+            self.io.write("\"")
+            self.io.write(obj)
+            self.io.write("\"")
+        else:
+            raise AssertionError("Don't know how to encode: " + str(obj))
+
+    def flush(self):
+        self.io.flush()
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 # All rights reserved.
 import unittest
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
-from transit.writer import MsgPackMarshaler
+from transit.writer import MsgPackMarshaler, JsonMarshaler
 from StringIO import StringIO
 
 class ExemplarBaseTest(unittest.TestCase):
@@ -20,13 +20,23 @@ def exemplar(name, val):
                 data = MsgPackUnmarshaler().load(stream)
                 self.assertEqual(val, data)
 
-        def test_reencode(self):
+        def test_reencode_msgpack(self):
             io = StringIO()
             marshaler = MsgPackMarshaler(io)
             marshaler.marshal_top(val)
             s = io.getvalue()
             io = StringIO(s)
             newval = MsgPackUnmarshaler().load(io)
+            self.assertEqual(val, newval)
+
+        def test_reencode_json(self):
+            io = StringIO()
+            marshaler = JsonMarshaler(io)
+            marshaler.marshal_top(val)
+            s = io.getvalue()
+            print s
+            io = StringIO(s)
+            newval = JsonUnmarshaler().load(io)
             self.assertEqual(val, newval)
 
     globals()["test_" + name + "_json"] = ExemplarTest
