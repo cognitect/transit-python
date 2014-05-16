@@ -1,68 +1,81 @@
 from constants import *
-import class_hash
+from class_hash import ClassDict
 
-class NoneHandler:
-  def tag(self, _):
-    return '_'
-  def rep(self, _):
-    return None
-  def string_rep(self, n):
-    return None
+class NoneHandler(object):
+    @staticmethod
+    def tag(_):
+        return '_'
+    @staticmethod
+    def rep(_):
+        return None
+    @staticmethod
+    def string_rep(n):
+        return None
 
-class IntHandler:
-  def tag(self, i):
-    return 'i'
-  def rep(self, i):
-    return i
-  def string_rep(self, i):
-    return str(i)
+class IntHandler(object):
+    @staticmethod
+    def tag(i):
+        return 'i'
+    @staticmethod
+    def rep(i):
+        return i
+    @staticmethod
+    def string_rep(i):
+        return str(i)
 
-class StringHandler:
-  def tag(self, s):
-    return 's'
-  def rep(self, s):
-    return s
-  def string_rep(self, s):
-    return s
+class StringHandler(object):
+    @staticmethod
+    def tag(s):
+        return 's'
+    @staticmethod
+    def rep(s):
+        return s
+    @staticmethod
+    def string_rep(s):
+        return s
 
-class BooleanHandler:
-  def tag(self, _):
-    return '?'
-  def rep(self, b):
-    return b
-  def string_rep(self, b):
-    if b:
-      return 't'
-    else:
-      return 'f'
+class BooleanHandler(object):
+    @staticmethod
+    def tag(_):
+        return '?'
+    @staticmethod
+    def rep(b):
+        return b
+    @staticmethod
+    def string_rep(b):
+        return b and 't' or 'f'
 
-class ArrayHandler:
-  def tag(self, a):
-    return 'array'
-  def rep(self, a):
-    return a
-  def string_rep(self, a):
-    return None
+class ArrayHandler(object):
+    @staticmethod
+    def tag(a):
+        return 'array'
+    @staticmethod
+    def rep(a):
+        return a
+    @staticmethod
+    def string_rep(a):
+        return None
 
-class MapHandler:
-  def tag(self, m):
-    return 'map'
-  def rep(self, m):
-    return m
-  def string_rep(self, m):
-    return None
+class MapHandler(object):
+    @staticmethod
+    def tag(m):
+        return 'map'
+    @staticmethod
+    def rep(m):
+        return m
+    @staticmethod
+    def string_rep(m):
+        return None
 
+class Handler(ClassDict):
+    def __init__(self):
+        super(Handler, self).__init__()
+        self.handlers = class_hash.ClassDict()
+        self.handlers[type(None)] = NoneHandler
+        self.handlers[bool] = BooleanHandler
+        self.handlers[str] = StringHandler
+        self.handlers[list] = ArrayHandler
+        self.handlers[tuple] = ArrayHandler
+        self.handlers[dict] = MapHandler
+        self.handlers[int] = IntHandler
 
-class Handler:
-  def __init__(self):
-    self.handlers = class_hash.ClassDict()
-    self.handlers[type(None)] = NoneHandler()
-    self.handlers[type(True)] = BooleanHandler()
-    self.handlers[str] = StringHandler()
-    self.handlers[list] = ArrayHandler()
-    self.handlers[tuple] = ArrayHandler()
-    self.handlers[dict] = MapHandler()
-    self.handlers[int] = IntHandler()
-
-  def __getitem__(self, item):
-    return self.handlers[item.__class__]
