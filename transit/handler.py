@@ -70,12 +70,10 @@ class MapHandler(object):
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
-        self.handlers = class_hash.ClassDict()
-        self.handlers[type(None)] = NoneHandler
-        self.handlers[bool] = BooleanHandler
-        self.handlers[str] = StringHandler
-        self.handlers[list] = ArrayHandler
-        self.handlers[tuple] = ArrayHandler
-        self.handlers[dict] = MapHandler
-        self.handlers[int] = IntHandler
-
+        self[type(None)] = NoneHandler
+        self[bool] = BooleanHandler
+        self[str] = StringHandler
+        self[list] = ArrayHandler
+        self[tuple] = ArrayHandler
+        self[dict] = MapHandler
+        self[int] = IntHandler
