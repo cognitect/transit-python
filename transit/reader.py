@@ -12,12 +12,10 @@ class JsonUnmarshaler(object):
     def load(self, stream):
         return self.decoder.decode(json.load(stream))
 
-
-
-
 class MsgPackUnmarshaler(object):
     def __init__(self):
         self.decoder = Decoder()
 
     def load(self, stream):
         return self.decoder.decode(msgpack.load(stream))
+
