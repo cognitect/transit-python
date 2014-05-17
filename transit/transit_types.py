@@ -12,8 +12,7 @@ class Keyword(object):
         return hash(self.str)
 
     def __eq__(self, other):
-        assert isinstance(other, Keyword)
-        return self.str == other.str
+        return isinstance(other, Keyword) and self.str == other.str
 
     def __call__(self, mp):
         return mp[self]
@@ -33,8 +32,7 @@ class Symbol(object):
         return hash(self.str)
 
     def __eq__(self, other):
-        assert isinstance(other, Symbol)
-        return self.str == other.str
+        return isinstance(other, Symbol) and self.str == other.str
 
     def __ne__(self, other):
         return not self == other
