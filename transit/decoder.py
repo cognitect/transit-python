@@ -41,6 +41,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "r": transit_types.URI,
                                 "t": to_date,
                                 "list": identity,
+                                "set": frozenset,
                                 "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }

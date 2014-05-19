@@ -5,6 +5,18 @@ import uuid
 import datetime, time
 import dateutil
 
+class TaggedMap(object):
+    def __init__(self, tag, rep, str):
+        self._tag = tag
+        self._rep = rep
+        self._str = str
+    def tag(self):
+        return self._tag
+    def rep(self):
+        return self._rep
+    def string_rep(self):
+        return self._str
+
 class NoneHandler(object):
     @staticmethod
     def tag(_):
@@ -142,6 +154,17 @@ class DateTimeHandler:
     def string_rep(d):
         return d.isoformat()
 
+class SetHandler:
+    @staticmethod
+    def tag(_):
+        return "set"
+    @staticmethod
+    def rep(s):
+        return TaggedMap("array", tuple(s), None)
+    @staticmethod
+    def string_rep(_):
+        return None
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
@@ -159,3 +182,6 @@ class Handler(ClassDict):
         self[uuid.UUID] = UuidHandler
         self[URI] = UriHandler
         self[datetime.datetime] = DateTimeHandler
+        self[set] = SetHandler
+        self[frozenset] = SetHandler
+        self[TaggedMap] = TaggedMap

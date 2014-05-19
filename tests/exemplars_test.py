@@ -58,6 +58,7 @@ SYM_STRS = ["a", "ab", "abc", "abcd", "abcde", "a1", "b2", "c3", "a_b"]
 SYMBOLS = tuple(map(Symbol, SYM_STRS))
 KEYWORDS = tuple(map(Keyword, SYM_STRS))
 
+
 UUIDS = (UUID('5a2cbea3-e8c6-428b-b525-21239370dd55'),
          UUID('d1dc64fa-da79-444b-9fa4-d4412f427289'),
          UUID('501a978e-3a3e-4060-b3be-1cf2bd4b1a38'),
@@ -71,6 +72,8 @@ URIS = (
 
 DATES = tuple(map(lambda x: datetime.fromtimestamp(x/1000.0, tz=dateutil.tz.tzutc()),
                   [-6106017600000, 0, 946728000000, 1396909037000]))
+
+SET_SIMPLE = frozenset(ARRAY_SIMPLE)
 
 exemplar("nil", None)
 exemplar("true", True)
@@ -106,6 +109,7 @@ exemplar("list_simple", ARRAY_SIMPLE)
 exemplar("list_empty", ())
 exemplar("list_mixed", ARRAY_MIXED)
 exemplar("list_nested", ARRAY_NESTED)
+exemplar("set_simple", SET_SIMPLE)
 
 if __name__=='__main__':
     unittest.main()
