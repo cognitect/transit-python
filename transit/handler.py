@@ -1,6 +1,6 @@
 from constants import *
 from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI
+from transit_types import Keyword, Symbol, URI, frozendict
 import uuid
 import datetime, time
 import dateutil
@@ -165,12 +165,25 @@ class SetHandler:
     def string_rep(_):
         return None
 
+class MapHandler:
+    @staticmethod
+    def tag(_):
+        return "map"
+    @staticmethod
+    def rep(m):
+        return m
+    @staticmethod
+    def string_rep(_):
+        return None
+
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
         self[type(None)] = NoneHandler
         self[bool] = BooleanHandler
         self[str] = StringHandler
+        self[unicode] = StringHandler
         self[list] = ArrayHandler
         self[tuple] = ArrayHandler
         self[dict] = MapHandler
@@ -185,3 +198,5 @@ class Handler(ClassDict):
         self[set] = SetHandler
         self[frozenset] = SetHandler
         self[TaggedMap] = TaggedMap
+        self[dict] = MapHandler
+        self[frozendict] = MapHandler

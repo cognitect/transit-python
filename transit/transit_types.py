@@ -110,3 +110,19 @@ class List(TaggedValue):
 class URI(TaggedValue):
     def __init__(self, data):
         TaggedValue.__init__(self, "uri", data)
+
+from collections import Mapping, Hashable
+class frozendict(Mapping, Hashable):
+    def __init__(self, *args, **kwargs):
+        self._dict = dict(*args, **kwargs)
+    def __len__(self):
+        return len(self._dict)
+    def __iter__(self):
+        return iter(self._dict)
+    def __getitem__(self, key):
+        return self._dict[key]
+    def __hash__(self):
+        return hash(frozenset(self._dict.items()))
+    def __repr__(self):
+        return 'frozendict(%r)' % (self._dict,)
+

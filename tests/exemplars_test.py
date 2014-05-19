@@ -4,7 +4,7 @@
 import unittest
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import MsgPackMarshaler, JsonMarshaler
-from transit.transit_types import Keyword, Symbol, URI
+from transit.transit_types import Keyword, Symbol, URI, frozendict
 from StringIO import StringIO
 from helpers import ints_centered_on, mapcat
 from uuid import UUID
@@ -74,6 +74,19 @@ DATES = tuple(map(lambda x: datetime.fromtimestamp(x/1000.0, tz=dateutil.tz.tzut
                   [-6106017600000, 0, 946728000000, 1396909037000]))
 
 SET_SIMPLE = frozenset(ARRAY_SIMPLE)
+SET_MIXED = frozenset(ARRAY_MIXED)
+SET_NESTED = frozenset([SET_SIMPLE, SET_MIXED])
+
+MAP_SIMPLE = frozendict({Keyword("a"): 1,
+                         Keyword("b"): 2,
+                         Keyword("c"): 3})
+
+MAP_MIXED = frozendict({Keyword("a"): 1,
+                        Keyword("b"): u"a string",
+                        Keyword("c"): True})
+
+MAP_NESTED = frozendict({Keyword("simple"): MAP_SIMPLE,
+                         Keyword("mixed"): MAP_MIXED})
 
 exemplar("nil", None)
 exemplar("true", True)
@@ -110,6 +123,12 @@ exemplar("list_empty", ())
 exemplar("list_mixed", ARRAY_MIXED)
 exemplar("list_nested", ARRAY_NESTED)
 exemplar("set_simple", SET_SIMPLE)
+exemplar("set_empty", set())
+exemplar("set_mixed", SET_MIXED)
+exemplar("set_nested", SET_NESTED)
+exemplar("map_simple", MAP_SIMPLE)
+exemplar("map_mixed", MAP_MIXED)
+exemplar("map_nested", MAP_NESTED)
 
 if __name__=='__main__':
     unittest.main()

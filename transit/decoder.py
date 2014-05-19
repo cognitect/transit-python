@@ -98,8 +98,8 @@ class Decoder(object):
         else:
             h = {}
             for k, v in hash.items():
-                h[self._decode(h, cache, True)] = self._decode(v, cache, False)
-            return h
+                h[self._decode(k, cache, True)] = self._decode(v, cache, False)
+            return transit_types.frozendict(h)
 
 
 
