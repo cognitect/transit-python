@@ -9,7 +9,7 @@ MIN_SIZE_CACHEABLE = 4
 ESCAPED = re.compile("^~(#|\$|:)")
 
 def is_cache_key(name):
-    return name[0] == "^"
+    return len(name) > 0 and name[0] == "^"
 
 def encode_key(i):
     return "^#" + str(i + FIRST_ORD)

@@ -1,7 +1,7 @@
 from constants import *
 from class_hash import ClassDict
 from transit_types import Keyword, Symbol
-
+import uuid
 class NoneHandler(object):
     @staticmethod
     def tag(_):
@@ -23,6 +23,17 @@ class IntHandler(object):
     @staticmethod
     def string_rep(i):
         return str(i)
+
+class FloatHandler(object):
+    @staticmethod
+    def tag(_):
+        return "f"
+    @staticmethod
+    def rep(f):
+        return str(f)
+    @staticmethod
+    def string_rep(f):
+        return FloatHandler.rep(f)
 
 class StringHandler(object):
     @staticmethod
@@ -90,6 +101,19 @@ class SymbolHandler(object):
     def string_rep(s):
         return str(s)
 
+class UuidHandler(object):
+    mask = pow(2, 64) - 1
+    @staticmethod
+    def tag(_):
+        return "u"
+    @staticmethod
+    def rep(u):
+        i = u.int
+        return (i >> 64, i & UuidHandler.mask)
+    @staticmethod
+    def string_rep(u):
+        return str(u)
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
@@ -100,5 +124,8 @@ class Handler(ClassDict):
         self[tuple] = ArrayHandler
         self[dict] = MapHandler
         self[int] = IntHandler
+        self[float] = FloatHandler
+        self[long] = IntHandler
         self[Keyword] = KeywordHandler
         self[Symbol] = SymbolHandler
+        self[uuid.UUID] = UuidHandler

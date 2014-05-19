@@ -224,19 +224,33 @@ class JsonMarshaler(Marshaler):
         nopts = JsonMarshaler.default_opts.copy()
         nopts.update(opts)
         self.started = [True]
+        self.is_key = [None]
         Marshaler.__init__(self, nopts)
 
     def push_level(self):
         self.started.append(True)
+        self.is_key.append(None)
 
     def pop_level(self):
         self.started.pop()
+        self.is_key.pop()
+
+    def push_map(self):
+        self.started.append(True)
+        self.is_key.append(True)
 
     def write_sep(self):
         if self.started[-1]:
             self.started[-1] = False
         else:
-            self.io.write(",")
+            if self.is_key[-1] is None:
+                self.io.write(",")
+            elif self.is_key[-1] is True:
+                self.io.write(":")
+                self.is_key[-1] = False
+            else:
+                self.io.write(",")
+                self.is_key[-1] = True
 
     def emit_array_start(self, size):
         self.write_sep()
@@ -251,7 +265,7 @@ class JsonMarshaler(Marshaler):
     def emit_map_start(self, size):
         self.write_sep()
         self.io.write("{")
-        self.pop_level()
+        self.push_map()
 
     def emit_map_end(self):
         self.pop_level()
@@ -260,7 +274,7 @@ class JsonMarshaler(Marshaler):
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp == int:
+        if tp == int or tp == long:
             self.io.write(str(obj))
         elif tp == float:
             self.io.write(str(obj))

@@ -6,17 +6,30 @@ from transit_types import TaggedValue
 from constants import *
 import uuid
 import re
+import ctypes
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
 def identity(x):
     return x
 
+def to_uuid(x):
+    if isinstance(x, (unicode, str)):
+        return uuid.UUID(x)
+
+    # hack to remove signs
+    a = ctypes.c_ulong(x[0])
+    b = ctypes.c_ulong(x[1])
+    combined = a.value << 64 | b.value
+    return uuid.UUID(int=combined)
+
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
                                 "$": transit_types.Symbol,
-                                "?": lambda x : x == "t",
+                                "?": lambda x: x == "t",
                                 "i": int,
+                                "f": float,
+                                "u": to_uuid,
                                 "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
