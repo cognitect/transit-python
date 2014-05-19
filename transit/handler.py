@@ -1,5 +1,6 @@
 from constants import *
 from class_hash import ClassDict
+from transit_types import Keyword, Symbol
 
 class NoneHandler(object):
     @staticmethod
@@ -67,15 +68,37 @@ class MapHandler(object):
     def string_rep(m):
         return None
 
+class KeywordHandler(object):
+    @staticmethod
+    def tag(k):
+        return ':'
+    @staticmethod
+    def rep(k):
+        return str(k)
+    @staticmethod
+    def string_rep(k):
+        return str(k)
+
+class SymbolHandler(object):
+    @staticmethod
+    def tag(s):
+        return '$'
+    @staticmethod
+    def rep(s):
+        return str(s)
+    @staticmethod
+    def string_rep(s):
+        return str(s)
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
-        self.handlers = class_hash.ClassDict()
-        self.handlers[type(None)] = NoneHandler
-        self.handlers[bool] = BooleanHandler
-        self.handlers[str] = StringHandler
-        self.handlers[list] = ArrayHandler
-        self.handlers[tuple] = ArrayHandler
-        self.handlers[dict] = MapHandler
-        self.handlers[int] = IntHandler
-
+        self[type(None)] = NoneHandler
+        self[bool] = BooleanHandler
+        self[str] = StringHandler
+        self[list] = ArrayHandler
+        self[tuple] = ArrayHandler
+        self[dict] = MapHandler
+        self[int] = IntHandler
+        self[Keyword] = KeywordHandler
+        self[Symbol] = SymbolHandler
