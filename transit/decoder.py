@@ -2,7 +2,7 @@
 # All rights reserved.
 
 import transit_types
-from transit_types import TaggedValue
+from transit_types import TaggedValue, frozendict
 from constants import *
 import uuid
 import re
@@ -10,6 +10,7 @@ import ctypes
 import dateutil.parser
 import datetime
 import dateutil.tz
+from helpers import pairs
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
@@ -31,6 +32,7 @@ def to_date(x):
         return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
     return dateutil.parser.parse(x)
 
+
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
                                 "$": transit_types.Symbol,
@@ -42,6 +44,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "t": to_date,
                                 "list": identity,
                                 "set": frozenset,
+                                "cmap": lambda x: frozendict(pairs(x)),
                                 "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }

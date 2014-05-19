@@ -80,7 +80,7 @@ class Marshaler(object):
     def emit_cmap(self, m, _, cache):
         self.emit_map_start(1)
         self.emit_string(ESC, "#", "cmap", True, cache)
-        self.marshal(flatten_map(m))
+        self.marshal(flatten_map(m), False, cache)
         self.emit_map_end()
 
     def emit_tagged_map(self, tag, rep, _, cache):
