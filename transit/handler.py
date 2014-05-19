@@ -2,6 +2,9 @@ from constants import *
 from class_hash import ClassDict
 from transit_types import Keyword, Symbol, URI
 import uuid
+import datetime, time
+import dateutil
+
 class NoneHandler(object):
     @staticmethod
     def tag(_):
@@ -125,6 +128,20 @@ class UriHandler(object):
     def string_rep(u):
         return u.data
 
+class DateTimeHandler:
+    epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=dateutil.tz.tzutc())
+    @staticmethod
+    def tag(_):
+        return "t"
+    @staticmethod
+    def rep(d):
+        td = d - DateTimeHandler.epoch
+        return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
+
+    @staticmethod
+    def string_rep(d):
+        return d.isoformat()
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
@@ -141,3 +158,4 @@ class Handler(ClassDict):
         self[Symbol] = SymbolHandler
         self[uuid.UUID] = UuidHandler
         self[URI] = UriHandler
+        self[datetime.datetime] = DateTimeHandler

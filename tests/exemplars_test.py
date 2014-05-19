@@ -8,6 +8,8 @@ from transit.transit_types import Keyword, Symbol, URI
 from StringIO import StringIO
 from helpers import ints_centered_on, mapcat
 from uuid import UUID
+from datetime import datetime
+import dateutil.tz
 
 class ExemplarBaseTest(unittest.TestCase):
     pass
@@ -52,6 +54,10 @@ SMALL_STRINGS = ("", "a", "ab", "abc", "abcd", "abcde", "abcdef")
 POWERS_OF_TWO = tuple(map(lambda x: pow(2, x), range(66)))
 INTERESTING_INTS = tuple(mapcat(lambda x: ints_centered_on(x, 2), POWERS_OF_TWO))
 
+SYM_STRS = ["a", "ab", "abc", "abcd", "abcde", "a1", "b2", "c3", "a_b"]
+SYMBOLS = tuple(map(Symbol, SYM_STRS))
+KEYWORDS = tuple(map(Keyword, SYM_STRS))
+
 UUIDS = (UUID('5a2cbea3-e8c6-428b-b525-21239370dd55'),
          UUID('d1dc64fa-da79-444b-9fa4-d4412f427289'),
          UUID('501a978e-3a3e-4060-b3be-1cf2bd4b1a38'),
@@ -63,6 +69,9 @@ URIS = (
   URI(u'file:///path/to/file.txt'),
   URI(u'http://www.詹姆斯.com/'))
 
+DATES = tuple(map(lambda x: datetime.fromtimestamp(x/1000.0, tz=dateutil.tz.tzutc()),
+                  [-6106017600000, 0, 946728000000, 1396909037000]))
+
 exemplar("nil", None)
 exemplar("true", True)
 exemplar("false", False)
@@ -71,6 +80,7 @@ exemplar("one", 1)
 exemplar("one_string", "hello")
 exemplar("one_keyword", Keyword("hello"))
 exemplar("one_symbol", Symbol("hello"))
+exemplar("one_date", datetime.fromtimestamp(946728000000/1000.0, dateutil.tz.tzutc()))
 exemplar("vector_simple", ARRAY_SIMPLE)
 exemplar("vector_empty", ())
 exemplar("vector_mixed", ARRAY_MIXED)
@@ -89,6 +99,13 @@ exemplar("one_uuid", UUIDS[0])
 exemplar("uuids", UUIDS)
 exemplar("one_uri", URIS[0])
 exemplar("uris", URIS)
+exemplar("dates_interesting", DATES)
+exemplar("symbols", SYMBOLS)
+exemplar("keywords", KEYWORDS)
+exemplar("list_simple", ARRAY_SIMPLE)
+exemplar("list_empty", ())
+exemplar("list_mixed", ARRAY_MIXED)
+exemplar("list_nested", ARRAY_NESTED)
 
 if __name__=='__main__':
     unittest.main()

@@ -7,6 +7,9 @@ from constants import *
 import uuid
 import re
 import ctypes
+import dateutil.parser
+import datetime
+import dateutil.tz
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
@@ -23,6 +26,11 @@ def to_uuid(x):
     combined = a.value << 64 | b.value
     return uuid.UUID(int=combined)
 
+def to_date(x):
+    if isinstance(x, (long, int)):
+        return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
+    return dateutil.parser.parse(x)
+
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
                                 "$": transit_types.Symbol,
@@ -31,6 +39,8 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "f": float,
                                 "u": to_uuid,
                                 "r": transit_types.URI,
+                                "t": to_date,
+                                "list": identity,
                                 "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }

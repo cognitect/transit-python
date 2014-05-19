@@ -12,7 +12,7 @@ def is_cache_key(name):
     return len(name) > 0 and name[0] == "^"
 
 def encode_key(i):
-    return "^#" + str(i + FIRST_ORD)
+    return "^" + chr(i + FIRST_ORD)
 
 def decode_key(s):
     return ord(s[1]) - FIRST_ORD
@@ -28,9 +28,8 @@ class RollingCache(object):
 
     def decode(self, name, as_map_key=False):
         """Always returns the name"""
-        key = self.value_to_key.get(name, None)
-        if key is not None:
-            return key
+        if is_cache_key(name):
+            return self.key_to_value[name]
         return self.encache(name) if is_cacheable(name, as_map_key) else name
 
 
