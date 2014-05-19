@@ -1,6 +1,6 @@
 from constants import *
 from class_hash import ClassDict
-from transit_types import Keyword, Symbol
+from transit_types import Keyword, Symbol, URI
 import uuid
 class NoneHandler(object):
     @staticmethod
@@ -114,6 +114,17 @@ class UuidHandler(object):
     def string_rep(u):
         return str(u)
 
+class UriHandler(object):
+    @staticmethod
+    def tag(_):
+        return "r"
+    @staticmethod
+    def rep(u):
+        return u.data
+    @staticmethod
+    def string_rep(u):
+        return u.data
+
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
@@ -129,3 +140,4 @@ class Handler(ClassDict):
         self[Keyword] = KeywordHandler
         self[Symbol] = SymbolHandler
         self[uuid.UUID] = UuidHandler
+        self[URI] = UriHandler

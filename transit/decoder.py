@@ -30,6 +30,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "i": int,
                                 "f": float,
                                 "u": to_uuid,
+                                "r": transit_types.URI,
                                 "'": identity},
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
@@ -52,7 +53,9 @@ class Decoder(object):
 
     def _decode(self, node, cache, as_map_key):
         tp = type(node)
-        if tp is str or tp is unicode:
+        if tp is str:
+            return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
+        if tp is unicode:
             return self.decode_string(node, cache, as_map_key)
         elif tp is dict:
             return self.decode_hash(node, cache, as_map_key)

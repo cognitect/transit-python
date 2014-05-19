@@ -282,7 +282,7 @@ class JsonMarshaler(Marshaler):
             self.io.write("true" if obj else "false")
         elif obj == None:
             self.io.write("null")
-        elif tp == str:
+        elif tp == str or tp == unicode:
             self.io.write("\"")
             self.io.write(obj)
             self.io.write("\"")

@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
 import unittest
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import MsgPackMarshaler, JsonMarshaler
-from transit.transit_types import Keyword, Symbol
+from transit.transit_types import Keyword, Symbol, URI
 from StringIO import StringIO
 from helpers import ints_centered_on, mapcat
 from uuid import UUID
@@ -56,6 +57,12 @@ UUIDS = (UUID('5a2cbea3-e8c6-428b-b525-21239370dd55'),
          UUID('501a978e-3a3e-4060-b3be-1cf2bd4b1a38'),
          UUID('b3ba141a-a776-48e4-9fae-a28ea8571f58'))
 
+URIS = (
+  URI(u'http://example.com'),
+  URI(u'ftp://example.com'),
+  URI(u'file:///path/to/file.txt'),
+  URI(u'http://www.詹姆斯.com/'))
+
 exemplar("nil", None)
 exemplar("true", True)
 exemplar("false", False)
@@ -79,6 +86,9 @@ exemplar("ints_interesting_neg", tuple(map(lambda x: -x, INTERESTING_INTS)))
 exemplar("doubles_small", tuple(map(float, ints_centered_on(0))))
 exemplar("doubles_interesting", (-3.14159, 3.14159, 4E11, 2.998E8, 6.626E-34))
 exemplar("one_uuid", UUIDS[0])
+exemplar("uuids", UUIDS)
+exemplar("one_uri", URIS[0])
+exemplar("uris", URIS)
 
 if __name__=='__main__':
     unittest.main()
