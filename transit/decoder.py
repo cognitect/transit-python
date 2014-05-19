@@ -13,7 +13,8 @@ def identity(x):
     return x
 
 default_options = {"decoders": {"_": lambda _: None,
-                                ":": transit_types.Symbol,
+                                ":": transit_types.Keyword,
+                                "$": transit_types.Symbol,
                                 "?": lambda x : x == "t",
                                 "i": int,
                                 "'": identity},
@@ -83,13 +84,10 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                decoder = self.decoders.get(str[1])
+                decoder = self.decoders.get(string[1])
                 if decoder:
                     return decoder(string[2:])
                 else:
                     return self.options["default_string_decoder"](string)
         else:
             return string
-
-
-

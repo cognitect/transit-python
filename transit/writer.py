@@ -8,11 +8,8 @@ from handler import Handler
 import re
 
 def flatten_map(m):
-    lst = []
-    for k, v in m.items():
-        lst.append(k)
-        lst.append(v)
-    return lst
+    # This is the fastest way to do this in Python
+    return [item for t in m.items() for item in t]
 
 def re_fn(pat):
     compiled = re.compile(pat)
@@ -220,7 +217,7 @@ class JsonMarshaler(Marshaler):
     ## Yes this is basically a custom JSON encoder,
     ## but I couldn't find an existing solution that worked
     ## well with the lazy writing method we have in this
-    ## project. 
+    ## project.
 
     def __init__(self, io, opts={}):
         self.io = io
@@ -280,9 +277,4 @@ class JsonMarshaler(Marshaler):
 
     def flush(self):
         self.io.flush()
-
-
-
-
-
 
