@@ -4,7 +4,7 @@
 import unittest
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import MsgPackMarshaler, JsonMarshaler
-from transit.transit_types import Keyword, Symbol, URI, frozendict
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
 from StringIO import StringIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
@@ -167,6 +167,9 @@ exemplar("maps_three_char_string_keys", ({"aaa": 1, "bbb": 2},
 exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
                                         {"aaaa": 3, "bbbb": 4},
                                         {"aaaa": 5, "bbbb": 6}))
+
+exemplar("maps_unrecognized_keys", (TaggedValue("~#abcde", Keyword("anything")),
+                                   TaggedValue("~#fghij", Keyword("anything-else")),))
 
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),

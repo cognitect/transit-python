@@ -3,7 +3,7 @@
 
 from constants import *
 from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI, frozendict
+from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
 import uuid
 import datetime, time
 import dateutil
@@ -138,12 +138,12 @@ class UriHandler(object):
         return "r"
     @staticmethod
     def rep(u):
-        return u.data
+        return u.value
     @staticmethod
     def string_rep(u):
         return u.data
 
-class DateTimeHandler:
+class DateTimeHandler(object):
     epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=dateutil.tz.tzutc())
     @staticmethod
     def tag(_):
@@ -157,7 +157,7 @@ class DateTimeHandler:
     def string_rep(d):
         return d.isoformat()
 
-class SetHandler:
+class SetHandler(object):
     @staticmethod
     def tag(_):
         return "set"
@@ -168,7 +168,7 @@ class SetHandler:
     def string_rep(_):
         return None
 
-class MapHandler:
+class MapHandler(object):
     @staticmethod
     def tag(_):
         return "map"
@@ -178,6 +178,19 @@ class MapHandler:
     @staticmethod
     def string_rep(_):
         return None
+
+class TaggedValueHandler(object):
+    @staticmethod
+    def tag(tv):
+        return "tagged_value"
+    @staticmethod
+    def rep(tv):
+        return {tv.tag: tv.value}
+    @staticmethod
+    def string_rep(_):
+        return None
+
+
 
 
 class Handler(ClassDict):
@@ -203,3 +216,4 @@ class Handler(ClassDict):
         self[TaggedMap] = TaggedMap
         self[dict] = MapHandler
         self[frozendict] = MapHandler
+        self[TaggedValue] = TaggedValueHandler

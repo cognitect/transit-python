@@ -12,7 +12,6 @@ class Keyword(object):
         return hash(self.str)
 
     def __eq__(self, other):
-        print self.str, other.str, self.str == other.str
         return isinstance(other, Keyword) and self.str == other.str
 
     def __call__(self, mp):
@@ -67,26 +66,26 @@ kws = _KWS()
 class TaggedValue(object):
     def __init__(self, tag, data):
         self.tag = tag
-        self.data = data
+        self.value = data
     def __eq__(self, other):
         if isinstance(other, TaggedValue):
             return self.tag == other.tag and \
-                   self.data == other.data
+                   self.value == other.value
         return False
 
     def __ne__(self, other):
         return not (self == other)
 
     def __hash__(self):
-        if isinstance(self.data, list):
-            return reduce(lambda a, b: hash(a) ^ hash(b), self.data, 0)
-        return hash(self.data)
+        if isinstance(self.value, list):
+            return reduce(lambda a, b: hash(a) ^ hash(b), self.value, 0)
+        return hash(self.value)
 
     def __str__(self):
         return repr(self)
 
     def __repr__(self):
-        return "#"+self.tag + " " + repr(self.data)
+        return "#"+self.tag + " " + repr(self.value)
 
 class Set(TaggedValue):
     def __init__(self, data):
