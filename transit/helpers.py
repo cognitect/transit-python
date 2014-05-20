@@ -1,6 +1,7 @@
 import itertools
 
-
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
 
 def mapcat(f, seq):
     for x in seq:

@@ -1,3 +1,6 @@
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
+
 from constants import *
 from class_hash import ClassDict
 from transit_types import Keyword, Symbol, URI, frozendict

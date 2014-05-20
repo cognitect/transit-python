@@ -13,6 +13,7 @@ import dateutil.tz
 from helpers import pairs
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
+import types
 
 def identity(x):
     return x
@@ -90,7 +91,7 @@ class Decoder(object):
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) == 1:
             key = self._decode(hash.keys()[0], cache, True)
-            if isinstance(key, (str, unicode)) and TAG_re.match(key):
+            if isinstance(key, (str, unicode)) and key.startswith(TAG):
                 decoder = self.decoders.get(key[2:], None)
                 if decoder:
                     return decoder(self._decode(hash.values()[0], cache, as_map_key))

@@ -1,3 +1,5 @@
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
 from transit.transit_types import Symbol, Keyword, frozendict
 from transit.helpers import cycle, take, pairs
 from itertools import izip

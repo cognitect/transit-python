@@ -7,6 +7,8 @@ FIRST_ORD = 33
 CACHE_SIZE = 94
 MIN_SIZE_CACHEABLE = 4
 ESCAPED = re.compile("^~(#|\$|:)")
+## Copyright (c) Cognitect, Inc.
+## All rights reserved.
 
 def is_cache_key(name):
     return len(name) > 0 and name[0] == "^"
@@ -16,6 +18,7 @@ def encode_key(i):
 
 def decode_key(s):
     return ord(s[1]) - FIRST_ORD
+
 
 def is_cacheable(str, as_map_key=False):
     return str and len(str) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(str))
