@@ -144,7 +144,29 @@ exemplar("vector_94_keywords_repeated_twice", tuple(array_of_symbools(94, 188)))
 exemplar("vector_95_keywords_repeated_twice", tuple(array_of_symbools(95, 190)))
 
 exemplar("map_10_items", hash_of_size(10))
+exemplar("maps_two_char_sym_keys", ({Keyword("aa"): 1, Keyword("bb"): 2},
+                                    {Keyword("aa"): 3, Keyword("bb"): 4},
+                                    {Keyword("aa"): 5, Keyword("bb"): 6}))
 
+exemplar("maps_three_char_sym_keys", ({Keyword("aaa"): 1, Keyword("bbb"): 2},
+                                      {Keyword("aaa"): 3, Keyword("bbb"): 4},
+                                      {Keyword("aaa"): 5, Keyword("bbb"): 6}))
+
+exemplar("maps_four_char_sym_keys", ({Keyword("aaaa"): 1, Keyword("bbbb"): 2},
+                                     {Keyword("aaaa"): 3, Keyword("bbbb"): 4},
+                                     {Keyword("aaaa"): 5, Keyword("bbbb"): 6}))
+
+exemplar("maps_two_char_string_keys", ({"aa": 1, "bb": 2},
+                                       {"aa": 3, "bb": 4},
+                                       {"aa": 5, "bb": 6}))
+
+exemplar("maps_three_char_string_keys", ({"aaa": 1, "bbb": 2},
+                                         {"aaa": 3, "bbb": 4},
+                                         {"aaa": 5, "bbb": 6}))
+
+exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
+                                        {"aaaa": 3, "bbbb": 4},
+                                        {"aaaa": 5, "bbbb": 6}))
 
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),
