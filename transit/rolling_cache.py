@@ -29,7 +29,10 @@ class RollingCache(object):
     def decode(self, name, as_map_key=False):
         """Always returns the name"""
         if is_cache_key(name):
-            return self.key_to_value[name]
+            try:
+                return self.key_to_value[name]
+            except:
+                pass
         return self.encache(name) if is_cacheable(name, as_map_key) else name
 
 
@@ -45,7 +48,7 @@ class RollingCache(object):
         return len(self.key_to_value)
 
     def is_cache_full(self):
-        return self.size() >= CACHE_SIZE
+        return self.size() > CACHE_SIZE
 
 
     def encache(self, name):

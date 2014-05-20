@@ -10,7 +10,7 @@ def array_of_symbools(m, n=None):
     if n is None:
         n = m
 
-    seeds = map(lambda x: Keyword("key"+str(x).zfill(4)), range(0, m+1))
+    seeds = map(lambda x: Keyword("key"+str(x).zfill(4)), range(0, m))
     return take(n, cycle(seeds))
 
 

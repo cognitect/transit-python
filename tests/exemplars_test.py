@@ -7,7 +7,7 @@ from transit.writer import MsgPackMarshaler, JsonMarshaler
 from transit.transit_types import Keyword, Symbol, URI, frozendict
 from StringIO import StringIO
 from transit.helpers import mapcat
-from helpers import ints_centered_on, hash_of_size
+from helpers import ints_centered_on, hash_of_size, array_of_symbools
 from uuid import UUID
 from datetime import datetime
 import dateutil.tz
@@ -134,13 +134,22 @@ exemplar("map_string_keys", {"first": 1, "second": 2, "third": 3})
 exemplar("map_numeric_keys", {1: "one", 2: "two"})
 exemplar("map_vector_keys", frozendict([[(1, 1), "one"],
                                         [(2, 2), "two"]]))
+
+
+exemplar("map_unrecognized_vals", {Keyword("key"): "`~notrecognized"})
+#exemplar("map_unrecognized_keys", )
+exemplar("vector_unrecognized_vals", ("`~notrecognized",))
+exemplar("vector_93_keywords_repeated_twice", tuple(array_of_symbools(93, 186)))
+exemplar("vector_94_keywords_repeated_twice", tuple(array_of_symbools(94, 188)))
+exemplar("vector_95_keywords_repeated_twice", tuple(array_of_symbools(95, 190)))
+
 exemplar("map_10_items", hash_of_size(10))
 
 
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),
                                       Keyword("s"): hash_of_size(n)})
-map(make_hash_exemplar, [10])
+map(make_hash_exemplar, [10, 90, 91, 92, 93, 94, 95])
 
 if __name__=='__main__':
     unittest.main()

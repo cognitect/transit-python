@@ -71,7 +71,7 @@ class Decoder(object):
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         if tp is unicode:
             return self.decode_string(node, cache, as_map_key)
-        elif tp is dict:
+        elif isinstance(node, dict):
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
             return tuple(map(lambda x: self._decode(x, cache, as_map_key), node))

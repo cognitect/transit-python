@@ -204,6 +204,7 @@ class MsgPackMarshaler(Marshaler):
         self.io.flush()
         self.packer.reset()
 
+REPLACE_RE = re.compile("\"")
 
 class JsonMarshaler(Marshaler):
     JSON_MAX_INT = pow(2, 63)
@@ -284,7 +285,7 @@ class JsonMarshaler(Marshaler):
             self.io.write("null")
         elif tp == str or tp == unicode:
             self.io.write("\"")
-            self.io.write(obj)
+            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
             self.io.write("\"")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))

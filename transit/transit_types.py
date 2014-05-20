@@ -12,6 +12,7 @@ class Keyword(object):
         return hash(self.str)
 
     def __eq__(self, other):
+        print self.str, other.str, self.str == other.str
         return isinstance(other, Keyword) and self.str == other.str
 
     def __call__(self, mp):
