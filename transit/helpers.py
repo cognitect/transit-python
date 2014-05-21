@@ -3,25 +3,14 @@ import itertools
 ## Copyright (c) Cognitect, Inc.
 ## All rights reserved.
 
-def mapcat(f, seq):
-    for x in seq:
-        for y in f(x):
-            yield y
+def mapcat(f, i):
+    return itertools.chain.from_iterable(itertools.imap(f, i))
 
 def pairs(i):
-    for x in range(0, len(i), 2):
-        yield (i[x], i[x+1])
+    return zip(*[iter(i)] * 2)
 
-def cycle(x):
-    d = tuple(x)
-    while True:
-        for x in d:
-            yield x
+cycle = itertools.cycle
 
-def take(n, s):
-    c = 0
-    for x in s:
-        yield x
-        c += 1
-        if c >= n:
-            break
+def take(n, i):
+    return itertools.islice(s, 0, n)
+
