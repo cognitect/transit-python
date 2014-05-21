@@ -12,5 +12,5 @@ def pairs(i):
 cycle = itertools.cycle
 
 def take(n, i):
-    return itertools.islice(s, 0, n)
+    return itertools.islice(i, 0, n)
 
