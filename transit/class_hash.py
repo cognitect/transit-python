@@ -13,13 +13,15 @@ class ClassDict(collections.MutableMapping):
 
     def __getitem__(self, key):
         key = isinstance(key, type) and key or type(key)
-        types = key.mro()
-        for t in types:
-            value = t in self.store and self.store[t]
-            if value:
-                return value
-        raise KeyError("No handler found for: " + str(key))
-        return None
+        if key in self.store:
+            return self.store[key]
+        else:
+            types = key.__bases__
+            for t in types:
+                value = t in self.store and self.store[t]
+                if value:
+                    return value
+            raise KeyError("No handler found for: " + str(key))
 
     def __setitem__(self, key, value):
         self.store[key] = value
