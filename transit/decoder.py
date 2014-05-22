@@ -76,11 +76,11 @@ class Decoder(object):
             return node
 
     def decode_string(self, string, cache, as_map_key):
-        if is_cacheable(string, as_map_key):
+        if is_cache_key(string):
+            return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
+        elif is_cacheable(string, as_map_key):
             cache.encode(string, as_map_key)
             return self.parse_string(string, cache, as_map_key)
-        elif is_cache_key(string):
-            return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
         else:
             return self.parse_string(string, cache, as_map_key)
 
@@ -105,14 +105,13 @@ class Decoder(object):
     def parse_string(self, string, cache, as_map_key):
         if string.startswith(ESC):
             m = string[1]
-            if m == ESC or m == SUB or m == RES:
+            if m in self.decoders:
+                return self.decoders[m](string[2:])
+            elif m == ESC or m == SUB or m == RES:
                 return string[1:]
             elif m == "#":
                 return string
             else:
-                if m in self.decoders:
-                    return self.decoders[m](string[2:])
-                else:
-                    return self.options["default_string_decoder"](string)
+                return self.options["default_string_decoder"](string)
         return string
 
