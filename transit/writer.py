@@ -269,10 +269,15 @@ class JsonMarshaler(Marshaler):
         self.pop_level()
         self.io.write("}")
 
+    #@profile
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp == int or tp == long:
+        if tp == str or tp == unicode:
+            self.io.write("\"")
+            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
+            self.io.write("\"")
+        elif tp == int or tp == long:
             self.io.write(str(obj))
         elif tp == float:
             self.io.write(str(obj))
@@ -280,10 +285,6 @@ class JsonMarshaler(Marshaler):
             self.io.write("true" if obj else "false")
         elif obj == None:
             self.io.write("null")
-        elif tp == str or tp == unicode:
-            self.io.write("\"")
-            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
-            self.io.write("\"")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))
 
