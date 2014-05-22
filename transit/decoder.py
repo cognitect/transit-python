@@ -18,7 +18,7 @@ def identity(x):
     return x
 
 def to_uuid(x):
-    if isinstance(x, (unicode, str)):
+    if isinstance(x, basestring):
         return uuid.UUID(x)
 
     # hack to remove signs

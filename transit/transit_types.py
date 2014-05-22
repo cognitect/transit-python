@@ -25,7 +25,7 @@ class Keyword(object):
 
 class Symbol(object):
     def __init__(self, value):
-        assert isinstance(value, str) or isinstance(value, unicode)
+        assert isinstance(value, basestring)
         self.str = value
 
     def __hash__(self):

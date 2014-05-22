@@ -99,11 +99,11 @@ class Marshaler(object):
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
-            if isinstance(rep, (str, unicode)):
+            if isinstance(rep, basestring):
                 self.emit_string(ESC, tag, rep, as_map_key, cache)
             elif as_map_key or self.opts["prefer_strings"]:
                 rep = handler.string_rep(obj)
-                if isinstance(rep, (str, unicode)):
+                if isinstance(rep, basestring):
                     self.emit_string(ESC, tag, rep, as_map_key, cache)
                 else:
                     raise AssertionError("Cannot be encoded as string: " + str({"tag": tag,
