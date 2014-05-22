@@ -64,14 +64,14 @@ class Decoder(object):
 
     def _decode(self, node, cache, as_map_key):
         tp = type(node)
-        if tp is str:
-            return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         if tp is unicode:
             return self.decode_string(node, cache, as_map_key)
         elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
             return tuple(self._decode(x, cache, as_map_key) for x in node)
+        elif tp is str:
+            return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         else:
             return node
 
@@ -85,7 +85,12 @@ class Decoder(object):
             return self.parse_string(string, cache, as_map_key)
 
     def decode_hash(self, hash, cache, as_map_key):
-        if len(hash) == 1:
+        if len(hash) != 1:
+            h = {}
+            for k, v in hash.items():
+                h[self._decode(k, cache, True)] = self._decode(v, cache, False)
+            return transit_types.frozendict(h)
+        else:
             key,value = hash.items()[0]
             key = self._decode(key, cache, True)
             if isinstance(key, basestring) and key.startswith(TAG):
@@ -96,11 +101,6 @@ class Decoder(object):
                     return self.options["default_hash_decoder"]({key: self.decode(value, cache, False)})
             else:
                 return {key: self._decode(value, cache, False)}
-        else:
-            h = {}
-            for k, v in hash.items():
-                h[self._decode(k, cache, True)] = self._decode(v, cache, False)
-            return transit_types.frozendict(h)
 
     def parse_string(self, string, cache, as_map_key):
         if string.startswith(ESC):
