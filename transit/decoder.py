@@ -84,21 +84,22 @@ class Decoder(object):
             cache.encode(string, as_map_key)
             return self.parse_string(string, cache, as_map_key)
         elif is_cache_key(string):
-            return self._decode(cache.decode(string, as_map_key), cache, as_map_key)
+            return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
         else:
             return self.parse_string(string, cache, as_map_key)
 
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) == 1:
-            key = self._decode(hash.keys()[0], cache, True)
-            if isinstance(key, (str, unicode)) and key.startswith(TAG):
+            key,value = hash.items()[0]
+            key = self._decode(key, cache, True)
+            if isinstance(key, basestring) and key.startswith(TAG):
                 decoder = self.decoders.get(key[2:], None)
                 if decoder:
-                    return decoder(self._decode(hash.values()[0], cache, as_map_key))
+                    return decoder(self._decode(value, cache, as_map_key))
                 else:
-                    return self.options["default_hash_decoder"]({key: self.decode(hash.values()[0], cache, False)})
+                    return self.options["default_hash_decoder"]({key: self.decode(value, cache, False)})
             else:
-                return {key: self._decode(hash.values()[0], cache, False)}
+                return {key: self._decode(value, cache, False)}
         else:
             h = {}
             for k, v in hash.items():

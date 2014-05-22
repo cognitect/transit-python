@@ -41,7 +41,8 @@ def exemplar(name, val):
             marshaler = JsonMarshaler(io)
             marshaler.marshal_top(val)
             s = io.getvalue()
-            print s
+            # Uncomment when debugging to see what payloads fail
+            #print s
             io = StringIO(s)
             newval = JsonUnmarshaler().load(io)
             self.assertEqual(val, newval)
