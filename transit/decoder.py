@@ -5,15 +5,14 @@ import transit_types
 from transit_types import TaggedValue, frozendict
 from constants import *
 import uuid
-import re
 import ctypes
+from collections import OrderedDict
 import dateutil.parser
 import datetime
 import dateutil.tz
 from helpers import pairs
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
-import types
 
 def identity(x):
     return x
@@ -50,9 +49,6 @@ default_options = {"decoders": {"_": lambda _: None,
                    "default_string_decoder": lambda x: "`" + str(x),
                    "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
 
-ESC_re = re.compile("^" + ESC)
-TAG_re = re.compile("^" + TAG)
-
 class Decoder(object):
 
     def __init__(self, options={}):
@@ -72,7 +68,7 @@ class Decoder(object):
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         if tp is unicode:
             return self.decode_string(node, cache, as_map_key)
-        elif isinstance(node, dict):
+        elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
             return tuple(map(lambda x: self._decode(x, cache, as_map_key), node))
@@ -106,20 +102,17 @@ class Decoder(object):
                 h[self._decode(k, cache, True)] = self._decode(v, cache, False)
             return transit_types.frozendict(h)
 
-
-
     def parse_string(self, string, cache, as_map_key):
-        if ESC_re.match(string):
+        if string.startswith(ESC):
             m = string[1]
             if m == ESC or m == SUB or m == RES:
                 return string[1:]
             elif m == "#":
                 return string
             else:
-                decoder = self.decoders.get(string[1])
-                if decoder:
-                    return decoder(string[2:])
+                if m in self.decoders:
+                    return self.decoders[m](string[2:])
                 else:
                     return self.options["default_string_decoder"](string)
-        else:
-            return string
+        return string
+
