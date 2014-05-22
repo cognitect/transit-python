@@ -191,8 +191,6 @@ class TaggedValueHandler(object):
         return None
 
 
-
-
 class Handler(ClassDict):
     def __init__(self):
         super(Handler, self).__init__()
@@ -217,3 +215,4 @@ class Handler(ClassDict):
         self[dict] = MapHandler
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
+

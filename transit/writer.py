@@ -18,11 +18,12 @@ def re_fn(pat):
 
     return re_inner_fn
 
-is_unrecognized = re_fn("^" + RES + ESC)
+def is_unrecognized(s):
+    s.startswith(RES +ESC)
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
-    if is_unrecognized(s):
+    if s.startswith(RES+ESC): # is_unrecognized
         return s[1:]
     elif is_escapable(s):
         return ESC+s
@@ -146,11 +147,11 @@ class Marshaler(object):
             raise AssertionError("Handler must provide a non-nil tag: " + str(handler))
 
 
-def dispatch_map(self, rep, as_map_key, cache):
-    if self.are_stringable_keys(rep):
-        self.emit_map(rep, as_map_key, cache)
-    else:
-        self.emit_cmap(rep, as_map_key, cache)
+    def dispatch_map(self, rep, as_map_key, cache):
+        if self.are_stringable_keys(rep):
+            self.emit_map(rep, as_map_key, cache)
+        else:
+            self.emit_cmap(rep, as_map_key, cache)
 
 
 
@@ -162,7 +163,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "d": Marshaler.emit_double,
                     "'": Marshaler.emit_quoted,
                     "array": Marshaler.emit_array,
-                    "map": dispatch_map,
+                    "map": Marshaler.dispatch_map,
                     "tagged_value": Marshaler.emit_tagged_value}
 
 
