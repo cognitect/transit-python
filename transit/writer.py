@@ -18,11 +18,12 @@ def re_fn(pat):
 
     return re_inner_fn
 
-is_unrecognized = re_fn("^" + RES + ESC)
+def is_unrecognized(s):
+    s.startswith(RES +ESC)
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
-    if is_unrecognized(s):
+    if s.startswith(RES+ESC): # is_unrecognized
         return s[1:]
     elif is_escapable(s):
         return ESC+s
@@ -98,11 +99,11 @@ class Marshaler(object):
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
-            if isinstance(rep, (str, unicode)):
+            if isinstance(rep, basestring):
                 self.emit_string(ESC, tag, rep, as_map_key, cache)
             elif as_map_key or self.opts["prefer_strings"]:
                 rep = handler.string_rep(obj)
-                if isinstance(rep, (str, unicode)):
+                if isinstance(rep, basestring):
                     self.emit_string(ESC, tag, rep, as_map_key, cache)
                 else:
                     raise AssertionError("Cannot be encoded as string: " + str({"tag": tag,
@@ -146,13 +147,10 @@ class Marshaler(object):
             raise AssertionError("Handler must provide a non-nil tag: " + str(handler))
 
 
-def dispatch_map(self, rep, as_map_key, cache):
-    if self.are_stringable_keys(rep):
-        self.emit_map(rep, as_map_key, cache)
-    else:
-        self.emit_cmap(rep, as_map_key, cache)
-
-
+    def dispatch_map(self, rep, as_map_key, cache):
+        if self.are_stringable_keys(rep):
+            return self.emit_map(rep, as_map_key, cache)
+        return self.emit_cmap(rep, as_map_key, cache)
 
 
 marshal_dispatch = {"_": Marshaler.emit_nil,
@@ -162,9 +160,8 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "d": Marshaler.emit_double,
                     "'": Marshaler.emit_quoted,
                     "array": Marshaler.emit_array,
-                    "map": dispatch_map,
+                    "map": Marshaler.dispatch_map,
                     "tagged_value": Marshaler.emit_tagged_value}
-
 
 
 class MsgPackMarshaler(Marshaler):
@@ -272,10 +269,15 @@ class JsonMarshaler(Marshaler):
         self.pop_level()
         self.io.write("}")
 
+    #@profile
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp == int or tp == long:
+        if tp == str or tp == unicode:
+            self.io.write("\"")
+            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
+            self.io.write("\"")
+        elif tp == int or tp == long:
             self.io.write(str(obj))
         elif tp == float:
             self.io.write(str(obj))
@@ -283,10 +285,6 @@ class JsonMarshaler(Marshaler):
             self.io.write("true" if obj else "false")
         elif obj == None:
             self.io.write("null")
-        elif tp == str or tp == unicode:
-            self.io.write("\"")
-            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
-            self.io.write("\"")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))
 

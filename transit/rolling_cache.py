@@ -20,8 +20,8 @@ def decode_key(s):
     return ord(s[1]) - FIRST_ORD
 
 
-def is_cacheable(str, as_map_key=False):
-    return str and len(str) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(str))
+def is_cacheable(string, as_map_key=False):
+    return string and len(string) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(string))
 
 class RollingCache(object):
 
@@ -31,21 +31,15 @@ class RollingCache(object):
 
     def decode(self, name, as_map_key=False):
         """Always returns the name"""
-        if is_cache_key(name):
-            try:
-                return self.key_to_value[name]
-            except:
-                pass
+        if is_cache_key(name) and (name in self.key_to_value):
+            return self.key_to_value[name]
         return self.encache(name) if is_cacheable(name, as_map_key) else name
-
 
     def encode(self, name, as_map_key=False):
         """Returns the name the first time and the key after that"""
-        key = self.key_to_value.get(name, None)
-        if key is not None:
-            return key
+        if name in self.key_to_value:
+            return self.key_to_value[name]
         return self.encache(name) if is_cacheable(name, as_map_key) else name
-
 
     def size(self):
         return len(self.key_to_value)
@@ -57,10 +51,8 @@ class RollingCache(object):
     def encache(self, name):
         if self.is_cache_full():
             self.clear()
-
-        existing_key = self.value_to_key.get(name, None)
-        if existing_key is not None:
-            return existing_key
+        elif name in self.value_to_key:
+            return self.value_to_key[name]
 
         key = encode_key(len(self.key_to_value))
         self.key_to_value[key] = name

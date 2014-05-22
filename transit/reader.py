@@ -10,11 +10,6 @@ class JsonUnmarshaler(object):
     def __init__(self):
         self.decoder = Decoder()
 
-    def pairs_hook(self, data):
-        print "pairs", data
-        return data
-
-
     def load(self, stream):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 

@@ -5,7 +5,7 @@ import collections
 
 class Keyword(object):
     def __init__(self, value):
-        assert isinstance(value, str) or isinstance(value, unicode)
+        assert isinstance(value, basestring)
         self.str = value
 
     def __hash__(self):
@@ -15,7 +15,7 @@ class Keyword(object):
         return isinstance(other, Keyword) and self.str == other.str
 
     def __call__(self, mp):
-        return mp[self]
+        return mp[self] # Maybe this should be .get()
 
     def __repr__(self):
         return "<Keyword " + self.str + ">"
@@ -25,7 +25,7 @@ class Keyword(object):
 
 class Symbol(object):
     def __init__(self, value):
-        assert isinstance(value, str) or isinstance(value, unicode)
+        assert isinstance(value, basestring)
         self.str = value
 
     def __hash__(self):
