@@ -179,3 +179,10 @@ map(make_hash_exemplar, [10, 90, 91, 92, 93, 94, 95])
 
 if __name__=='__main__':
     unittest.main()
+    #import cProfile
+    #import pstats
+    #cProfile.run('unittest.main()', 'exemptests')
+    #p = pstats.Stats('exemptests')
+    #p.sort_stats('time')
+    #p.print_stats()
+
