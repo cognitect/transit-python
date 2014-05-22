@@ -149,11 +149,8 @@ class Marshaler(object):
 
     def dispatch_map(self, rep, as_map_key, cache):
         if self.are_stringable_keys(rep):
-            self.emit_map(rep, as_map_key, cache)
-        else:
-            self.emit_cmap(rep, as_map_key, cache)
-
-
+            return self.emit_map(rep, as_map_key, cache)
+        return self.emit_cmap(rep, as_map_key, cache)
 
 
 marshal_dispatch = {"_": Marshaler.emit_nil,
@@ -165,7 +162,6 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "array": Marshaler.emit_array,
                     "map": Marshaler.dispatch_map,
                     "tagged_value": Marshaler.emit_tagged_value}
-
 
 
 class MsgPackMarshaler(Marshaler):

@@ -71,7 +71,7 @@ class Decoder(object):
         elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
-            return tuple(map(lambda x: self._decode(x, cache, as_map_key), node))
+            return tuple(self._decode(x, cache, as_map_key) for x in node)
         else:
             return node
 
