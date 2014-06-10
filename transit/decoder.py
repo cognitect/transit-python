@@ -32,6 +32,11 @@ def to_date(x):
         return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
     return dateutil.parser.parse(x)
 
+def is_tagged_map(map):
+    if len(map) == 1:
+        key, value = map.items()[0]
+        return isinstance(key, basestring) and key.startswith(TAG)
+    return False
 
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
@@ -84,6 +89,17 @@ class Decoder(object):
         else:
             return self.parse_string(string, cache, as_map_key)
 
+    def decode_map(self, map):
+        if is_tagged_map(map):
+            key, value = map.items()[0]
+            decoder = self.decoders.get(key[2:], None)
+            if decoder:
+                return decoder(value)
+            else:
+                return self.options["default_hash_decoder"](map)
+        else:
+            return frozendict(map)
+
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) != 1:
             h = {}
@@ -114,4 +130,3 @@ class Decoder(object):
             else:
                 return self.options["default_string_decoder"](string)
         return string
-
