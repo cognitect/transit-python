@@ -7,6 +7,15 @@ import msgpack
 from handler import Handler
 import re
 
+def Writer(protocol="json"):
+    """ Top-level entry that gets the right kind of writer."""
+    if protocol == "json":
+        return JsonMarshaler() # opts
+    if protocol =="json_verbose":
+        return VerboseJsonMarshaler() # opts
+    if protocol =="msgpack":
+        return MsgPackMarshaler() # opts
+
 def flatten_map(m):
     # This is the fastest way to do this in Python
     return [item for t in m.items() for item in t]
@@ -20,6 +29,8 @@ def re_fn(pat):
 
 def is_unrecognized(s):
     s.startswith(RES +ESC)
+
+# a function def without a def
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
@@ -33,6 +44,9 @@ def escape(s):
 class Marshaler(object):
     def __init__(self, opts = {}):
         self.opts = opts
+        self.init_handlers()
+
+    def init_handlers(self):
         self.handlers = Handler()
 
     def are_stringable_keys(self, m):
@@ -72,11 +86,10 @@ class Marshaler(object):
         self.emit_array_end()
 
     def emit_map(self, m, _, cache):
-        self.emit_map_start(len(m))
-        for k, v in m.items():
-            self.marshal(k, True, cache)
-            self.marshal(v, False, cache)
-        self.emit_map_end()
+        """ Emits array as per default JSON spec (formerly JSON-M)
+            :TODO: need to flatten once more inside array
+        """
+        self.emit_array(["^ ", flatten_map(m)], _, cache)
 
     def emit_cmap(self, m, _, cache):
         self.emit_map_start(1)
@@ -90,6 +103,8 @@ class Marshaler(object):
         self.marshal(rep, False, cache)
         self.emit_map_end()
 
+
+    # Might be different from spec, refer to dispatch.
     def emit_tagged_value(self, rep, as_map_key, cache):
         self.emit_map_start(1)
         self.emit_object(cache.encode(rep.keys()[0], True), True)
@@ -118,8 +133,6 @@ class Marshaler(object):
         else:
             self.emit_tagged_map(tag, rep, False, cache)
 
-
-
     def marshal(self, obj, as_map_key, cache):
         handler = self.handlers[obj]
         tag = handler.tag(obj)
@@ -130,7 +143,7 @@ class Marshaler(object):
         else:
             self.emit_encoded(tag, handler, obj, as_map_key, cache)
 
-    def marshal_top(self, obj, cache = None):
+    def marshal_top(self, obj, cache=None):
         if not cache:
             cache = RollingCache()
 
@@ -165,7 +178,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
 
 
 class MsgPackMarshaler(Marshaler):
-    MSGPACK_MAX_INT = pow(2, 63)
+    MSGPACK_MAX_INT = pow(2, 63) - 1
     MSGPACK_MIN_INT = -pow(2, 63)
 
     default_opts = {"prefer_strings": False,
@@ -255,7 +268,6 @@ class JsonMarshaler(Marshaler):
         self.io.write("[")
         self.push_level()
 
-
     def emit_array_end(self):
         self.pop_level()
         self.io.write("]")
@@ -291,3 +303,30 @@ class JsonMarshaler(Marshaler):
     def flush(self):
         self.io.flush()
 
+
+class VerboseSettings(object):
+    """ Mixin for JsonMarshaler that adds support for Verbose output/input."""
+    @staticmethod
+    def verbose_handlers(handlers):
+        for k, v in handlers:
+            if hasattr(v, "verbose_handler"):
+                self[k] = v.verbose_handler()
+
+    def init_handlers(self):
+        self.handlers = verbose_handlers(Handler())
+
+    def emit_string(self, prefix, tag, string, as_map_key, cache):
+        return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
+        pass
+
+    def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
+        self.emit_map_start(len(m))
+        for k, v in m.items():
+            self.marshal(k, True, cache)
+            self.marshal(v, False, cache)
+        self.emit_map_end()
+
+
+class VerboseJsonMarshaler(VerboseSettings, JsonMarshaler):
+    """ JsonMarshaler class with VerboseSettings mixin"""
+    pass # All from inheritance and mixin

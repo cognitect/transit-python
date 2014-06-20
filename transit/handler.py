@@ -152,10 +152,23 @@ class DateTimeHandler(object):
     def rep(d):
         td = d - DateTimeHandler.epoch
         return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
-
+    @staticmethod
+    def verbose_handler():
+        return VerboseDateTimeHandler
     @staticmethod
     def string_rep(d):
         return d.isoformat()
+
+class VerboseDateTimeHandler(object):
+    @staticmethod
+    def tag(_):
+        return "t"
+    @staticmethod
+    def rep(d):
+        return DateTimeHandler.string_rep(d)
+    @staticmethod
+    def string_rep(d):
+        return DateTimeHandler.string_rep(d)
 
 class SetHandler(object):
     @staticmethod
