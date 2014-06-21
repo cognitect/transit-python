@@ -159,7 +159,7 @@ class DateTimeHandler(object):
     def string_rep(d):
         return d.isoformat()
 
-class VerboseDateTimeHandler(object):
+class VerboseDateTimeHandler(DateTimeHandler):
     @staticmethod
     def tag(_):
         return "t"
