@@ -161,13 +161,7 @@ class DateTimeHandler(object):
 
 class VerboseDateTimeHandler(DateTimeHandler):
     @staticmethod
-    def tag(_):
-        return "t"
-    @staticmethod
     def rep(d):
-        return DateTimeHandler.string_rep(d)
-    @staticmethod
-    def string_rep(d):
         return DateTimeHandler.string_rep(d)
 
 class SetHandler(object):
