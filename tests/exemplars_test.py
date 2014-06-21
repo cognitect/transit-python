@@ -2,6 +2,12 @@
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
 import unittest
+
+# get parent directory into python path
+import sys, os
+sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.path.pardir))
+
+# then import transit stuff
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import MsgPackMarshaler, JsonMarshaler
 from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
