@@ -7,14 +7,14 @@ import msgpack
 from handler import Handler
 import re
 
-def Writer(protocol="json"):
+def Writer(io, protocol="json", opts={}):
     """ Top-level entry that gets the right kind of writer."""
     if protocol == "json":
-        return JsonMarshaler() # opts
-    if protocol =="json_verbose":
-        return VerboseJsonMarshaler() # opts
-    if protocol =="msgpack":
-        return MsgPackMarshaler() # opts
+        return JsonMarshaler(io, opts=opts) # opts
+    if protocol == "json_verbose":
+        return VerboseJsonMarshaler(io, opts=opts) # opts
+    if protocol == "msgpack":
+        return MsgPackMarshaler(io, opts=opts) # opts
 
 def flatten_map(m):
     # This is the fastest way to do this in Python

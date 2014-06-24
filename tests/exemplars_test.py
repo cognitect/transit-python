@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.pat
 
 # then import transit stuff
 from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
-from transit.writer import MsgPackMarshaler, JsonMarshaler
+from transit.writer import Writer
 from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
 from StringIO import StringIO
 from transit.helpers import mapcat
@@ -35,7 +35,7 @@ def exemplar(name, val):
 
         def test_reencode_msgpack(self):
             io = StringIO()
-            marshaler = MsgPackMarshaler(io)
+            marshaler = Writer(io, protocol="msgpack")
             marshaler.marshal_top(val)
             s = io.getvalue()
             io = StringIO(s)
@@ -44,14 +44,20 @@ def exemplar(name, val):
 
         def test_reencode_json(self):
             io = StringIO()
-            marshaler = JsonMarshaler(io)
+            marshaler = Writer(io, protocol="json")
             marshaler.marshal_top(val)
             s = io.getvalue()
             # Uncomment when debugging to see what payloads fail
-            #print s
+            # print(s)
             io = StringIO(s)
             newval = JsonUnmarshaler().load(io)
             self.assertEqual(val, newval)
+
+        # test json verbose
+#        def test_reencode_json_verbose(self):
+#            io = StringIO()
+#            marshaler = Writer(io, protocol="json_verbose")
+#            self.assertEqual(True, True)
 
     globals()["test_" + name + "_json"] = ExemplarTest
 
