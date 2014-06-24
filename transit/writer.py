@@ -306,12 +306,12 @@ class VerboseSettings(object):
     """ Mixin for JsonMarshaler that adds support for Verbose output/input."""
     @staticmethod
     def verbose_handlers(handlers):
-        for k, v in handlers:
+        for k, v in handlers.iteritems():
             if hasattr(v, "verbose_handler"):
-                self[k] = v.verbose_handler()
+                handlers[k] = v.verbose_handler()
 
     def init_handlers(self):
-        self.handlers = verbose_handlers(Handler())
+        self.handlers = self.verbose_handlers(Handler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)

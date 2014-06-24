@@ -54,10 +54,10 @@ def exemplar(name, val):
             self.assertEqual(val, newval)
 
         # test json verbose
-#        def test_reencode_json_verbose(self):
-#            io = StringIO()
-#            marshaler = Writer(io, protocol="json_verbose")
-#            self.assertEqual(True, True)
+        def test_reencode_json_verbose(self):
+            io = StringIO()
+            marshaler = Writer(io, protocol="json_verbose")
+            self.assertEqual(True, True)
 
     globals()["test_" + name + "_json"] = ExemplarTest
 
