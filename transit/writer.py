@@ -87,7 +87,7 @@ class Marshaler(object):
 
     def emit_map(self, m, _, cache):
         """ Emits array as per default JSON spec (formerly JSON-M) """
-        self.emit_array(["^ "] + flatten_map(m), _, cache)
+        self.emit_array([MAP_AS_ARR] + flatten_map(m), _, cache)
 
     def emit_cmap(self, m, _, cache):
         self.emit_map_start(1)
