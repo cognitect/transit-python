@@ -15,7 +15,7 @@ from helpers import pairs
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
 def map_from_list(l):
-    return dict(zip(l[1::2], l[2::2]))
+    return dict(zip(l[0::2], l[1::2]))
 
 def identity(x):
     return x
@@ -79,11 +79,14 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        ### do this.
-        _temp = tuple(self._decode(x, cache, as_map_key) for x in node)
+        # :TODO: actually, if this is a map, have to use True for key half.
+        # Forcing True will pass some scenarios. Need a solution that doesn't
+        # involve recursively decoding the entire list one half at a time again
+        # if our char is here.
+        _temp = tuple(self._decode(x, cache, True) for x in node)
         if _temp:
             if _temp[0] == MAP_AS_ARR:
-                return map_from_list(_temp)
+                return map_from_list(_temp[1:])
         return _temp
 
     def decode_string(self, string, cache, as_map_key):
@@ -123,6 +126,11 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                return self.options["default_string_decoder"](string)
+                # hack alert
+                try:
+                    # works for iso8601 strings (verbose mode)
+                    return parser.parse(string)
+                except:
+                    return self.options["default_string_decoder"](string)
         return string
 
