@@ -44,9 +44,9 @@ def escape(s):
 class Marshaler(object):
     def __init__(self, opts = {}):
         self.opts = opts
-        self.init_handlers()
+        self._init_handlers()
 
-    def init_handlers(self):
+    def _init_handlers(self):
         self.handlers = Handler()
 
     def are_stringable_keys(self, m):
@@ -305,13 +305,13 @@ class JsonMarshaler(Marshaler):
 class VerboseSettings(object):
     """ Mixin for JsonMarshaler that adds support for Verbose output/input."""
     @staticmethod
-    def verbose_handlers(handlers):
+    def _verbose_handlers(handlers):
         for k, v in handlers.iteritems():
             if hasattr(v, "verbose_handler"):
                 handlers[k] = v.verbose_handler()
 
-    def init_handlers(self):
-        self.handlers = self.verbose_handlers(Handler())
+    def _init_handlers(self):
+        self.handlers = self._verbose_handlers(Handler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)

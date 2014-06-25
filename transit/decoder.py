@@ -14,6 +14,9 @@ from helpers import pairs
 
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
+def map_from_list(l):
+    return dict(zip(l[1::2], l[2::2]))
+
 def identity(x):
     return x
 
@@ -69,11 +72,19 @@ class Decoder(object):
         elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
-            return tuple(self._decode(x, cache, as_map_key) for x in node)
+            return self.decode_list(node, cache, as_map_key)
         elif tp is str:
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         else:
             return node
+
+    def decode_list(self, node, cache, as_map_key):
+        ### do this.
+        _temp = tuple(self._decode(x, cache, as_map_key) for x in node)
+        if _temp:
+            if _temp[0] == MAP_AS_ARR:
+                return map_from_list(_temp)
+        return _temp
 
     def decode_string(self, string, cache, as_map_key):
         if is_cache_key(string):
