@@ -265,6 +265,13 @@ class JsonMarshaler(Marshaler):
         self.io.write("[")
         self.push_level()
 
+    def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default
+        self.emit_map_start(len(m))
+        for k, v in m.items():
+            self.marshal(k, True, cache)
+            self.marshal(v, False, cache)
+        self.emit_map_end()
+
     def emit_array_end(self):
         self.pop_level()
         self.io.write("]")
@@ -316,6 +323,7 @@ class VerboseSettings(object):
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
 
+    # :TODO: modify design to eliminate copy&paste b/t this and msgpack.
     def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
         self.emit_map_start(len(m))
         for k, v in m.items():
