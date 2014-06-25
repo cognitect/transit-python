@@ -30,7 +30,6 @@ def re_fn(pat):
 def is_unrecognized(s):
     s.startswith(RES +ESC)
 
-# a function def without a def
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
@@ -309,13 +308,13 @@ class VerboseSettings(object):
         for k, v in handlers.iteritems():
             if hasattr(v, "verbose_handler"):
                 handlers[k] = v.verbose_handler()
+        return handlers
 
     def _init_handlers(self):
         self.handlers = self._verbose_handlers(Handler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
-        pass
 
     def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
         self.emit_map_start(len(m))

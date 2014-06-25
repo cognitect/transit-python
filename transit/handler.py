@@ -222,4 +222,3 @@ class Handler(ClassDict):
         self[dict] = MapHandler
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
-

@@ -57,7 +57,11 @@ def exemplar(name, val):
         def test_reencode_json_verbose(self):
             io = StringIO()
             marshaler = Writer(io, protocol="json_verbose")
-            self.assertEqual(True, True)
+            marshaler.marshal_top(val)
+            s = io.getvalue()
+            io = StringIO(s)
+            newval = JsonUnmarshaler().load(io)
+            self.assertEqual(val, newval)
 
     globals()["test_" + name + "_json"] = ExemplarTest
 
