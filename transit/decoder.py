@@ -76,15 +76,13 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        # :TODO: actually, if this is a map, have to use True for key half.
-        # Forcing True will pass some scenarios. Need a solution that doesn't
-        # involve recursively decoding the entire list one half at a time again
-        # if our char is here.
-        _temp = tuple(self._decode(x, cache, True) for x in node)
-        if _temp:
-            if _temp[0] == MAP_AS_ARR:
-                return dict(pairs(_temp[1:]))
-        return _temp
+        """Special case decodes map-as-array."""
+        if node:
+            if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
+                return {self._decode(k, cache, True):
+                        self._decode(v, cache, as_map_key)
+                        for k,v in pairs(node[1:])}
+        return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
         if is_cache_key(string):
