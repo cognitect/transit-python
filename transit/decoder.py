@@ -29,9 +29,13 @@ def to_uuid(x):
 
 def to_date(x):
     if isinstance(x, (long, int)):
-        return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
-    return dateutil.parser.parse(x)
+        return convert_timestamp(x)
+    if "T" in x:
+        return dateutil.parser.parse(x)
+    return convert_timestamp(long(x))
 
+def convert_timestamp(ms):
+    return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
 
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
@@ -42,6 +46,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "u": to_uuid,
                                 "r": transit_types.URI,
                                 "t": to_date,
+                                "m": to_date,
                                 "list": identity,
                                 "set": frozenset,
                                 "cmap": lambda x: frozendict(pairs(x)),
@@ -121,11 +126,6 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                # hack alert
-                try:
-                    # works for iso8601 strings (verbose mode)
-                    return parser.parse(string)
-                except:
-                    return self.options["default_string_decoder"](string)
+                return self.options["default_string_decoder"](string)
         return string
 

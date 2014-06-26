@@ -33,6 +33,11 @@ def exemplar(name, val):
                 data = MsgPackUnmarshaler().load(stream)
                 self.assertEqual(val, data)
 
+        def test_json_verbose(self):
+            with open("../transit/simple-examples/" + name + ".json-verbose", 'r') as stream:
+                data = JsonUnmarshaler().load(stream)
+                self.assertEqual(val, data)
+
         def test_reencode_msgpack(self):
             io = StringIO()
             marshaler = Writer(io, protocol="msgpack")
