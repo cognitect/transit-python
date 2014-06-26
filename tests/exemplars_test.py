@@ -153,9 +153,9 @@ exemplar("map_vector_keys", frozendict([[(1, 1), "one"],
                                         [(2, 2), "two"]]))
 
 
-exemplar("map_unrecognized_vals", {Keyword("key"): "`~notrecognized"})
+exemplar("map_unrecognized_vals", {Keyword("key"): "~Unrecognized"})
 #exemplar("map_unrecognized_keys", )
-exemplar("vector_unrecognized_vals", ("`~notrecognized",))
+exemplar("vector_unrecognized_vals", ("~Unrecognized",))
 exemplar("vector_93_keywords_repeated_twice", tuple(array_of_symbools(93, 186)))
 exemplar("vector_94_keywords_repeated_twice", tuple(array_of_symbools(94, 188)))
 exemplar("vector_95_keywords_repeated_twice", tuple(array_of_symbools(95, 190)))
