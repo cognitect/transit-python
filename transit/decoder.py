@@ -29,11 +29,13 @@ def to_uuid(x):
 
 def to_date(x):
     if isinstance(x, (long, int)):
-        return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
+        return convert_timestamp(x)
     if "T" in x:
         return dateutil.parser.parse(x)
-    return datetime.datetime.fromtimestamp(long(x) / 1000.0, dateutil.tz.tzutc())
+    return convert_timestamp(long(x))
 
+def convert_timestamp(ms):
+    return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
 
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
