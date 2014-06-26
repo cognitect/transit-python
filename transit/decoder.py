@@ -126,11 +126,6 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                # hack alert
-                try:
-                    # works for iso8601 strings (verbose mode)
-                    return parser.parse(string)
-                except:
-                    return self.options["default_string_decoder"](string)
+                return self.options["default_string_decoder"](string)
         return string
 
