@@ -69,11 +69,20 @@ class Decoder(object):
         elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
-            return tuple(self._decode(x, cache, as_map_key) for x in node)
+            return self.decode_list(node, cache, as_map_key)
         elif tp is str:
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         else:
             return node
+
+    def decode_list(self, node, cache, as_map_key):
+        """Special case decodes map-as-array."""
+        if node:
+            if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
+                return {self._decode(k, cache, True):
+                        self._decode(v, cache, as_map_key)
+                        for k,v in pairs(node[1:])}
+        return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
         if is_cache_key(string):
@@ -112,6 +121,11 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                return self.options["default_string_decoder"](string)
+                # hack alert
+                try:
+                    # works for iso8601 strings (verbose mode)
+                    return parser.parse(string)
+                except:
+                    return self.options["default_string_decoder"](string)
         return string
 

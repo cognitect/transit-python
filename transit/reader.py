@@ -13,6 +13,7 @@ class JsonUnmarshaler(object):
     def load(self, stream):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 
+
 class MsgPackUnmarshaler(object):
     def __init__(self):
         self.decoder = Decoder()

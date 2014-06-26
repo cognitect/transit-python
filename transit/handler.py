@@ -6,7 +6,7 @@ from class_hash import ClassDict
 from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
 import uuid
 import datetime, time
-import dateutil
+from dateutil import tz
 
 class TaggedMap(object):
     def __init__(self, tag, rep, str):
@@ -144,7 +144,7 @@ class UriHandler(object):
         return u.data
 
 class DateTimeHandler(object):
-    epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=dateutil.tz.tzutc())
+    epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=tz.tzutc())
     @staticmethod
     def tag(_):
         return "t"
@@ -152,10 +152,17 @@ class DateTimeHandler(object):
     def rep(d):
         td = d - DateTimeHandler.epoch
         return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
-
+    @staticmethod
+    def verbose_handler():
+        return VerboseDateTimeHandler
     @staticmethod
     def string_rep(d):
         return d.isoformat()
+
+class VerboseDateTimeHandler(DateTimeHandler):
+    @staticmethod
+    def rep(d):
+        return DateTimeHandler.string_rep(d)
 
 class SetHandler(object):
     @staticmethod
@@ -215,4 +222,3 @@ class Handler(ClassDict):
         self[dict] = MapHandler
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
-
