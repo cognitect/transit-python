@@ -30,7 +30,9 @@ def to_uuid(x):
 def to_date(x):
     if isinstance(x, (long, int)):
         return datetime.datetime.fromtimestamp(x / 1000.0, dateutil.tz.tzutc())
-    return dateutil.parser.parse(x)
+    if "T" in x:
+        return dateutil.parser.parse(x)
+    return datetime.datetime.fromtimestamp(long(x) / 1000.0, dateutil.tz.tzutc())
 
 
 default_options = {"decoders": {"_": lambda _: None,
@@ -42,6 +44,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "u": to_uuid,
                                 "r": transit_types.URI,
                                 "t": to_date,
+                                "m": to_date,
                                 "list": identity,
                                 "set": frozenset,
                                 "cmap": lambda x: frozendict(pairs(x)),
