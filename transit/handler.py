@@ -147,7 +147,7 @@ class DateTimeHandler(object):
     epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=tz.tzutc())
     @staticmethod
     def tag(_):
-        return "t"
+        return "m"
     @staticmethod
     def rep(d):
         td = d - DateTimeHandler.epoch
@@ -157,12 +157,18 @@ class DateTimeHandler(object):
         return VerboseDateTimeHandler
     @staticmethod
     def string_rep(d):
-        return d.isoformat()
+        return str(DateTimeHandler.rep(d))
 
-class VerboseDateTimeHandler(DateTimeHandler):
+class VerboseDateTimeHandler(object):
+    @staticmethod
+    def tag(_):
+        return "t"
     @staticmethod
     def rep(d):
-        return DateTimeHandler.string_rep(d)
+        return d.isoformat()
+    @staticmethod
+    def string_rep(d):
+        return VerboseDateTimeHandler.rep(d)
 
 class SetHandler(object):
     @staticmethod
