@@ -1,14 +1,11 @@
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
-
 import re
 
 FIRST_ORD = 33
 CACHE_SIZE = 94*94
 MIN_SIZE_CACHEABLE = 4
 ESCAPED = re.compile("^~(#|\$|:)")
-## Copyright (c) Cognitect, Inc.
-## All rights reserved.
 
 def is_cache_key(name):
     return len(name) > 0 and name[0] == "^"
@@ -32,7 +29,8 @@ def is_cacheable(string, as_map_key=False):
     return string and len(string) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(string))
 
 class RollingCache(object):
-    # (1) should we use list or dict on read side?
+    # (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.
+      # dict lookup should be amortized O(1), for list O(n)
     # (2) currently stores value read from the wire, should probably store value after decoding
     # so we don't do multiple decodes. Sped up parsing in ruby by 30%.
     def __init__(self):
@@ -72,8 +70,7 @@ class RollingCache(object):
 
 
     def clear(self):
-        # Flushing this one will introduce bugs.
-        # self.key_to_value = {}
+        # self.key_to_value = {} <-- not necessary
         self.value_to_key = {}
 
 
