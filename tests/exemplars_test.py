@@ -190,8 +190,8 @@ exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
                                         {"aaaa": 3, "bbbb": 4},
                                         {"aaaa": 5, "bbbb": 6}))
 
-exemplar("maps_unrecognized_keys", (TaggedValue("~#abcde", Keyword("anything")),
-                                   TaggedValue("~#fghij", Keyword("anything-else")),))
+exemplar("maps_unrecognized_keys", (TaggedValue("abcde", Keyword("anything")),
+                                   TaggedValue("fghij", Keyword("anything-else")),))
 
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),

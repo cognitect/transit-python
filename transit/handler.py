@@ -138,10 +138,10 @@ class UriHandler(object):
         return "r"
     @staticmethod
     def rep(u):
-        return u.value
+        return u.rep
     @staticmethod
     def string_rep(u):
-        return u.data
+        return u.rep
 
 class DateTimeHandler(object):
     epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=tz.tzutc())
@@ -195,10 +195,10 @@ class MapHandler(object):
 class TaggedValueHandler(object):
     @staticmethod
     def tag(tv):
-        return "tagged_value"
+        return tv.tag
     @staticmethod
     def rep(tv):
-        return {tv.tag: tv.value}
+        return tv.rep
     @staticmethod
     def string_rep(_):
         return None

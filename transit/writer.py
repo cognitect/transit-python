@@ -7,8 +7,10 @@ import msgpack
 from handler import Handler
 import re
 
-def Writer(io, protocol="json", opts={}):
-    """ Top-level entry that gets the right kind of writer."""
+def Writer(io, protocol="json", custom_handlers={}, opts={}):
+    """ Top-level entry that gets the right kind of writer.
+        :TODO: protocol=format? Check transit.
+    """
     if protocol == "json":
         return JsonMarshaler(io, opts=opts) # opts
     if protocol == "json_verbose":
@@ -100,14 +102,6 @@ class Marshaler(object):
         self.marshal(rep, False, cache)
         self.emit_map_end()
 
-
-    # Might be different from spec, refer to dispatch.
-    def emit_tagged_value(self, rep, as_map_key, cache):
-        self.emit_map_start(1)
-        self.emit_object(cache.encode(rep.keys()[0], True), True)
-        self.marshal(rep.values()[0], False, cache)
-        self.emit_map_end()
-
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
@@ -170,8 +164,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "d": Marshaler.emit_double,
                     "'": Marshaler.emit_quoted,
                     "array": Marshaler.emit_array,
-                    "map": Marshaler.dispatch_map,
-                    "tagged_value": Marshaler.emit_tagged_value}
+                    "map": Marshaler.dispatch_map}
 
 
 class MsgPackMarshaler(Marshaler):

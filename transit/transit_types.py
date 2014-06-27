@@ -64,52 +64,52 @@ class _KWS(object):
 kws = _KWS()
 
 class TaggedValue(object):
-    def __init__(self, tag, data):
+    def __init__(self, tag, rep):
         self.tag = tag
-        self.value = data
+        self.rep = rep
     def __eq__(self, other):
         if isinstance(other, TaggedValue):
             return self.tag == other.tag and \
-                   self.value == other.value
+                   self.rep == other.rep
         return False
 
     def __ne__(self, other):
         return not (self == other)
 
     def __hash__(self):
-        if isinstance(self.value, list):
-            return reduce(lambda a, b: hash(a) ^ hash(b), self.value, 0)
-        return hash(self.value)
+        if isinstance(self.rep, list):
+            return reduce(lambda a, b: hash(a) ^ hash(b), self.rep, 0)
+        return hash(self.rep)
 
     def __str__(self):
         return repr(self)
 
     def __repr__(self):
-        return "#"+self.tag + " " + repr(self.value)
+        return self.tag + " " + repr(self.rep)
 
 class Set(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "set", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "set", rep)
 
 class CMap(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "cmap", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "cmap", rep)
 
 class Vector(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "vector", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "vector", rep)
 
 class Array(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "array", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "array", rep)
 
 class List(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "list", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "list", rep)
 
 class URI(TaggedValue):
-    def __init__(self, data):
-        TaggedValue.__init__(self, "uri", data)
+    def __init__(self, rep):
+        TaggedValue.__init__(self, "uri", rep)
 
 from collections import Mapping, Hashable
 class frozendict(Mapping, Hashable):
