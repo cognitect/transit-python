@@ -48,7 +48,7 @@ class BigIntHandler(object):
         return "n"
     @staticmethod
     def rep(n):
-        return n
+        return BigIntHandler.string_rep(n)
     @staticmethod
     def string_rep(n):
         return str(n)
@@ -227,7 +227,7 @@ class Handler(ClassDict):
         self[dict] = MapHandler
         self[int] = IntHandler
         self[float] = FloatHandler
-        self[long] = IntHandler
+        self[long] = BigIntHandler
         self[Keyword] = KeywordHandler
         self[Symbol] = SymbolHandler
         self[uuid.UUID] = UuidHandler
