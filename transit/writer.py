@@ -7,8 +7,10 @@ import msgpack
 from handler import Handler
 import re
 
-def Writer(io, protocol="json", opts={}):
-    """ Top-level entry that gets the right kind of writer."""
+def Writer(io, protocol="json", custom_handlers={}, opts={}):
+    """ Top-level entry that gets the right kind of writer.
+        :TODO: protocol=format? Check transit.
+    """
     if protocol == "json":
         return JsonMarshaler(io, opts=opts) # opts
     if protocol == "json_verbose":

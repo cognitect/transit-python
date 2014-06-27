@@ -51,8 +51,7 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "set": frozenset,
                                 "cmap": lambda x: frozendict(pairs(x)),
                                 "'": identity},
-                   "default_string_decoder": lambda x: "`" + str(x),
-                   "default_hash_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
+                   "default_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
 
 class Decoder(object):
 
@@ -112,7 +111,7 @@ class Decoder(object):
                 if decoder:
                     return decoder(self._decode(value, cache, as_map_key))
                 else:
-                    return self.options["default_hash_decoder"]({key[2:]: self.decode(value, cache, False)})
+                    return self.options["default_decoder"]({key[2:]: self.decode(value, cache, False)})
             else:
                 return {key: self._decode(value, cache, False)}
 
@@ -126,6 +125,6 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                return self.options["default_string_decoder"](string)
+                return self.options["default_decoder"]({string[1]: string[2:]})
         return string
 
