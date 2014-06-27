@@ -85,7 +85,7 @@ class TaggedValue(object):
         return repr(self)
 
     def __repr__(self):
-        return "#"+self.tag + " " + repr(self.rep)
+        return self.tag + " " + repr(self.rep)
 
 class Set(TaggedValue):
     def __init__(self, rep):

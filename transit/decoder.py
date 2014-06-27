@@ -112,7 +112,7 @@ class Decoder(object):
                 if decoder:
                     return decoder(self._decode(value, cache, as_map_key))
                 else:
-                    return self.options["default_hash_decoder"]({key: self.decode(value, cache, False)})
+                    return self.options["default_hash_decoder"]({key[2:]: self.decode(value, cache, False)})
             else:
                 return {key: self._decode(value, cache, False)}
 
