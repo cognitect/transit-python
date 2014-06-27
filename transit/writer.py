@@ -101,6 +101,7 @@ class Marshaler(object):
         self.emit_map_end()
 
 
+    # ---DEAD BUT PRESERVED FOR REFERENCE---
     # Might be different from spec, refer to dispatch.
     def emit_tagged_value(self, rep, as_map_key, cache):
         self.emit_map_start(1)
@@ -170,8 +171,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "d": Marshaler.emit_double,
                     "'": Marshaler.emit_quoted,
                     "array": Marshaler.emit_array,
-                    "map": Marshaler.dispatch_map,
-                    "tagged_value": Marshaler.emit_tagged_value}
+                    "map": Marshaler.dispatch_map}
 
 
 class MsgPackMarshaler(Marshaler):
