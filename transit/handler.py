@@ -42,6 +42,17 @@ class IntHandler(object):
     def string_rep(i):
         return str(i)
 
+class BigIntHandler(object):
+    @staticmethod
+    def tag(_):
+        return "n"
+    @staticmethod
+    def rep(n):
+        return n
+    @staticmethod
+    def string_rep(n):
+        return str(n)
+
 class FloatHandler(object):
     @staticmethod
     def tag(_):
