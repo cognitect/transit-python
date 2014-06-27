@@ -102,15 +102,6 @@ class Marshaler(object):
         self.marshal(rep, False, cache)
         self.emit_map_end()
 
-
-    # ---DEAD BUT PRESERVED FOR REFERENCE---
-    # Might be different from spec, refer to dispatch.
-    def emit_tagged_value(self, rep, as_map_key, cache):
-        self.emit_map_start(1)
-        self.emit_object(cache.encode(rep.keys()[0], True), True)
-        self.marshal(rep.values()[0], False, cache)
-        self.emit_map_end()
-
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
