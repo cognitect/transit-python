@@ -8,7 +8,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.path.pardir))
 
 # then import transit stuff
-from transit.reader import JsonUnmarshaler, MsgPackUnmarshaler
+from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
 from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
 from StringIO import StringIO
@@ -25,47 +25,51 @@ def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
         def test_json(self):
             with open("../transit/simple-examples/" + name + ".json", 'r') as stream:
-                data = JsonUnmarshaler().load(stream)
+                data = Reader(protocol="json").read(stream)
                 self.assertEqual(val, data)
 
         def test_msgpack(self):
             with open("../transit/simple-examples/" + name + ".mp", 'r') as stream:
-                data = MsgPackUnmarshaler().load(stream)
+                data = Reader(protocol="msgpack").read(stream)
                 self.assertEqual(val, data)
 
         def test_json_verbose(self):
             with open("../transit/simple-examples/" + name + ".json-verbose", 'r') as stream:
-                data = JsonUnmarshaler().load(stream)
+                data = Reader(protocol="json_verbose").read(stream)
                 self.assertEqual(val, data)
 
         def test_reencode_msgpack(self):
             io = StringIO()
-            marshaler = Writer(io, protocol="msgpack")
-            marshaler.marshal_top(val)
+            writer = Writer(io, protocol="msgpack")
+            writer.write(val)
             s = io.getvalue()
             io = StringIO(s)
-            newval = MsgPackUnmarshaler().load(io)
+
+            reader = Reader(protocol="msgpack")
+            newval = reader.read(io)
             self.assertEqual(val, newval)
 
         def test_reencode_json(self):
             io = StringIO()
-            marshaler = Writer(io, protocol="json")
-            marshaler.marshal_top(val)
+            writer = Writer(io, protocol="json")
+            writer.write(val)
             s = io.getvalue()
             # Uncomment when debugging to see what payloads fail
             # print(s)
             io = StringIO(s)
-            newval = JsonUnmarshaler().load(io)
+            reader = Reader(protocol="json")
+            newval = reader.read(io)
             self.assertEqual(val, newval)
 
         # test json verbose
         def test_reencode_json_verbose(self):
             io = StringIO()
-            marshaler = Writer(io, protocol="json_verbose")
-            marshaler.marshal_top(val)
+            writer = Writer(io, protocol="json_verbose")
+            writer.write(val)
             s = io.getvalue()
             io = StringIO(s)
-            newval = JsonUnmarshaler().load(io)
+            reader = Reader(protocol="json_verbose")
+            newval = reader.read(io)
             self.assertEqual(val, newval)
 
     globals()["test_" + name + "_json"] = ExemplarTest

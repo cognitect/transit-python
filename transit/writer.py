@@ -7,16 +7,24 @@ import msgpack
 from handler import Handler
 import re
 
-def Writer(io, protocol="json", custom_handlers={}, opts={}):
-    """ Top-level entry that gets the right kind of writer.
-        :TODO: protocol=format? Check transit.
-    """
-    if protocol == "json":
-        return JsonMarshaler(io, opts=opts) # opts
-    if protocol == "json_verbose":
-        return VerboseJsonMarshaler(io, opts=opts) # opts
-    if protocol == "msgpack":
-        return MsgPackMarshaler(io, opts=opts) # opts
+class Writer(object):
+
+    def __init__(self, io, protocol="json", opts={}):
+        """ Top-level entry that gets the right kind of writer.
+            :TODO: protocol=format? Check transit.
+        """
+        if protocol == "json":
+            self.marshaler = JsonMarshaler(io, opts=opts)
+        elif protocol == "json_verbose":
+            self.marshaler = VerboseJsonMarshaler(io, opts=opts)
+        else:
+            self.marshaler = MsgPackMarshaler(io, opts=opts)
+
+    def write(self, obj):
+        self.marshaler.marshal_top(obj)
+
+    def register(self, obj_type, handler_class):
+        self.marshaler.register(obj_type, handler_class)
 
 def flatten_map(m):
     # This is the fastest way to do this in Python
@@ -156,6 +164,8 @@ class Marshaler(object):
             return self.emit_map(rep, as_map_key, cache)
         return self.emit_cmap(rep, as_map_key, cache)
 
+    def register(self, obj_type, handler_class):
+        self.handlers[obj_type] = handler_class
 
 marshal_dispatch = {"_": Marshaler.emit_nil,
                     "?": Marshaler.emit_boolean,

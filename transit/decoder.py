@@ -129,3 +129,8 @@ class Decoder(object):
                 return self.options["default_decoder"]({string[1]: string[2:]})
         return string
 
+    def register(key_or_tag, func):
+        if key_or_tag == "default_decoder":
+            self.options["default_decoder"] = func
+        else:
+            self.decoders[key_or_tag] = func
