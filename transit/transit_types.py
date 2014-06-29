@@ -7,9 +7,10 @@ class Keyword(object):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
+        self.hv = value.__hash__()
 
     def __hash__(self):
-        return hash(self.str)
+        return self.hv
 
     def __eq__(self, other):
         return isinstance(other, Keyword) and self.str == other.str
@@ -27,9 +28,10 @@ class Symbol(object):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
+        self.hv = value.__hash__()
 
     def __hash__(self):
-        return hash(self.str)
+        return self.hv
 
     def __eq__(self, other):
         return isinstance(other, Symbol) and self.str == other.str

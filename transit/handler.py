@@ -48,7 +48,7 @@ class BigIntHandler(object):
         return "n"
     @staticmethod
     def rep(n):
-        return BigIntHandler.string_rep(n)
+        return str(n)
     @staticmethod
     def string_rep(n):
         return str(n)
@@ -62,7 +62,7 @@ class FloatHandler(object):
         return str(f)
     @staticmethod
     def string_rep(f):
-        return FloatHandler.rep(f)
+        return str(f)
 
 class StringHandler(object):
     @staticmethod
@@ -179,7 +179,7 @@ class VerboseDateTimeHandler(object):
         return d.isoformat()
     @staticmethod
     def string_rep(d):
-        return VerboseDateTimeHandler.rep(d)
+        return d.isoformat()
 
 class SetHandler(object):
     @staticmethod
