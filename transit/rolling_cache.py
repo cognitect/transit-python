@@ -1,11 +1,12 @@
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
 import re
+from constants import ESC
 
 FIRST_ORD = 33
 CACHE_SIZE = 94*94
 MIN_SIZE_CACHEABLE = 4
-ESCAPED = re.compile("^~(#|\$|:)")
+#ESCAPED = re.compile("^~(#|\$|:)")
 
 def is_cache_key(name):
     return len(name) and name[0] == "^"
@@ -24,7 +25,11 @@ def decode_key(s):
     return (ord(s[2]) - FIRST_ORD) + (94 * (ord(s[1]) - FIRST_ORD))
 
 def is_cacheable(string, as_map_key=False):
-    return string and len(string) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(string))
+    return string \
+            and len(string) >= MIN_SIZE_CACHEABLE \
+            and (as_map_key \
+                 or string[0] == ESC)
+            #or ESCAPED.match(string)) # TODO:Do we need to be this robust in a check?
 
 class RollingCache(object):
     # (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.
