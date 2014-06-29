@@ -68,7 +68,10 @@ class Marshaler(object):
         return self.emit_string(ESC, "_", None, True, cache) if as_map_key else self.emit_object(None)
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        return self.emit_object(cache.encode(str(prefix) + tag + escape(string), as_map_key), as_map_key)
+        encoded = cache.encode(str(prefix)+tag+escape(string), as_map_key)
+        if "cache_enabled" in self.opts and cache.is_cacheable(encoded, as_map_key):
+            return self.emit_object(cache.value_to_key(encoded), as_map_key)
+        return self.emit_object(encoded, as_map_key)
 
     def emit_boolean(self, b, as_map_key, cache):
         return self.emit_string(ESC, "?", b, True, cache) if as_map_key else self.emit_object(b)
