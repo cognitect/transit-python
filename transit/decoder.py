@@ -132,3 +132,4 @@ class Decoder(object):
             self.options["default_decoder"] = func
         else:
             self.decoders[key_or_tag] = func
+

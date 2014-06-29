@@ -237,6 +237,7 @@ class JsonMarshaler(Marshaler):
         self.started = [True]
         self.is_key = [None]
         Marshaler.__init__(self, nopts)
+        self.flush = self.io.flush
 
     def push_level(self):
         self.started.append(True)
@@ -254,14 +255,16 @@ class JsonMarshaler(Marshaler):
         if self.started[-1]:
             self.started[-1] = False
         else:
-            if self.is_key[-1] is None:
-                self.io.write(",")
-            elif self.is_key[-1] is True:
+            last = self.is_key[-1]
+            if last:
                 self.io.write(":")
                 self.is_key[-1] = False
-            else:
+            elif last is False:
                 self.io.write(",")
                 self.is_key[-1] = True
+            else:
+            #elif last is None:
+                self.io.write(",")
 
     def emit_array_start(self, size):
         self.write_sep()
@@ -288,27 +291,22 @@ class JsonMarshaler(Marshaler):
         self.pop_level()
         self.io.write("}")
 
-    #@profile
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp == str or tp == unicode:
+        if tp is str or tp is unicode:
             self.io.write("\"")
             self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
             self.io.write("\"")
-        elif tp == int or tp == long:
+        elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
-        elif tp == float:
-            self.io.write(str(obj))
-        elif tp == bool:
+        elif tp is bool:
             self.io.write("true" if obj else "false")
-        elif obj == None:
+        elif obj is None:
             self.io.write("null")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))
 
-    def flush(self):
-        self.io.flush()
 
 
 class VerboseSettings(object):
@@ -338,3 +336,4 @@ class VerboseSettings(object):
 class VerboseJsonMarshaler(VerboseSettings, JsonMarshaler):
     """ JsonMarshaler class with VerboseSettings mixin"""
     pass # All from inheritance and mixin
+

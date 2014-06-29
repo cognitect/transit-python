@@ -71,9 +71,6 @@ class RollingCache(object):
 
         return name
 
-
     def clear(self):
         self.value_to_key = {}
-
-
 

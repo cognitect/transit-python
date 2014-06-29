@@ -16,8 +16,7 @@ class ClassDict(collections.MutableMapping):
         if key in self.store:
             return self.store[key]
         else:
-            types = key.__bases__
-            for t in types:
+            for t in key.__bases__:
                 value = t in self.store and self.store[t]
                 if value:
                     return value
@@ -34,3 +33,4 @@ class ClassDict(collections.MutableMapping):
 
     def __len__(self):
         return len(self.store)
+
