@@ -8,22 +8,20 @@ MIN_SIZE_CACHEABLE = 4
 ESCAPED = re.compile("^~(#|\$|:)")
 
 def is_cache_key(name):
-    return len(name) > 0 and name[0] == "^"
+    return len(name) and name[0] == "^"
 
 def encode_key(i):
     lo = i % 94
     hi = i // 94
     if hi == 0:
         return "^" + chr(i + FIRST_ORD)
-    else:
-        return "^" + chr(hi + FIRST_ORD) + chr(lo + FIRST_ORD)
+    return "^" + chr(hi + FIRST_ORD) + chr(lo + FIRST_ORD)
 
 def decode_key(s):
     sz = len(s)
     if sz == 2:
         return ord(s[1]) - FIRST_ORD
-    else:
-        return (ord(s[2]) - FIRST_ORD) + (94 * (ord(s[1]) - FIRST_ORD))
+    return (ord(s[2]) - FIRST_ORD) + (94 * (ord(s[1]) - FIRST_ORD))
 
 def is_cacheable(string, as_map_key=False):
     return string and len(string) >= MIN_SIZE_CACHEABLE and (as_map_key or ESCAPED.match(string))
@@ -35,7 +33,7 @@ class RollingCache(object):
     # so we don't do multiple decodes. Sped up parsing in ruby by 30%.
     def __init__(self):
         self.key_to_value = {}
-        self.clear()
+        self.value_to_key = {}
 
     # if index rolls over... (bug)
     def decode(self, name, as_map_key=False):
@@ -54,7 +52,7 @@ class RollingCache(object):
         return len(self.key_to_value)
 
     def is_cache_full(self):
-        return self.size() > CACHE_SIZE
+        return len(self.key_to_value) > CACHE_SIZE
 
     def encache(self, name):
         if self.is_cache_full():
@@ -70,7 +68,6 @@ class RollingCache(object):
 
 
     def clear(self):
-        # self.key_to_value = {} <-- not necessary
         self.value_to_key = {}
 
 

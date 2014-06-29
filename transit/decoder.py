@@ -92,11 +92,9 @@ class Decoder(object):
     def decode_string(self, string, cache, as_map_key):
         if is_cache_key(string):
             return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
-        elif is_cacheable(string, as_map_key):
+        if is_cacheable(string, as_map_key):
             cache.encode(string, as_map_key)
-            return self.parse_string(string, cache, as_map_key)
-        else:
-            return self.parse_string(string, cache, as_map_key)
+        return self.parse_string(string, cache, as_map_key)
 
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) != 1:
