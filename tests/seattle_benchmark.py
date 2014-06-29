@@ -14,12 +14,15 @@ def run_tests(data):
     tt = time.time()
     json.load(datas)
     ett = time.time()
-    print "Done: " + str((et - t) * 1000.0) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
+    read_delta = (et - t) * 1000.0
+    print "Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
+    return read_delta
 
 fd = open("../transit/seattle-data0.tjs", 'r')
 data = fd.read()
 fd.close()
 
-for x in range(100):
-    run_tests(data)
+runs = 100
+deltas = [run_tests(data) for x in range(runs)]
+print "\nMean: "+str(sum(deltas)/runs)
 
