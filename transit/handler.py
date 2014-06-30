@@ -3,7 +3,7 @@
 
 from constants import *
 from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
+from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
 import uuid
 import datetime, time
 from dateutil import tz
@@ -214,6 +214,14 @@ class TaggedValueHandler(object):
     def string_rep(_):
         return None
 
+class LinkHandler(object):
+    @staticmethod
+    def tag(_):
+        return "link"
+    def rep(m):
+        return m
+    def string_rep(_):
+        return None
 
 class Handler(ClassDict):
     def __init__(self):
@@ -239,3 +247,4 @@ class Handler(ClassDict):
         self[dict] = MapHandler
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
+        self[Link] = LinkHandler

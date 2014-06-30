@@ -128,3 +128,40 @@ class frozendict(Mapping, Hashable):
     def __repr__(self):
         return 'frozendict(%r)' % (self._dict,)
 
+class Link(frozendict):
+    """ Link extends frozendict for its expected keys. """
+    # Class property constants for rendering types
+    LINK = "link"
+    IMAGE = "image"
+
+    # Class property constants for keywords/obj properties.
+    HREF = "href"
+    REL = "rel"
+    PROMPT = "prompt"
+    NAME = "name"
+    RENDER = "render"
+
+    def __init__(self, href, rel, name=None, render=None, prompt=None):
+        self._dict[Link.HREF] = href
+        self._dict[Link.REL] = rel
+        if prompt: self._dict[Link.PROMPT] = prompt
+        if name: self._dict[Link.NAME] = name
+        if render:
+            assert render.lower() in [Link.LINK, Link.IMAGE]
+            self._dict[Link.RENDER] = render
+
+    @property
+    def href(self):
+        return self._dict[Link.HREF]
+    @property
+    def rel(self):
+        return self._dict[Link.REL]
+    @property
+    def prompt(self):
+        return self._dict[Link.PROMPT]
+    @property
+    def name(self):
+        return self._dict[Link.NAME]
+    @property
+    def render(self):
+        return self._dict[Link.RENDER]
