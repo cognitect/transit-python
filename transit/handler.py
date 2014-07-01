@@ -220,7 +220,7 @@ class LinkHandler(object):
         return "link"
     @staticmethod
     def rep(l):
-        return l.as_array
+        return l.as_map
     @staticmethod
     def string_rep(_):
         return None

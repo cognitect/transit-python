@@ -130,8 +130,6 @@ class frozendict(Mapping, Hashable):
 
 class Link(frozendict):
     """ Link extends frozendict for its expected keys. """
-    # ...Consider moving this to a namedtuple at somepoint...
-
     # Class property constants for rendering types
     LINK = "link"
     IMAGE = "image"
@@ -143,17 +141,15 @@ class Link(frozendict):
     NAME = "name"
     RENDER = "render"
 
-    def __init__(self, href, rel, name=None, render=None, prompt=None):
-        self._dict = {}
-        self._dict[Link.HREF] = href
-        self._dict[Link.REL] = rel
-        if prompt:
-            self._dict[Link.PROMPT] = prompt
-        if name:
-            self._dict[Link.NAME] = name
+    def __init__(self, href=None, rel=None, name=None, render=None, prompt=None):
+        assert href and rel
         if render:
             assert render.lower() in [Link.LINK, Link.IMAGE]
-            self._dict[Link.RENDER] = render
+        self._dict = {Link.HREF: href,
+                      Link.REL: rel,
+                      Link.NAME: name,
+                      Link.RENDER: render,
+                      Link.PROMPT: prompt}
 
     @property
     def href(self):
@@ -170,6 +166,9 @@ class Link(frozendict):
     @property
     def render(self):
         return self._dict[Link.RENDER]
+    @property
+    def as_map(self):
+        return self._dict
     @property
     def as_array(self):
         return [self.href, self.rel, self.name, self.render, self.prompt]
