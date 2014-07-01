@@ -142,6 +142,7 @@ class Link(frozendict):
     RENDER = "render"
 
     def __init__(self, href, rel, name=None, render=None, prompt=None):
+        self._dict = {}
         self._dict[Link.HREF] = href
         self._dict[Link.REL] = rel
         if prompt: self._dict[Link.PROMPT] = prompt
@@ -165,3 +166,6 @@ class Link(frozendict):
     @property
     def render(self):
         return self._dict[Link.RENDER]
+    @property
+    def as_array(self):
+        return [self.href, self.rel, self.name, self.render, self.prompt]

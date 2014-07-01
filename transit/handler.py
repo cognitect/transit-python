@@ -218,8 +218,10 @@ class LinkHandler(object):
     @staticmethod
     def tag(_):
         return "link"
-    def rep(m):
-        return m
+    @staticmethod
+    def rep(l):
+        return l.as_array
+    @staticmethod
     def string_rep(_):
         return None
 

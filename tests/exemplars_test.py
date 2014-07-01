@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.pat
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
-from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
 from StringIO import StringIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
@@ -196,6 +196,9 @@ exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
 
 exemplar("maps_unrecognized_keys", (TaggedValue("abcde", Keyword("anything")),
                                    TaggedValue("fghij", Keyword("anything-else")),))
+
+# Doesn't exist in simple examples but gave me tests to verify Link.
+#exemplar("link", Link("http://www.blah.com", "test", "test", "link", "test"))
 
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),
