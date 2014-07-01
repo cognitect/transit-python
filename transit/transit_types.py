@@ -113,7 +113,7 @@ class URI(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "uri", rep)
 
-from collections import Mapping, Hashable
+from collections import Mapping, Hashable, namedtuple
 class frozendict(Mapping, Hashable):
     def __init__(self, *args, **kwargs):
         self._dict = dict(*args, **kwargs)
@@ -130,6 +130,8 @@ class frozendict(Mapping, Hashable):
 
 class Link(frozendict):
     """ Link extends frozendict for its expected keys. """
+    # ...Consider moving this to a namedtuple at somepoint...
+
     # Class property constants for rendering types
     LINK = "link"
     IMAGE = "image"
@@ -145,8 +147,10 @@ class Link(frozendict):
         self._dict = {}
         self._dict[Link.HREF] = href
         self._dict[Link.REL] = rel
-        if prompt: self._dict[Link.PROMPT] = prompt
-        if name: self._dict[Link.NAME] = name
+        if prompt:
+            self._dict[Link.PROMPT] = prompt
+        if name:
+            self._dict[Link.NAME] = name
         if render:
             assert render.lower() in [Link.LINK, Link.IMAGE]
             self._dict[Link.RENDER] = render
@@ -169,3 +173,4 @@ class Link(frozendict):
     @property
     def as_array(self):
         return [self.href, self.rel, self.name, self.render, self.prompt]
+
