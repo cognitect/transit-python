@@ -55,6 +55,11 @@ default_options = {"decoders": {"_": lambda _: None,
                                 "'": identity},
                    "default_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
 
+ground_decoders = {"_": lambda _: None,
+                   "?": lambda x: x == "t",
+                   "i": int,
+                   "'": identity}
+
 class Decoder(object):
 
     def __init__(self, options={}):
@@ -62,6 +67,8 @@ class Decoder(object):
         self.options.update(options)
 
         self.decoders = self.options["decoders"]
+        # Always ensure we control the ground decoders
+        self.decoders.update(ground_decoders)
 
     def decode(self, node, cache=None, as_map_key=False):
         if not cache:
