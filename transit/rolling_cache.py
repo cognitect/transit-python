@@ -1,12 +1,10 @@
 # Copyright (c) Cognitect, Inc.
 # All rights reserved.
-import re
 from constants import ESC, SUB, MAP_AS_ARR
 
 FIRST_ORD = 33
 CACHE_SIZE = 94*94
 MIN_SIZE_CACHEABLE = 4
-ESCAPED = re.compile("^~(#|\$|:)")
 
 def is_cache_key(name):
     return len(name) and (name[0] == SUB and name != MAP_AS_ARR)
@@ -28,10 +26,14 @@ def is_cacheable(string, as_map_key=False):
     return string \
             and len(string) >= MIN_SIZE_CACHEABLE \
             and (as_map_key \
-            #or string[0] == ESC) # TODO: The docs suggest a robust check here, but not sure if that's needed?
-            or ESCAPED.match(string))
+            or (string[:2] in ["~#", "~$", "~:"]))
 
 class RollingCache(object):
+    """ This is the internal cache used by python-transit for cacheing and
+    expanding map keys during writing and reading.  The cache enables transit
+    to minimize the amount of duplicate data sent over the wire, effectively
+    compressing down the overall payload size.  The cache is not intended to
+    be used directly."""
     # (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.
       # dict lookup should be amortized O(1), for list O(n)
     # (2) currently stores value read from the wire, should probably store value after decoding

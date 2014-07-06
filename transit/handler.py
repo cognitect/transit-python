@@ -8,6 +8,9 @@ import uuid
 import datetime, time
 from dateutil import tz
 
+# This file contains all the top-level objects used when writing Transit
+# data.  These object must all be immutable and pickleable.
+
 class TaggedMap(object):
     def __init__(self, tag, rep, str):
         self._tag = tag
@@ -226,6 +229,10 @@ class LinkHandler(object):
         return None
 
 class Handler(ClassDict):
+    """This is the master handler for encoding Python data into Transit data,
+    based on its type.  The Handler itself is a dispatch map, that resolves
+    on full type/object inheritance."""
+
     def __init__(self):
         super(Handler, self).__init__()
         self[type(None)] = NoneHandler
@@ -250,3 +257,4 @@ class Handler(ClassDict):
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
         self[Link] = LinkHandler
+
