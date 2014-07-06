@@ -15,9 +15,11 @@ from helpers import pairs
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
 def identity(x):
+    """ The single-arity identity function"""
     return x
 
 def to_uuid(x):
+    """ Given a string, return a UUID object"""
     if isinstance(x, basestring):
         return uuid.UUID(x)
 
@@ -27,15 +29,18 @@ def to_uuid(x):
     combined = a.value << 64 | b.value
     return uuid.UUID(int=combined)
 
+def convert_timestamp(ms):
+    """ Given a timestamp in ms, return a DateTime object"""
+    return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
+
 def to_date(x):
+    """ Given an encoding of a date (int, long, long-able, or DateTime string,
+    return a DateTime object"""
     if isinstance(x, (long, int)):
         return convert_timestamp(x)
     if "T" in x:
         return dateutil.parser.parse(x)
     return convert_timestamp(long(x))
-
-def convert_timestamp(ms):
-    return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
 
 default_options = {"decoders": {"_": lambda _: None,
                                 ":": transit_types.Keyword,
@@ -61,6 +66,8 @@ ground_decoders = {"_": lambda _: None,
                    "'": identity}
 
 class Decoder(object):
+    """ The Decoder is the lowest level entry point for parsing, decoding, and
+    fully converting Transit data into Python objects"""
 
     def __init__(self, options={}):
         self.options = default_options.copy()
@@ -71,6 +78,11 @@ class Decoder(object):
         self.decoders.update(ground_decoders)
 
     def decode(self, node, cache=None, as_map_key=False):
+        """ Given a node of data (any supported decodeable obj - string, dict,
+        list), return the decoded object.  Optionally set the current decode
+        cache [None].  If None, a new RollingCache is instantiated and used.
+        You may also hit to the decoder that this node is to be treated as a
+        map key [False].  This is used internally."""
         if not cache:
             cache = RollingCache()
         return self._decode(node, cache, as_map_key)
@@ -89,7 +101,7 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        """Special case decodes map-as-array."""
+        """ Special case decodes map-as-array."""
         if node:
             if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
                 return {self._decode(k, cache, True):
@@ -135,7 +147,11 @@ class Decoder(object):
                 return self.options["default_decoder"]({string[1]: string[2:]})
         return string
 
-    def register(key_or_tag, func):
+    def register(self, key_or_tag, func):
+        """ Register a custom Transit tag and new parsing function with the
+        decoder.  Also, you can optionally set the 'default_decoder' with
+        this function.  Your new tag and parse/decode function will be added
+        to the interal dictionary of decoders for this Decoder object"""
         if key_or_tag == "default_decoder":
             self.options["default_decoder"] = func
         else:
