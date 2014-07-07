@@ -4,7 +4,7 @@
 from constants import *
 from rolling_cache import RollingCache
 import msgpack
-from handler import Handler
+from write_handlers import Handler
 import re
 
 class Writer(object):
@@ -12,7 +12,7 @@ class Writer(object):
     to Transit data.  During initialization, you must specify the protocol used
     for marshalling the data- json or msgpack.  You must also specify the io
     source used for writing (a file descriptor).  You may optionally pass in
-    an options dictionary that will be forwarded onto the Marshaller."""
+    an options dictionary that will be forwarded onto the Marshaler."""
     def __init__(self, io, protocol="json", opts={}):
         if protocol == "json":
             self.marshaler = JsonMarshaler(io, opts=opts)
