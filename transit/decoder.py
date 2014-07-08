@@ -13,72 +13,45 @@
 ## limitations under the License.
 
 import transit_types
-from transit_types import TaggedValue, frozendict
 from constants import *
-import uuid
-import ctypes
 from collections import OrderedDict
-import dateutil.parser
-import datetime
-import dateutil.tz
 from helpers import pairs
-
+import read_handlers as rh
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
-def identity(x):
-    """ The single-arity identity function"""
-    return x
+default_options = {"decoders": {"_": rh.NoneHandler,
+                                ":": rh.KeywordHandler,
+                                "$": rh.SymbolHandler,
+                                "?": rh.BooleanHandler,
+                                "i": rh.IntHandler,
+                                "f": rh.FloatHandler,
+                                "u": rh.UuidHandler,
+                                "r": rh.UriHandler,
+                                "t": rh.DateHandler,
+                                "m": rh.DateHandler,
+                                "n": rh.BigIntegerHandler,
+                                "link": rh.LinkHandler,
+                                "list": rh.ListHandler,
+                                "set": rh.SetHandler,
+                                "cmap": rh.CmapHandler,
+                                "'": rh.IdentityHandler},
+                   "default_decoder": rh.DefaultHandler}
 
-def to_uuid(x):
-    """ Given a string, return a UUID object"""
-    if isinstance(x, basestring):
-        return uuid.UUID(x)
-
-    # hack to remove signs
-    a = ctypes.c_ulong(x[0])
-    b = ctypes.c_ulong(x[1])
-    combined = a.value << 64 | b.value
-    return uuid.UUID(int=combined)
-
-def convert_timestamp(ms):
-    """ Given a timestamp in ms, return a DateTime object"""
-    return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
-
-def to_date(x):
-    """ Given an encoding of a date (int, long, long-able, or DateTime string,
-    return a DateTime object"""
-    if isinstance(x, (long, int)):
-        return convert_timestamp(x)
-    if "T" in x:
-        return dateutil.parser.parse(x)
-    return convert_timestamp(long(x))
-
-default_options = {"decoders": {"_": lambda _: None,
-                                ":": transit_types.Keyword,
-                                "$": transit_types.Symbol,
-                                "?": lambda x: x == "t",
-                                "i": int,
-                                "f": float,
-                                "u": to_uuid,
-                                "r": transit_types.URI,
-                                "t": to_date,
-                                "m": to_date,
-                                "n": int,
-                                "link": lambda kwargs: transit_types.Link(**kwargs),
-                                "list": identity,
-                                "set": frozenset,
-                                "cmap": lambda x: frozendict(pairs(x)),
-                                "'": identity},
-                   "default_decoder": lambda h: TaggedValue(h.keys()[0], h.values()[0]), }
-
-ground_decoders = {"_": lambda _: None,
-                   "?": lambda x: x == "t",
-                   "i": int,
-                   "'": identity}
+ground_decoders = {"_": rh.NoneHandler,
+                   "?": rh.KeywordHandler,
+                   "i": rh.IntHandler,
+                   "'": rh.IdentityHandler}
 
 class Decoder(object):
     """ The Decoder is the lowest level entry point for parsing, decoding, and
-    fully converting Transit data into Python objects"""
+    fully converting Transit data into Python objects.
+
+    During the creation of a Decoder object, you can specify custom options
+    in a dictionary.  One such option is 'decoders'.  Note that while you
+    can specify your own decoders and override many of the built in decoders,
+    some decoders are silently enforced and cannot be overriden.  These are
+    known as Ground Decoders, and are needed to maintain bottom-tier
+    compatibility."""
 
     def __init__(self, options={}):
         self.options = default_options.copy()
@@ -112,7 +85,11 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        """ Special case decodes map-as-array."""
+        """ Special case decodes map-as-array.
+        Otherwise lists are treated as Python lists.
+
+        Arguments follow the same convention as the top-level 'decode'
+        function"""
         if node:
             if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
                 return {self._decode(k, cache, True):
@@ -121,6 +98,8 @@ class Decoder(object):
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
+        """ Decode a string - arguments follow the same convention as the
+        top-level 'decode' function"""
         if is_cache_key(string):
             return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
         if is_cacheable(string, as_map_key):
@@ -139,9 +118,9 @@ class Decoder(object):
             if isinstance(key, basestring) and key.startswith(TAG):
                 decoder = self.decoders.get(key[2:], None)
                 if decoder:
-                    return decoder(self._decode(value, cache, as_map_key))
+                    return decoder.from_rep(self._decode(value, cache, as_map_key))
                 else:
-                    return self.options["default_decoder"]({key[2:]: self.decode(value, cache, False)})
+                    return self.options["default_decoder"].from_rep(key[2:], self.decode(value, cache, False))
             else:
                 return {key: self._decode(value, cache, False)}
 
@@ -149,22 +128,22 @@ class Decoder(object):
         if string.startswith(ESC):
             m = string[1]
             if m in self.decoders:
-                return self.decoders[m](string[2:])
+                return self.decoders[m].from_rep(string[2:])
             elif m == ESC or m == SUB or m == RES:
                 return string[1:]
             elif m == "#":
                 return string
             else:
-                return self.options["default_decoder"]({string[1]: string[2:]})
+                return self.options["default_decoder"](string[1], string[2:])
         return string
 
-    def register(self, key_or_tag, func):
+    def register(self, key_or_tag, obj):
         """ Register a custom Transit tag and new parsing function with the
         decoder.  Also, you can optionally set the 'default_decoder' with
         this function.  Your new tag and parse/decode function will be added
         to the interal dictionary of decoders for this Decoder object"""
         if key_or_tag == "default_decoder":
-            self.options["default_decoder"] = func
+            self.options["default_decoder"] = obj
         else:
-            self.decoders[key_or_tag] = func
+            self.decoders[key_or_tag] = obj
 

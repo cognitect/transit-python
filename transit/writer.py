@@ -15,7 +15,7 @@
 from constants import *
 from rolling_cache import RollingCache
 import msgpack
-from handler import Handler
+from write_handlers import WriteHandler
 import re
 
 class Writer(object):
@@ -23,7 +23,7 @@ class Writer(object):
     to Transit data.  During initialization, you must specify the protocol used
     for marshalling the data- json or msgpack.  You must also specify the io
     source used for writing (a file descriptor).  You may optionally pass in
-    an options dictionary that will be forwarded onto the Marshaller."""
+    an options dictionary that will be forwarded onto the Marshaler."""
     def __init__(self, io, protocol="json", opts={}):
         if protocol == "json":
             self.marshaler = JsonMarshaler(io, opts=opts)
@@ -80,9 +80,11 @@ class Marshaler(object):
         self._init_handlers()
 
     def _init_handlers(self):
-        self.handlers = Handler()
+        self.handlers = WriteHandler()
 
     def are_stringable_keys(self, m):
+        """ Test whether the keys within a map are stringable - a simple map,
+        that can be optimized and whose keys can be cached"""
         for x in m.keys():
             if len(self.handlers[x].tag(x)) != 1:
                 return False
@@ -195,6 +197,9 @@ class Marshaler(object):
 
 
     def dispatch_map(self, rep, as_map_key, cache):
+        """ Used to determine and dipatch the writing of a map - a simple
+        map with strings as keys, or a complex map, whose keys are also
+        compound types."""
         if self.are_stringable_keys(rep):
             return self.emit_map(rep, as_map_key, cache)
         return self.emit_cmap(rep, as_map_key, cache)
@@ -363,7 +368,7 @@ class VerboseSettings(object):
         return handlers
 
     def _init_handlers(self):
-        self.handlers = self._verbose_handlers(Handler())
+        self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
