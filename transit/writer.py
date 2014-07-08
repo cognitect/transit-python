@@ -4,7 +4,7 @@
 from constants import *
 from rolling_cache import RollingCache
 import msgpack
-from write_handlers import Handler
+from write_handlers import WriteHandler
 import re
 
 class Writer(object):
@@ -69,7 +69,7 @@ class Marshaler(object):
         self._init_handlers()
 
     def _init_handlers(self):
-        self.handlers = Handler()
+        self.handlers = WriteHandler()
 
     def are_stringable_keys(self, m):
         for x in m.keys():
@@ -352,7 +352,7 @@ class VerboseSettings(object):
         return handlers
 
     def _init_handlers(self):
-        self.handlers = self._verbose_handlers(Handler())
+        self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)

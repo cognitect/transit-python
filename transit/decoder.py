@@ -33,7 +33,14 @@ ground_decoders = {"_": rh.NoneHandler,
 
 class Decoder(object):
     """ The Decoder is the lowest level entry point for parsing, decoding, and
-    fully converting Transit data into Python objects"""
+    fully converting Transit data into Python objects.
+
+    During the creation of a Decoder object, you can specify custom options
+    in a dictionary.  One such option is 'decoders'.  Note that while you
+    can specify your own decoders and override many of the built in decoders,
+    some decoders are silently enforced and cannot be overriden.  These are
+    known as Ground Decoders, and are needed to maintain bottom-tier
+    compatibility."""
 
     def __init__(self, options={}):
         self.options = default_options.copy()
@@ -67,7 +74,11 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        """ Special case decodes map-as-array."""
+        """ Special case decodes map-as-array.
+        Otherwise lists are treated as Python lists.
+
+        Arguments follow the same convention as the top-level 'decode'
+        function"""
         if node:
             if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
                 return {self._decode(k, cache, True):
@@ -76,6 +87,8 @@ class Decoder(object):
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
+        """ Decode a string - arguments follow the same convention as the
+        top-level 'decode' function"""
         if is_cache_key(string):
             return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
         if is_cacheable(string, as_map_key):
@@ -122,3 +135,4 @@ class Decoder(object):
             self.options["default_decoder"] = obj
         else:
             self.decoders[key_or_tag] = obj
+

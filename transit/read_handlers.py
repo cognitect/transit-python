@@ -7,6 +7,9 @@ import datetime
 import dateutil.tz
 from helpers import pairs
 
+## Read handlers are used by the decoder when parsing/reading in Transit
+## data and returning Python objects
+
 class DefaultHandler(object):
     @staticmethod
     def from_rep(t, v):
@@ -102,3 +105,4 @@ class IdentityHandler(object):
     @staticmethod
     def from_rep(i):
         return i
+
