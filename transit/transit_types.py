@@ -139,8 +139,7 @@ class frozendict(Mapping, Hashable):
     def __repr__(self):
         return 'frozendict(%r)' % (self._dict,)
 
-class Link(frozendict):
-    """ Link extends frozendict for its expected keys. """
+class Link(object):
     # Class property constants for rendering types
     LINK = "link"
     IMAGE = "image"
@@ -153,6 +152,7 @@ class Link(frozendict):
     RENDER = "render"
 
     def __init__(self, href=None, rel=None, name=None, render=None, prompt=None):
+        self._dict = frozendict()
         assert href and rel
         if render:
             assert render.lower() in [Link.LINK, Link.IMAGE]
@@ -161,6 +161,11 @@ class Link(frozendict):
                       Link.NAME: name,
                       Link.RENDER: render,
                       Link.PROMPT: prompt}
+
+    def __eq__(self, other):
+        return self._dict == other._dict
+    def __ne__(self, other):
+        return self._dict != other._dict
 
     @property
     def href(self):
@@ -183,4 +188,3 @@ class Link(frozendict):
     @property
     def as_array(self):
         return [self.href, self.rel, self.name, self.render, self.prompt]
-
