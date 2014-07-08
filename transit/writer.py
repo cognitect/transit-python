@@ -72,6 +72,8 @@ class Marshaler(object):
         self.handlers = WriteHandler()
 
     def are_stringable_keys(self, m):
+        """ Test whether the keys within a map are stringable - a simple map,
+        that can be optimized and whose keys can be cached"""
         for x in m.keys():
             if len(self.handlers[x].tag(x)) != 1:
                 return False
@@ -184,6 +186,9 @@ class Marshaler(object):
 
 
     def dispatch_map(self, rep, as_map_key, cache):
+        """ Used to determine and dipatch the writing of a map - a simple
+        map with strings as keys, or a complex map, whose keys are also
+        compound types."""
         if self.are_stringable_keys(rep):
             return self.emit_map(rep, as_map_key, cache)
         return self.emit_cmap(rep, as_map_key, cache)
