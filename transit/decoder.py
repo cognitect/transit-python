@@ -134,7 +134,7 @@ class Decoder(object):
             elif m == "#":
                 return string
             else:
-                return self.options["default_decoder"](string[1], string[2:])
+                return self.options["default_decoder"].from_rep(string[1], string[2:])
         return string
 
     def register(self, key_or_tag, obj):
