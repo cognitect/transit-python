@@ -28,18 +28,18 @@ transit.decoder module
     :undoc-members:
     :show-inheritance:
 
-transit.handler module
-----------------------
-
-.. automodule:: transit.handler
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 transit.helpers module
 ----------------------
 
 .. automodule:: transit.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+transit.read_handlers module
+----------------------------
+
+.. automodule:: transit.read_handlers
     :members:
     :undoc-members:
     :show-inheritance:
@@ -64,6 +64,14 @@ transit.transit_types module
 ----------------------------
 
 .. automodule:: transit.transit_types
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+transit.write_handlers module
+-----------------------------
+
+.. automodule:: transit.write_handlers
     :members:
     :undoc-members:
     :show-inheritance:
