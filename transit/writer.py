@@ -13,7 +13,7 @@
 ## limitations under the License.
 
 from constants import *
-from rolling_cache import RollingCache
+from rolling_cache import RollingCache, is_cacheable
 import msgpack
 from write_handlers import WriteHandler
 import re
@@ -23,8 +23,9 @@ class Writer(object):
     to Transit data.  During initialization, you must specify the protocol used
     for marshalling the data- json or msgpack.  You must also specify the io
     source used for writing (a file descriptor).  You may optionally pass in
-    an options dictionary that will be forwarded onto the Marshaler."""
-    def __init__(self, io, protocol="json", opts={}):
+    an options dictionary that will be forwarded onto the Marshaler.
+    The cache is enabled by default."""
+    def __init__(self, io, protocol="json", opts={"cache_enabled": True}):
         if protocol == "json":
             self.marshaler = JsonMarshaler(io, opts=opts)
         elif protocol == "json_verbose":
@@ -95,8 +96,9 @@ class Marshaler(object):
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         encoded = cache.encode(str(prefix)+tag+escape(string), as_map_key)
-        if "cache_enabled" in self.opts and cache.is_cacheable(encoded, as_map_key):
-            return self.emit_object(cache.value_to_key(encoded), as_map_key)
+        # TODO: Remove this optimization for the time being - it breaks the cache
+        #if "cache_enabled" in self.opts and is_cacheable(encoded, as_map_key):
+        #    return self.emit_object(cache.value_to_key[encoded], as_map_key)
         return self.emit_object(encoded, as_map_key)
 
     def emit_boolean(self, b, as_map_key, cache):
