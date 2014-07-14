@@ -19,6 +19,13 @@ from helpers import pairs
 import read_handlers as rh
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
+class Tag(object):
+    def __init__(self, tag):
+        self._tag = tag
+    @property
+    def tag(self):
+        return self._tag
+
 default_options = {"decoders": {"_": rh.NoneHandler,
                                 ":": rh.KeywordHandler,
                                 "$": rh.SymbolHandler,
@@ -115,12 +122,12 @@ class Decoder(object):
         else:
             key,value = hash.items()[0]
             key = self._decode(key, cache, True)
-            if isinstance(key, basestring) and key.startswith(TAG):
-                decoder = self.decoders.get(key[2:], None)
+            if isinstance(key, Tag):
+                decoder = self.decoders.get(key.tag, None)
                 if decoder:
                     return decoder.from_rep(self._decode(value, cache, as_map_key))
                 else:
-                    return self.options["default_decoder"].from_rep(key[2:], self.decode(value, cache, False))
+                    return self.options["default_decoder"].from_rep(key.tag, self.decode(value, cache, False))
             else:
                 return {key: self._decode(value, cache, False)}
 
@@ -132,7 +139,7 @@ class Decoder(object):
             elif m == ESC or m == SUB or m == RES:
                 return string[1:]
             elif m == "#":
-                return string
+                return Tag(string[2:])
             else:
                 return self.options["default_decoder"].from_rep(string[1], string[2:])
         return string
