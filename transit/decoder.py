@@ -21,10 +21,7 @@ from rolling_cache import RollingCache, is_cacheable, is_cache_key
 
 class Tag(object):
     def __init__(self, tag):
-        self._tag = tag
-    @property
-    def tag(self):
-        return self._tag
+        self.tag = tag
 
 default_options = {"decoders": {"_": rh.NoneHandler,
                                 ":": rh.KeywordHandler,
