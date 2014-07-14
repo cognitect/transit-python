@@ -98,10 +98,13 @@ class Decoder(object):
         Arguments follow the same convention as the top-level 'decode'
         function"""
         if node:
-            if self._decode(node[0], cache, as_map_key) == MAP_AS_ARR:
+            decoded = self._decode(node[0], cache, as_map_key)
+            if decoded == MAP_AS_ARR:
                 return {self._decode(k, cache, True):
                         self._decode(v, cache, as_map_key)
                         for k,v in pairs(node[1:])}
+            elif isinstance(decoded, Tag):
+                return self.decode_tag(decoded.tag, self._decode(node[1], cache, as_map_key))
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
@@ -113,6 +116,13 @@ class Decoder(object):
             cache.encode(string, as_map_key)
         return self.parse_string(string, cache, as_map_key)
 
+    def decode_tag(self, tag, rep):
+        decoder = self.decoders.get(tag, None)
+        if decoder:
+            return decoder.from_rep(rep)
+        else:
+            return self.options["default_decoder"].from_rep(tag, rep)
+
     def decode_hash(self, hash, cache, as_map_key):
         if len(hash) != 1:
             h = {}
@@ -123,11 +133,7 @@ class Decoder(object):
             key,value = hash.items()[0]
             key = self._decode(key, cache, True)
             if isinstance(key, Tag):
-                decoder = self.decoders.get(key.tag, None)
-                if decoder:
-                    return decoder.from_rep(self._decode(value, cache, as_map_key))
-                else:
-                    return self.options["default_decoder"].from_rep(key.tag, self.decode(value, cache, False))
+                return self.decode_tag(key.tag, self._decode(value, cache, as_map_key))
             else:
                 return {key: self._decode(value, cache, False)}
 
