@@ -14,16 +14,17 @@
 
 from constants import ESC, SUB, MAP_AS_ARR
 
-FIRST_ORD = 33
-CACHE_SIZE = 94*94
+FIRST_ORD = 48
+CACHE_CODE_DIGITS = 44
+CACHE_SIZE = CACHE_CODE_DIGITS * CACHE_CODE_DIGITS
 MIN_SIZE_CACHEABLE = 4
 
 def is_cache_key(name):
     return len(name) and (name[0] == SUB and name != MAP_AS_ARR)
 
 def encode_key(i):
-    lo = i % 94
-    hi = i // 94
+    lo = i % CACHE_CODE_DIGITS
+    hi = i // CACHE_CODE_DIGITS
     if hi == 0:
         return "^" + chr(i + FIRST_ORD)
     return "^" + chr(hi + FIRST_ORD) + chr(lo + FIRST_ORD)
@@ -32,7 +33,7 @@ def decode_key(s):
     sz = len(s)
     if sz == 2:
         return ord(s[1]) - FIRST_ORD
-    return (ord(s[2]) - FIRST_ORD) + (94 * (ord(s[1]) - FIRST_ORD))
+    return (ord(s[2]) - FIRST_ORD) + (CACHE_CODE_DIGITS * (ord(s[1]) - FIRST_ORD))
 
 def is_cacheable(string, as_map_key=False):
     return string \
