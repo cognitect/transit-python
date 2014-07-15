@@ -135,11 +135,11 @@ class Marshaler(object):
         self.marshal(flatten_map(m), False, cache)
         self.emit_map_end()
 
-    def emit_tagged_map(self, tag, rep, _, cache):
-        self.emit_map_start(1)
-        self.emit_object(cache.encode(ESC + "#" + tag, True), True)
+    def emit_tagged(self, tag, rep, _, cache):
+        self.emit_array_start(2)
+        self.emit_object(cache.encode(ESC + "#" + tag, False), False)
         self.marshal(rep, False, cache)
-        self.emit_map_end()
+        self.emit_array_end()
 
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
@@ -155,13 +155,13 @@ class Marshaler(object):
                                                                                 "rep": rep,
                                                                                 "obj": obj}))
             else:
-                self.emit_tagged_map(tag, rep, False, cache)
+                self.emit_tagged(tag, rep, False, cache)
         elif as_map_key:
             raise AssertionError("Cannot be used as a map key: " + str({"tag": tag,
                                                                                 "rep": rep,
                                                                                 "obj": obj}))
         else:
-            self.emit_tagged_map(tag, rep, False, cache)
+            self.emit_tagged(tag, rep, False, cache)
 
     def marshal(self, obj, as_map_key, cache):
         """ Marshal an individual obj, potentially as part of another container
@@ -383,6 +383,11 @@ class VerboseSettings(object):
             self.marshal(v, False, cache)
         self.emit_map_end()
 
+    def emit_tagged(self, tag, rep, _, cache):
+        self.emit_map_start(1)
+        self.emit_object(cache.encode(ESC + "#" + tag, True), True)
+        self.marshal(rep, False, cache)
+        self.emit_map_end()
 
 class VerboseJsonMarshaler(VerboseSettings, JsonMarshaler):
     """ JsonMarshaler class with VerboseSettings mixin"""
