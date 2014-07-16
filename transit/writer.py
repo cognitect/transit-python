@@ -16,6 +16,7 @@ from constants import *
 from rolling_cache import RollingCache, is_cacheable
 import msgpack
 from write_handlers import WriteHandler
+from transit_types import TaggedValue
 import re
 
 class Writer(object):
@@ -104,13 +105,6 @@ class Marshaler(object):
     def emit_boolean(self, b, as_map_key, cache):
         return self.emit_string(ESC, "?", b, True, cache) if as_map_key else self.emit_object(b)
 
-
-    def emit_quoted(self, o, as_map_key, cache):
-        self.emit_map_start(1)
-        self.emit_string(TAG, "'", None, True, cache)
-        self.marshal(o, False, cache)
-        self.emit_map_end()
-
     def emit_int(self, i, as_map_key, cache):
         if as_map_key or i > self.opts["max_int"] or i < self.opts["min_int"]:
             return self.emit_string(ESC, "i", str(i), as_map_key, cache)
@@ -189,8 +183,8 @@ class Marshaler(object):
 
         tag = handler.tag(obj)
         if tag:
-            if self.opts["quote_scalars"] and len(tag) == 1:
-                self.marshal(Quote(), False, cache)
+            if len(tag) == 1:
+                self.marshal(TaggedValue(QUOTE, obj), False, cache)
             else:
                 self.marshal(obj, False, cache)
             self.flush()
@@ -218,7 +212,6 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", rep, as_map_key, cache),
                     "i": Marshaler.emit_int,
                     "d": Marshaler.emit_double,
-                    "'": Marshaler.emit_quoted,
                     "array": Marshaler.emit_array,
                     "map": Marshaler.dispatch_map}
 
@@ -231,8 +224,7 @@ class MsgPackMarshaler(Marshaler):
 
     default_opts = {"prefer_strings": False,
                     "max_int": MSGPACK_MAX_INT,
-                    "min_int": MSGPACK_MIN_INT,
-                    "quote_scalars": False}
+                    "min_int": MSGPACK_MIN_INT}
 
     def __init__(self, io, opts={}):
         self.io = io
@@ -272,8 +264,7 @@ class JsonMarshaler(Marshaler):
 
     default_opts = {"prefer_strings": False,
                     "max_int": JSON_MAX_INT,
-                    "min_int": JSON_MIN_INT,
-                    "quote_scalars": False}
+                    "min_int": JSON_MIN_INT}
 
     ## Yes this is basically a custom JSON encoder,
     ## but I couldn't find an existing solution that worked
