@@ -19,5 +19,6 @@ ESC = "~"
 SUB = "^"
 RES = "`"
 TAG = "~#"
+QUOTE = "'"
 MAP_AS_ARR = "^ "
 
