@@ -5,15 +5,17 @@ Transit is a format and set of libraries for conveying values between
 applications written in different programming languages. The library provides
 support for marshalling data to/from Python.
 
-* [Rationale](http://i-should-be-a-link)
-* [API docs](http://cognitect.github.io/transit-python/)
-* [Specification](http://github.com/cognitect/transit-format)
+ * [Rationale](http://i-should-be-a-link)
+ * [API docs](http://cognitect.github.io/transit-python/)
+ * [Specification](http://github.com/cognitect/transit-format)
 
 
 ## Releases and Dependency Information
 
-* Latest release: TBD
-* [All Released Versions](http://some-pypi-link-here)
+The [PYPI](https://pypi.python.org/pypi) package is
+[`transit-python`](https://pypi.python.org/pypi/transit-python)
+
+ * Latest stable release: [0.8](https://pypi.python.org/pypi/transit-python/0.8)
 
 
 ## Usage
