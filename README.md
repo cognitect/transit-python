@@ -2,11 +2,21 @@ transit-python
 ==============
 
 Transit is a format and set of libraries for conveying values between
-applications written in different programming languages. See
-[https://github.com/cognitect/transit-format](https://github.com/cognitect/transit-format)
-for details.
+applications written in different programming languages. The library provides
+support for marshalling data to/from Python.
 
-transit-python is a Transit encoder/decoder library for Python.
+* [Rationale](http://i-should-be-a-link)
+* [API docs](http://cognitect.github.io/transit-java/)
+* [Specification](http://github.com/cognitect/transit-format)
+
+
+## Releases and Dependency Information
+
+* Latest release: TBD
+* [All Released Versions](http://some-pypi-link-here)
+
+
+## Usage
 
 ```python
 # io can be any Python file descriptor,
@@ -36,18 +46,26 @@ For example:
 >>> vals = reader.read(StringIO(s))
 ```
 
-# Typed arrays, lists, and chars
+
+## Supported Python versions
+
+ * 2.7.X
+
+
+## Type Mapping
+
+### Typed arrays, lists, and chars
 
 The [transit spec](https://github.com/cognitect/transit-format)
 defines several semantic types that map to more general types in Python:
 
 * typed arrays (ints, longs, doubles, floats, bools) map to Python Tuples
 * lists map to Python Tuples
-* chars map to Strings
+* chars map to Strings/Unicode
 
 When the reader encounters an of these (e.g. <code>{"ints" =>
 [1,2,3]}</code>) it delivers just the appropriate object to the app
-(e.g. <code>[1,2,3]</code>).
+(e.g. <code>(1,2,3)</code>).
 
 Use a TaggedValue to write these out if it will benefit a consuming
 app e.g.:
@@ -56,31 +74,60 @@ app e.g.:
 writer.write(TaggedValue("ints", [1,2,3]))
 ```
 
-# Supported Python versions
+### Default type mapping
 
- * 2.7.X
+|Transit type|Write accepts|Read returns|
+|------------|-------------|------------|
+|null|None|None|
+|string|unicode, str|unicode|
+|boolean|bool|bool|
+|integer|int|int|
+|decimal|float|float|
+|keyword|transit\_types.Keyword|transit\_types.Keyword|
+|symbol|transit\_types.Symbol|transit\_types.Symbol|
+|big decimal|java.math.BigDecimal|java.math.BigDecimal|
+|big integer|java.math.BigInteger|long|
+|time|long, int, dateutil|long|
+|uri|transit\_types.URI|transit\_types.URI|
+|uuid|uuid.UUID|uuid.UUID|
+|char|transit\_types.TaggedValue|unicode|
+|array|list, tuple|tuple|
+|list|list, tuple|tuple|
+|set|set|set|
+|map|dict|dict|
+|bytes|transit\_types.TaggedValue|tuple|
+|shorts|transit\_types.TaggedValue|tuple|
+|ints|transit\_types.TaggedValue|tuple|
+|longs|transit\_types.TaggedValue|tuple|
+|floats|transit\_types.TaggedValue|tuple|
+|doubles|transit\_types.TaggedValue|tuple|
+|chars|transit\_types.TaggedValue|tuple|
+|bools|transit\_types.TaggedValue|tuple|
+|link|transit\_types.Link|transit\_types.Link|
+|tagged value|transit\_types.TaggedValue|transit\_types.TaggedValue|
 
-# Development
 
-## Setup
+## Development
+
+### Setup
 
 Transit Python requires Transit to be at the same directory level as
 transit-python for access to the exemplar files.
 
 
-## Benchmarks
+### Benchmarks
 
 ```sh
 python tests/seattle_benchmark.py
 ```
 
-## Running the examples
+### Running the examples
 
 ```sh
 python tests/exemplars_test.py
 ```
 
-## Build
+### Build
 
 ```sh
 pip install -e .
@@ -93,7 +140,18 @@ The command below shows what version number will be applied.
 bin/revision
 ```
 
-# Copyright and License
+
+## Contributing
+
+Please discuss potential problems or enhancements on the
+[transit-format mailing list](https://groups.google.com/forum/#!forum/transit-format).
+Issues should be filed using GitHub issues for this project.
+
+Contributing to Cognitect projects requires a signed
+[Cognitect Contributor Agreement](http://cognitect.com/contributing).
+
+
+## Copyright and License
 
 Copyright © 2014 Cognitect
 
