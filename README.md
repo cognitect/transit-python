@@ -6,7 +6,7 @@ applications written in different programming languages. The library provides
 support for marshalling data to/from Python.
 
 * [Rationale](http://i-should-be-a-link)
-* [API docs](http://cognitect.github.io/transit-java/)
+* [API docs](http://cognitect.github.io/transit-python/)
 * [Specification](http://github.com/cognitect/transit-format)
 
 
@@ -85,8 +85,8 @@ writer.write(TaggedValue("ints", [1,2,3]))
 |decimal|float|float|
 |keyword|transit\_types.Keyword|transit\_types.Keyword|
 |symbol|transit\_types.Symbol|transit\_types.Symbol|
-|big decimal|java.math.BigDecimal|java.math.BigDecimal|
-|big integer|java.math.BigInteger|long|
+|big decimal|transit\_types.TaggedValue|float|
+|big integer|transit\_types.TaggedValue|long|
 |time|long, int, dateutil|long|
 |uri|transit\_types.URI|transit\_types.URI|
 |uuid|uuid.UUID|uuid.UUID|
