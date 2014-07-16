@@ -87,9 +87,9 @@ writer.write(TaggedValue("ints", [1,2,3]))
 |decimal|float|float|
 |keyword|transit\_types.Keyword|transit\_types.Keyword|
 |symbol|transit\_types.Symbol|transit\_types.Symbol|
-|big decimal|transit\_types.TaggedValue|float|
-|big integer|transit\_types.TaggedValue|long|
-|time|long, int, dateutil|long|
+|big decimal|float|float|
+|big integer|long|long|
+|time|long, int, datetime|datetime|
 |uri|transit\_types.URI|transit\_types.URI|
 |uuid|uuid.UUID|uuid.UUID|
 |char|transit\_types.TaggedValue|unicode|
@@ -106,7 +106,6 @@ writer.write(TaggedValue("ints", [1,2,3]))
 |chars|transit\_types.TaggedValue|tuple|
 |bools|transit\_types.TaggedValue|tuple|
 |link|transit\_types.Link|transit\_types.Link|
-|tagged value|transit\_types.TaggedValue|transit\_types.TaggedValue|
 
 
 ## Development
