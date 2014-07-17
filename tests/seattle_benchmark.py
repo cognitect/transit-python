@@ -29,7 +29,7 @@ def run_tests(data):
     print "Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
     return read_delta
 
-fd = open("../transit/seattle-data0.tjs", 'r')
+fd = open("../transit/seattle-data0.json", 'r')
 data = fd.read()
 fd.close()
 
