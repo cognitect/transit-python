@@ -31,16 +31,17 @@ def run_tests(data):
 
 means = {}
 for jsonfile in ["../transit/seattle-data0.json", "../transit/seattle-data0.jsonv"]:
+    data = ""
     with open(jsonfile, 'r') as fd:
         data = fd.read()
 
-        print("-"*50)
-        print("Running " + jsonfile)
-        print("-"*50)
+    print("-"*50)
+    print("Running " + jsonfile)
+    print("-"*50)
 
-        runs = 100
-        deltas = [run_tests(data) for x in range(runs)]
-        means[jsonfile] = sum(deltas)/runs
+    runs = 100
+    deltas = [run_tests(data) for x in range(runs)]
+    means[jsonfile] = sum(deltas)/runs
 
 for jsonfile, mean in means.items():
     print "\nMean for" + jsonfile + ": "+str(mean)
