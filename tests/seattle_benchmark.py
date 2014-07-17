@@ -29,11 +29,20 @@ def run_tests(data):
     print "Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
     return read_delta
 
-fd = open("../transit/seattle-data0.json", 'r')
-data = fd.read()
-fd.close()
+means = {}
+for jsonfile in ["../transit/seattle-data0.json", "../transit/seattle-data0.jsonv"]:
+    fd = open(jsonfile, 'r')
+    data = fd.read()
+    fd.close()
 
-runs = 100
-deltas = [run_tests(data) for x in range(runs)]
-print "\nMean: "+str(sum(deltas)/runs)
+    print("-"*50)
+    print("Running " + jsonfile)
+    print("-"*50)
+
+    runs = 100
+    deltas = [run_tests(data) for x in range(runs)]
+    means[jsonfile] = sum(deltas)/runs
+
+for jsonfile, mean in means.items():
+    print "\nMean for" + jsonfile + ": "+str(mean)
 
