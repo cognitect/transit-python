@@ -267,7 +267,7 @@ class JsonMarshaler(Marshaler):
     JSON_MAX_INT = pow(2, 63)
     JSON_MIN_INT = -pow(2, 63)
 
-    default_opts = {"prefer_strings": False,
+    default_opts = {"prefer_strings": True,
                     "max_int": JSON_MAX_INT,
                     "min_int": JSON_MIN_INT}
 
