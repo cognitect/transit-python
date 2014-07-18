@@ -170,6 +170,7 @@ class Marshaler(object):
         tag = handler.tag(obj)
         rep = handler.string_rep(obj) if as_map_key else handler.rep(obj)
         f = marshal_dispatch.get(tag)
+
         if f:
             f(self, rep, as_map_key, cache)
         else:
@@ -215,6 +216,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", rep, as_map_key, cache),
                     "i": Marshaler.emit_int,
                     "d": Marshaler.emit_double,
+                    "'": lambda self, rep, _, cache: Marshaler.emit_tagged(self, "'", rep, False, cache),
                     "array": Marshaler.emit_array,
                     "map": Marshaler.dispatch_map}
 
@@ -265,7 +267,7 @@ class JsonMarshaler(Marshaler):
     JSON_MAX_INT = pow(2, 63)
     JSON_MIN_INT = -pow(2, 63)
 
-    default_opts = {"prefer_strings": False,
+    default_opts = {"prefer_strings": True,
                     "max_int": JSON_MAX_INT,
                     "min_int": JSON_MIN_INT}
 
