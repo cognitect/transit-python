@@ -22,4 +22,5 @@ while 1:
     s = StringIO(line)
     o = r.read(s)
     w.write(o)
+print ""
 
