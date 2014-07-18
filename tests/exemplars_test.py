@@ -83,6 +83,13 @@ def exemplar(name, val):
             newval = reader.read(io)
             self.assertEqual(val, newval)
 
+        def assertEqual(self, val, data):
+            try:
+                return unittest.TestCase.assertEqual(self, val, data)
+            except AssertionError as e:
+                e.args += (name, "failed")
+                raise
+
     globals()["test_" + name + "_json"] = ExemplarTest
 
 ARRAY_SIMPLE = (1, 2, 3)
