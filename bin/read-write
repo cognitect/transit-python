@@ -11,36 +11,34 @@ import transit.writer as twriter
 
 transport = (len(sys.argv) > 1) and sys.argv[1].replace("-", "_") or "json"
 
-r = treader.Reader(protocol=transport)
-w = twriter.Writer(sys.stdout, protocol=transport)
+def test_loop():
+    r = treader.Reader(protocol=transport)
+    buff = ''
+    while True:
+        buff += sys.stdin.read(1)
+        if buff.endswith('\n'):
+            s = StringIO(buff[:-1])
+            o = r.read(s)
+            ws = StringIO()
+            w = twriter.Writer(ws, protocol=transport)
+            w.write(o)
+            result = ws.getvalue().strip()
+            # Multiple values have commas between them.  Take them out.
+            if result[0] == ",":
+                result = result[1:]
+            sys.stdout.write(result)
+            sys.stdout.flush()
+            buff = ''
+test_loop()
 
-#def unbuffered_stdin():
-#    #return os.fdopen(sys.stdin.fileno(), 'r', 100)
-#    return io.open(sys.stdin.fileno(), 'r', 100, closefd=False)
-
-#sys.stdin = unbuffered_stdin()
-#i = fileinput.FileInput() # Do this if you want to open up more than one fileinput on the same source
-#i = fileinput.input("-")
-#
-#while True:
-#    for line in i:
-#        #if line == '':
-#        #    break
-#        s = StringIO(line)
-#        o = r.read(s)
-#        w.write(o)
-#        #sys.stdin.seek(0)
-#        #i = i.next()
-
-#raise("BOOM")
 
 # If you want to use this with pipe, or interactively...
-while True:
-    line = sys.stdin.readline() # `for line in stdin` won't play nice in all situations
-    if line == '':
-        break
-    s = StringIO(line)
-    o = r.read(s)
-    w.write(o)
+#while True:
+#    line = sys.stdin.readline() # `for line in stdin` won't play nice in all situations
+#    if line == '':
+#        break
+#    s = StringIO(line)
+#    o = r.read(s)
+#    w.write(o)
 print ""
 
