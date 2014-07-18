@@ -26,7 +26,7 @@ def encode_key(i):
     lo = i % CACHE_CODE_DIGITS
     hi = i // CACHE_CODE_DIGITS
     if hi == 0:
-        return "^" + chr(i + FIRST_ORD)
+        return "^" + chr(lo + FIRST_ORD)
     return "^" + chr(hi + FIRST_ORD) + chr(lo + FIRST_ORD)
 
 def decode_key(s):
