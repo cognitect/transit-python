@@ -5,10 +5,18 @@ Transit is a format and set of libraries for conveying values between
 applications written in different programming languages. The library provides
 support for marshalling data to/from Python.
 
- * [Rationale](http://i-should-be-a-link)
+ * [Rationale](http://blog.cognitect.com/blog/2014/7/22/transit)
  * [API docs](http://cognitect.github.io/transit-python/)
  * [Specification](http://github.com/cognitect/transit-format)
 
+This implementation's major.minor version number corresponds to the
+version of the Transit specification it supports.
+
+_NOTE: Transit is a work in progress and may evolve based on feedback.
+As a result, while Transit is a great option for transferring data
+between applications, it should not yet be used for storing data
+durably over time. This recommendation will change when the
+specification is complete._ 
 
 ## Releases and Dependency Information
 
@@ -144,13 +152,7 @@ bin/revision
 
 ## Contributing
 
-Please discuss potential problems or enhancements on the
-[transit-format mailing list](https://groups.google.com/forum/#!forum/transit-format).
-Issues should be filed using GitHub issues for this project.
-
-Contributing to Cognitect projects requires a signed
-[Cognitect Contributor Agreement](http://cognitect.com/contributing).
-
+This library is open source, developed internally by Cognitect. We welcome discussions of potential problems and enhancement suggestions on the [transit-format mailing list](https://groups.google.com/forum/#!forum/transit-format). Issues can be filed using GitHub [issues](https://github.com/cognitect/transit-python/issues) for this project. Because transit is incorporated into products and client projects, we prefer to do development internally and are not accepting pull requests or patches.
 
 ## Copyright and License
 
