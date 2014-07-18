@@ -10,7 +10,7 @@ support for marshalling data to/from Python.
  * [Specification](http://github.com/cognitect/transit-format)
 
 This implementation's major.minor version number corresponds to the
-version of it supports.
+version of the Transit specification it supports.
 
 _NOTE: Transit is a work in progress and may evolve based on feedback.
 As a result, while Transit is a great option for transferring data
