@@ -183,9 +183,9 @@ exemplar("map_vector_keys", frozendict([[(1, 1), "one"],
 exemplar("map_unrecognized_vals", {Keyword("key"): "~Unrecognized"})
 #exemplar("map_unrecognized_keys", )
 exemplar("vector_unrecognized_vals", ("~Unrecognized",))
-exemplar("vector_1935_keywords_repeated_twice", tuple(array_of_symbools(93, 186)))
-exemplar("vector_1936_keywords_repeated_twice", tuple(array_of_symbools(94, 188)))
-exemplar("vector_1937_keywords_repeated_twice", tuple(array_of_symbools(95, 190)))
+exemplar("vector_1935_keywords_repeated_twice", tuple(array_of_symbools(1935, 1935*2)))
+exemplar("vector_1936_keywords_repeated_twice", tuple(array_of_symbools(1936, 1936*2)))
+exemplar("vector_1937_keywords_repeated_twice", tuple(array_of_symbools(1937, 1937*2)))
 
 exemplar("map_10_items", hash_of_size(10))
 exemplar("maps_two_char_sym_keys", ({Keyword("aa"): 1, Keyword("bb"): 2},
