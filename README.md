@@ -5,7 +5,7 @@ Transit is a format and set of libraries for conveying values between
 applications written in different programming languages. The library provides
 support for marshalling data to/from Python.
 
- * [Rationale](http://i-should-be-a-link)
+ * [Rationale](http://blog.cognitect.com/blog/2014/7/22/transit)
  * [API docs](http://cognitect.github.io/transit-python/)
  * [Specification](http://github.com/cognitect/transit-format)
 
