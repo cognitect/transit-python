@@ -119,9 +119,12 @@ class Marshaler(object):
         map(lambda x: self.marshal(x, False, cache), a)
         self.emit_array_end()
 
-    def emit_map(self, m, _, cache):
-        """ Emits array as per default JSON spec (formerly JSON-M) """
-        self.emit_array([MAP_AS_ARR] + flatten_map(m), _, cache)
+    def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
+        self.emit_map_start(len(m))
+        for k, v in m.items():
+            self.marshal(k, True, cache)
+            self.marshal(v, False, cache)
+        self.emit_map_end()
 
     def emit_cmap(self, m, _, cache):
         self.emit_map_start(1)
@@ -312,16 +315,13 @@ class JsonMarshaler(Marshaler):
         self.io.write("[")
         self.push_level()
 
-    def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default
-        self.emit_map_start(len(m))
-        for k, v in m.items():
-            self.marshal(k, True, cache)
-            self.marshal(v, False, cache)
-        self.emit_map_end()
-
     def emit_array_end(self):
         self.pop_level()
         self.io.write("]")
+
+    def emit_map(self, m, _, cache):
+        """ Emits array as per default JSON spec."""
+        self.emit_array([MAP_AS_ARR] + flatten_map(m), _, cache)
 
     def emit_map_start(self, size):
         self.write_sep()
@@ -349,7 +349,6 @@ class JsonMarshaler(Marshaler):
             raise AssertionError("Don't know how to encode: " + str(obj))
 
 
-
 class VerboseSettings(object):
     """ Mixin for JsonMarshaler that adds support for Verbose output/input.
     Verbosity is only suggest for debuging/inspecting purposes."""
@@ -366,8 +365,7 @@ class VerboseSettings(object):
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
 
-    # :TODO: modify design to eliminate copy&paste b/t this and msgpack.
-    def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
+    def emit_map(self, m, _, cache):
         self.emit_map_start(len(m))
         for k, v in m.items():
             self.marshal(k, True, cache)
@@ -379,6 +377,7 @@ class VerboseSettings(object):
         self.emit_object(cache.encode(ESC + "#" + tag, True), True)
         self.marshal(rep, False, cache)
         self.emit_map_end()
+
 
 class VerboseJsonMarshaler(VerboseSettings, JsonMarshaler):
     """ JsonMarshaler class with VerboseSettings mixin"""

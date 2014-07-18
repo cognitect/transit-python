@@ -31,9 +31,9 @@ def run_tests(data):
 
 means = {}
 for jsonfile in ["../transit/seattle-data0.json", "../transit/seattle-data0.jsonv"]:
-    fd = open(jsonfile, 'r')
-    data = fd.read()
-    fd.close()
+    data = ""
+    with open(jsonfile, 'r') as fd:
+        data = fd.read()
 
     print("-"*50)
     print("Running " + jsonfile)
