@@ -6,7 +6,8 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.pat
 import transit.reader as treader
 import transit.writer as twriter
 
-transport = (sys.argv[0] or "json").replace("-", "_")
+
+transport = (len(sys.argv) > 1) and sys.argv[1].replace("-", "_") or "json"
 
 r = treader.Reader(protocol=transport)
 w = twriter.Writer(sys.stdout, protocol=transport)
