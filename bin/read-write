@@ -14,31 +14,33 @@ transport = (len(sys.argv) > 1) and sys.argv[1].replace("-", "_") or "json"
 r = treader.Reader(protocol=transport)
 w = twriter.Writer(sys.stdout, protocol=transport)
 
-def unbuffered_stdin():
-    #return os.fdopen(sys.stdin.fileno(), 'r', 100)
-    return io.open(sys.stdin.fileno(), 'r', 100, closefd=False)
+#def unbuffered_stdin():
+#    #return os.fdopen(sys.stdin.fileno(), 'r', 100)
+#    return io.open(sys.stdin.fileno(), 'r', 100, closefd=False)
 
-sys.stdin = unbuffered_stdin()
+#sys.stdin = unbuffered_stdin()
 #i = fileinput.FileInput() # Do this if you want to open up more than one fileinput on the same source
-i = fileinput.input("-")
+#i = fileinput.input("-")
+#
+#while True:
+#    for line in i:
+#        #if line == '':
+#        #    break
+#        s = StringIO(line)
+#        o = r.read(s)
+#        w.write(o)
+#        #sys.stdin.seek(0)
+#        #i = i.next()
 
-while True:
-    for line in i:
-        #if line == '':
-        #    break
-        s = StringIO(line)
-        o = r.read(s)
-        w.write(o)
-        #sys.stdin.seek(0)
-        #i = i.next()
+#raise("BOOM")
 
 # If you want to use this with pipe, or interactively...
-#while 1:
-#    line = sys.stdin.readline() # `for line in stdin` won't play nice in all situations
-#    if line == '':
-#        break
-#    s = StringIO(line)
-#    o = r.read(s)
-#    w.write(o)
+while True:
+    line = sys.stdin.readline() # `for line in stdin` won't play nice in all situations
+    if line == '':
+        break
+    s = StringIO(line)
+    o = r.read(s)
+    w.write(o)
 print ""
 
