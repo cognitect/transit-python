@@ -29,8 +29,11 @@ def run_tests(data):
     print "Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
     return read_delta
 
+
+seattle_dir = "../transit-format/examples/0.8/"
 means = {}
-for jsonfile in ["../transit/seattle-data0.json", "../transit/seattle-data0.jsonv"]:
+for jsonfile in [seattle_dir + "example.json", 
+                 seattle_dir + "example.verbose.json"]:
     data = ""
     with open(jsonfile, 'r') as fd:
         data = fd.read()
