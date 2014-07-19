@@ -16,7 +16,7 @@ _NOTE: Transit is a work in progress and may evolve based on feedback.
 As a result, while Transit is a great option for transferring data
 between applications, it should not yet be used for storing data
 durably over time. This recommendation will change when the
-specification is complete._ 
+specification is complete._
 
 ## Releases and Dependency Information
 
@@ -82,6 +82,30 @@ app e.g.:
 
 ```python
 writer.write(TaggedValue("ints", [1,2,3]))
+```
+
+### Python's bool and int
+
+All caveats of the Python language apply to decoding Transit data.
+
+In Python, bools are subclasses of int (that is, `True` is actually `1`).
+
+```python
+>>> hash(1)
+1
+>>> hash(True)
+1
+>>> True == 1
+True
+```
+
+This only becomes problematic when decoding a map that contains bool and
+int keys.  The bool keys may be overridden (ie: you'll only see the int key),
+and the value will be one of any possible bool/int keyed value.
+
+```python
+>>> {1: "Hello", True: "World"}
+{1: 'World'}
 ```
 
 ### Default type mapping
