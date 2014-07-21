@@ -58,15 +58,10 @@ def re_fn(pat):
 
     return re_inner_fn
 
-def is_unrecognized(s):
-    s.startswith(RES +ESC)
-
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
-    if s.startswith(RES+ESC): # is_unrecognized
-        return s[1:]
-    elif is_escapable(s):
+    if is_escapable(s):
         return ESC+s
     else:
         return s

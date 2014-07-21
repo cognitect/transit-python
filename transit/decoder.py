@@ -42,7 +42,7 @@ default_options = {"decoders": {"_": rh.NoneHandler,
                    "default_decoder": rh.DefaultHandler}
 
 ground_decoders = {"_": rh.NoneHandler,
-                   "?": rh.KeywordHandler,
+                   "?": rh.BooleanHandler,
                    "i": rh.IntHandler,
                    "'": rh.IdentityHandler}
 
