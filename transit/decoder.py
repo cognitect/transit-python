@@ -97,9 +97,15 @@ class Decoder(object):
         if node:
             decoded = self._decode(node[0], cache, as_map_key)
             if decoded == MAP_AS_ARR:
-                return {self._decode(k, cache, True):
-                        self._decode(v, cache, as_map_key)
-                        for k,v in pairs(node[1:])}
+                returned_dict = {}
+                for k,v in pairs(node[1:]):
+                    key = self._decode(k, cache, True)
+                    val = self._decode(v, cache, as_map_key)
+                    returned_dict[key] = val
+                return returned_dict
+#                return {self._decode(k, cache, True):
+#                        self._decode(v, cache, as_map_key)
+#                        for k,v in pairs(node[1:])}
             elif isinstance(decoded, Tag):
                 return self.decode_tag(decoded.tag, self._decode(node[1], cache, as_map_key))
         return tuple(self._decode(x, cache, as_map_key) for x in node)
