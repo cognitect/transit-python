@@ -97,6 +97,7 @@ class Decoder(object):
         if node:
             decoded = self._decode(node[0], cache, as_map_key)
             if decoded == MAP_AS_ARR:
+                # k, v decode order matches for cache, needs fix. 
                 returned_dict = {}
                 for k,v in pairs(node[1:]):
                     key = self._decode(k, cache, True)
