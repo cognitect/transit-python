@@ -19,7 +19,7 @@ import subprocess
 revision = subprocess.check_output("./bin/revision")
 
 setup(name="transit-python",
-      version="0.1."+revision,
+      version="0.8."+revision,
       description="Transit marshalling for Python",
       author="Cognitect",
       url="https://github.com/cognitect/transit-python",
