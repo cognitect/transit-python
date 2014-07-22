@@ -1,0 +1,5 @@
+*.pyc
+*.swp
+apidoc/_build
+build/
+dist/
