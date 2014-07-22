@@ -44,7 +44,7 @@ You can uninstall with:
 from transit.writer import Writer
 from transit.reader import Reader
 
-writer = Writer("json", io) # or "json-verbose", "msgpack"
+writer = Writer(io, "json") # or "json-verbose", "msgpack"
 writer.write(value)
 
 reader = Reader("json") # or "msgpack"
