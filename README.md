@@ -6,7 +6,7 @@ applications written in different programming languages. The library provides
 support for marshalling data to/from Python.
 
  * [Rationale](http://blog.cognitect.com/blog/2014/7/22/transit)
- * [API docs](http://cognitect.github.io/transit-python/)
+ * [API docs](http://pythonhosted.org/transit-python/)
  * [Specification](http://github.com/cognitect/transit-format)
 
 This implementation's major.minor version number corresponds to the
