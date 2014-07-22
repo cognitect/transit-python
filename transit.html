@@ -1,0 +1,1396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>transit package &mdash; transit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="transit 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to transit’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to transit’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">transit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="transit-package">
+<h1>transit package<a class="headerlink" href="#transit-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-transit.class_hash">
+<span id="transit-class-hash-module"></span><h2>transit.class_hash module<a class="headerlink" href="#module-transit.class_hash" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.class_hash.ClassDict">
+<em class="property">class </em><tt class="descclassname">transit.class_hash.</tt><tt class="descname">ClassDict</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/transit/class_hash.html#ClassDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.class_hash.ClassDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">_abcoll.MutableMapping</span></tt></p>
+<p>A dictionary that looks up class/type keys with inheritance</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-transit.constants">
+<span id="transit-constants-module"></span><h2>transit.constants module<a class="headerlink" href="#module-transit.constants" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-transit.decoder">
+<span id="transit-decoder-module"></span><h2>transit.decoder module<a class="headerlink" href="#module-transit.decoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.decoder.Decoder">
+<em class="property">class </em><tt class="descclassname">transit.decoder.</tt><tt class="descname">Decoder</tt><big>(</big><em>options={}</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The Decoder is the lowest level entry point for parsing, decoding, and
+fully converting Transit data into Python objects.</p>
+<p>During the creation of a Decoder object, you can specify custom options
+in a dictionary.  One such option is &#8216;decoders&#8217;.  Note that while you
+can specify your own decoders and override many of the built in decoders,
+some decoders are silently enforced and cannot be overriden.  These are
+known as Ground Decoders, and are needed to maintain bottom-tier
+compatibility.</p>
+<dl class="method">
+<dt id="transit.decoder.Decoder.decode">
+<tt class="descname">decode</tt><big>(</big><em>node</em>, <em>cache=None</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a node of data (any supported decodeable obj - string, dict,
+list), return the decoded object.  Optionally set the current decode
+cache [None].  If None, a new RollingCache is instantiated and used.
+You may also hit to the decoder that this node is to be treated as a
+map key [False].  This is used internally.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.decode_hash">
+<tt class="descname">decode_hash</tt><big>(</big><em>hash</em>, <em>cache</em>, <em>as_map_key</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.decode_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.decode_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.decode_list">
+<tt class="descname">decode_list</tt><big>(</big><em>node</em>, <em>cache</em>, <em>as_map_key</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.decode_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.decode_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special case decodes map-as-array.
+Otherwise lists are treated as Python lists.</p>
+<p>Arguments follow the same convention as the top-level &#8216;decode&#8217;
+function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.decode_string">
+<tt class="descname">decode_string</tt><big>(</big><em>string</em>, <em>cache</em>, <em>as_map_key</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.decode_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.decode_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string - arguments follow the same convention as the
+top-level &#8216;decode&#8217; function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.decode_tag">
+<tt class="descname">decode_tag</tt><big>(</big><em>tag</em>, <em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.decode_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.decode_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.parse_string">
+<tt class="descname">parse_string</tt><big>(</big><em>string</em>, <em>cache</em>, <em>as_map_key</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.parse_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.parse_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.decoder.Decoder.register">
+<tt class="descname">register</tt><big>(</big><em>key_or_tag</em>, <em>obj</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Decoder.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Decoder.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a custom Transit tag and new parsing function with the
+decoder.  Also, you can optionally set the &#8216;default_decoder&#8217; with
+this function.  Your new tag and parse/decode function will be added
+to the interal dictionary of decoders for this Decoder object</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.decoder.Tag">
+<em class="property">class </em><tt class="descclassname">transit.decoder.</tt><tt class="descname">Tag</tt><big>(</big><em>tag</em><big>)</big><a class="reference internal" href="_modules/transit/decoder.html#Tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.decoder.Tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-transit.helpers">
+<span id="transit-helpers-module"></span><h2>transit.helpers module<a class="headerlink" href="#module-transit.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="transit.helpers.mapcat">
+<tt class="descclassname">transit.helpers.</tt><tt class="descname">mapcat</tt><big>(</big><em>f</em>, <em>i</em><big>)</big><a class="reference internal" href="_modules/transit/helpers.html#mapcat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.helpers.mapcat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.helpers.pairs">
+<tt class="descclassname">transit.helpers.</tt><tt class="descname">pairs</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/helpers.html#pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.helpers.pairs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.helpers.take">
+<tt class="descclassname">transit.helpers.</tt><tt class="descname">take</tt><big>(</big><em>n</em>, <em>i</em><big>)</big><a class="reference internal" href="_modules/transit/helpers.html#take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.helpers.take" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-transit.read_handlers">
+<span id="transit-read-handlers-module"></span><h2>transit.read_handlers module<a class="headerlink" href="#module-transit.read_handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.read_handlers.BigIntegerHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">BigIntegerHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#BigIntegerHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.BigIntegerHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.BigIntegerHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#BigIntegerHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.BigIntegerHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.BooleanHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">BooleanHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#BooleanHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.BooleanHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.BooleanHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#BooleanHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.BooleanHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.CmapHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">CmapHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#CmapHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.CmapHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.CmapHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>cmap</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#CmapHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.CmapHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.DateHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">DateHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#DateHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.DateHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.DateHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#DateHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.DateHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.DefaultHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">DefaultHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#DefaultHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.DefaultHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.DefaultHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>t</em>, <em>v</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#DefaultHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.DefaultHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.FloatHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">FloatHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#FloatHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.FloatHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.FloatHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#FloatHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.FloatHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.IdentityHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">IdentityHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#IdentityHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.IdentityHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.IdentityHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#IdentityHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.IdentityHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.IntHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">IntHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#IntHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.IntHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.IntHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#IntHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.IntHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.KeywordHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">KeywordHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#KeywordHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.KeywordHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.KeywordHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#KeywordHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.KeywordHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.LinkHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">LinkHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#LinkHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.LinkHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.LinkHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>l</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#LinkHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.LinkHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.ListHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">ListHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#ListHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.ListHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.ListHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>l</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#ListHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.ListHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.NoneHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">NoneHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#NoneHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.NoneHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.NoneHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#NoneHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.NoneHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.SetHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">SetHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#SetHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.SetHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.SetHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#SetHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.SetHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.SymbolHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">SymbolHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#SymbolHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.SymbolHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.SymbolHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#SymbolHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.SymbolHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.UriHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">UriHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#UriHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.UriHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.UriHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#UriHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.UriHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.read_handlers.UuidHandler">
+<em class="property">class </em><tt class="descclassname">transit.read_handlers.</tt><tt class="descname">UuidHandler</tt><a class="reference internal" href="_modules/transit/read_handlers.html#UuidHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.UuidHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.read_handlers.UuidHandler.from_rep">
+<em class="property">static </em><tt class="descname">from_rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/read_handlers.html#UuidHandler.from_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.read_handlers.UuidHandler.from_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a string, return a UUID object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-transit.reader">
+<span id="transit-reader-module"></span><h2>transit.reader module<a class="headerlink" href="#module-transit.reader" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.reader.JsonUnmarshaler">
+<em class="property">class </em><tt class="descclassname">transit.reader.</tt><tt class="descname">JsonUnmarshaler</tt><a class="reference internal" href="_modules/transit/reader.html#JsonUnmarshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.JsonUnmarshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The top-level Unmarshaler used by the Reader for JSON payloads.  While
+you may use this directly, it is strongly discouraged.</p>
+<dl class="method">
+<dt id="transit.reader.JsonUnmarshaler.load">
+<tt class="descname">load</tt><big>(</big><em>stream</em><big>)</big><a class="reference internal" href="_modules/transit/reader.html#JsonUnmarshaler.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.JsonUnmarshaler.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.reader.MsgPackUnmarshaler">
+<em class="property">class </em><tt class="descclassname">transit.reader.</tt><tt class="descname">MsgPackUnmarshaler</tt><a class="reference internal" href="_modules/transit/reader.html#MsgPackUnmarshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.MsgPackUnmarshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The top-level Unmarshaler used by the Reader for MsgPacke payloads.
+While you may use this directly, it is strongly discouraged.</p>
+<dl class="method">
+<dt id="transit.reader.MsgPackUnmarshaler.load">
+<tt class="descname">load</tt><big>(</big><em>stream</em><big>)</big><a class="reference internal" href="_modules/transit/reader.html#MsgPackUnmarshaler.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.MsgPackUnmarshaler.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.reader.Reader">
+<em class="property">class </em><tt class="descclassname">transit.reader.</tt><tt class="descname">Reader</tt><big>(</big><em>protocol='json'</em><big>)</big><a class="reference internal" href="_modules/transit/reader.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.Reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The top-level object for reading in Transit data and converting it to
+Python objects.  During initialization, you must specify the protocol used
+for unmarshalling the data- json or msgpack.</p>
+<dl class="method">
+<dt id="transit.reader.Reader.read">
+<tt class="descname">read</tt><big>(</big><em>stream</em><big>)</big><a class="reference internal" href="_modules/transit/reader.html#Reader.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.Reader.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a readable file descriptor object (something <a href="#id1"><span class="problematic" id="id2">`</span></a>load`able by
+msgpack or json), read the data, and return the Python representation
+of the contents.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.reader.Reader.register">
+<tt class="descname">register</tt><big>(</big><em>key_or_tag</em>, <em>f_val</em><big>)</big><a class="reference internal" href="_modules/transit/reader.html#Reader.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.reader.Reader.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a custom transit tag and decoder/parser function for use
+during reads.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-transit.rolling_cache">
+<span id="transit-rolling-cache-module"></span><h2>transit.rolling_cache module<a class="headerlink" href="#module-transit.rolling_cache" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.rolling_cache.RollingCache">
+<em class="property">class </em><tt class="descclassname">transit.rolling_cache.</tt><tt class="descname">RollingCache</tt><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This is the internal cache used by python-transit for cacheing and
+expanding map keys during writing and reading.  The cache enables transit
+to minimize the amount of duplicate data sent over the wire, effectively
+compressing down the overall payload size.  The cache is not intended to
+be used directly.</p>
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.decode">
+<tt class="descname">decode</tt><big>(</big><em>name</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Always returns the name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.encache">
+<tt class="descname">encache</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.encache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.encache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.encode">
+<tt class="descname">encode</tt><big>(</big><em>name</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name the first time and the key after that</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.is_cache_full">
+<tt class="descname">is_cache_full</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.is_cache_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.is_cache_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.rolling_cache.RollingCache.size">
+<tt class="descname">size</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#RollingCache.size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.RollingCache.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="transit.rolling_cache.decode_key">
+<tt class="descclassname">transit.rolling_cache.</tt><tt class="descname">decode_key</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#decode_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.decode_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.rolling_cache.encode_key">
+<tt class="descclassname">transit.rolling_cache.</tt><tt class="descname">encode_key</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#encode_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.encode_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.rolling_cache.is_cache_key">
+<tt class="descclassname">transit.rolling_cache.</tt><tt class="descname">is_cache_key</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#is_cache_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.is_cache_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.rolling_cache.is_cacheable">
+<tt class="descclassname">transit.rolling_cache.</tt><tt class="descname">is_cacheable</tt><big>(</big><em>string</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/rolling_cache.html#is_cacheable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.rolling_cache.is_cacheable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-transit.transit_types">
+<span id="transit-transit-types-module"></span><h2>transit.transit_types module<a class="headerlink" href="#module-transit.transit_types" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.transit_types.Array">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Array</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.CMap">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">CMap</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#CMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.CMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.Keyword">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Keyword</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Keyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Keyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.Link">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Link</tt><big>(</big><em>href=None</em>, <em>rel=None</em>, <em>name=None</em>, <em>render=None</em>, <em>prompt=None</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="transit.transit_types.Link.HREF">
+<tt class="descname">HREF</tt><em class="property"> = 'href'</em><a class="headerlink" href="#transit.transit_types.Link.HREF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.IMAGE">
+<tt class="descname">IMAGE</tt><em class="property"> = 'image'</em><a class="headerlink" href="#transit.transit_types.Link.IMAGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.LINK">
+<tt class="descname">LINK</tt><em class="property"> = 'link'</em><a class="headerlink" href="#transit.transit_types.Link.LINK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.NAME">
+<tt class="descname">NAME</tt><em class="property"> = 'name'</em><a class="headerlink" href="#transit.transit_types.Link.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.PROMPT">
+<tt class="descname">PROMPT</tt><em class="property"> = 'prompt'</em><a class="headerlink" href="#transit.transit_types.Link.PROMPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.REL">
+<tt class="descname">REL</tt><em class="property"> = 'rel'</em><a class="headerlink" href="#transit.transit_types.Link.REL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.RENDER">
+<tt class="descname">RENDER</tt><em class="property"> = 'render'</em><a class="headerlink" href="#transit.transit_types.Link.RENDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.as_array">
+<tt class="descname">as_array</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.as_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.as_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.as_map">
+<tt class="descname">as_map</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.as_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.as_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.href">
+<tt class="descname">href</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.href"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.href" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.name">
+<tt class="descname">name</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.prompt">
+<tt class="descname">prompt</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.prompt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.prompt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.rel">
+<tt class="descname">rel</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.rel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.rel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Link.render">
+<tt class="descname">render</tt><a class="reference internal" href="_modules/transit/transit_types.html#Link.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Link.render" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.List">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">List</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.List" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.Set">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Set</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.Symbol">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Symbol</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Symbol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Symbol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.TaggedValue">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">TaggedValue</tt><big>(</big><em>tag</em>, <em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#TaggedValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.TaggedValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.URI">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">URI</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#URI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.Vector">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">Vector</tt><big>(</big><em>rep</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#Vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><tt class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.transit_types.frozendict">
+<em class="property">class </em><tt class="descclassname">transit.transit_types.</tt><tt class="descname">frozendict</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/transit/transit_types.html#frozendict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.frozendict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">_abcoll.Mapping</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">_abcoll.Hashable</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.kws">
+<tt class="descclassname">transit.transit_types.</tt><tt class="descname">kws</tt><a class="headerlink" href="#transit.transit_types.kws" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-transit.write_handlers">
+<span id="transit-write-handlers-module"></span><h2>transit.write_handlers module<a class="headerlink" href="#module-transit.write_handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.write_handlers.ArrayHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">ArrayHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#ArrayHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.ArrayHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.ArrayHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#ArrayHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.ArrayHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.ArrayHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#ArrayHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.ArrayHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.ArrayHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#ArrayHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.ArrayHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.BigIntHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">BigIntHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#BigIntHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BigIntHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BigIntHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BigIntHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BigIntHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BigIntHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BigIntHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BigIntHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BigIntHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BigIntHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BigIntHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.BooleanHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">BooleanHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#BooleanHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BooleanHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BooleanHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BooleanHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BooleanHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BooleanHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BooleanHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BooleanHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.BooleanHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#BooleanHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.BooleanHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.DateTimeHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">DateTimeHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#DateTimeHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.DateTimeHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="transit.write_handlers.DateTimeHandler.epoch">
+<tt class="descname">epoch</tt><em class="property"> = datetime.datetime(1970, 1, 1, 0, 0, tzinfo=tzutc())</em><a class="headerlink" href="#transit.write_handlers.DateTimeHandler.epoch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.DateTimeHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#DateTimeHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.DateTimeHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.DateTimeHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#DateTimeHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.DateTimeHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.DateTimeHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#DateTimeHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.DateTimeHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.DateTimeHandler.verbose_handler">
+<em class="property">static </em><tt class="descname">verbose_handler</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#DateTimeHandler.verbose_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.DateTimeHandler.verbose_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.FloatHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">FloatHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#FloatHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.FloatHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.FloatHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>f</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#FloatHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.FloatHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.FloatHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>f</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#FloatHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.FloatHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.FloatHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#FloatHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.FloatHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.IntHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">IntHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#IntHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.IntHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.IntHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#IntHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.IntHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.IntHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#IntHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.IntHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.IntHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#IntHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.IntHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.KeywordHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">KeywordHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#KeywordHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.KeywordHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.KeywordHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#KeywordHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.KeywordHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.KeywordHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#KeywordHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.KeywordHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.KeywordHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#KeywordHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.KeywordHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.LinkHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">LinkHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#LinkHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.LinkHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.LinkHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>l</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#LinkHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.LinkHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.LinkHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#LinkHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.LinkHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.LinkHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#LinkHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.LinkHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.MapHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">MapHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.MapHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>m</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.MapHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.MapHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.NoneHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">NoneHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#NoneHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.NoneHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.NoneHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#NoneHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.NoneHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.NoneHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#NoneHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.NoneHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.NoneHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#NoneHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.NoneHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.SetHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">SetHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#SetHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SetHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SetHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SetHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SetHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SetHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SetHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SetHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SetHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SetHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SetHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.StringHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">StringHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#StringHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.StringHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.StringHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#StringHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.StringHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.StringHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#StringHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.StringHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.StringHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#StringHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.StringHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.SymbolHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">SymbolHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#SymbolHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SymbolHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SymbolHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SymbolHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SymbolHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SymbolHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SymbolHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SymbolHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.SymbolHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#SymbolHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.SymbolHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.TaggedMap">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">TaggedMap</tt><big>(</big><em>tag</em>, <em>rep</em>, <em>str</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="transit.write_handlers.TaggedMap.rep">
+<tt class="descname">rep</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedMap.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedMap.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.write_handlers.TaggedMap.string_rep">
+<tt class="descname">string_rep</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedMap.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedMap.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.write_handlers.TaggedMap.tag">
+<tt class="descname">tag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedMap.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedMap.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.TaggedValueHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">TaggedValueHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedValueHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedValueHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.TaggedValueHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>tv</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedValueHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedValueHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.TaggedValueHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedValueHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedValueHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.TaggedValueHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>tv</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#TaggedValueHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.TaggedValueHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.UriHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">UriHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#UriHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UriHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UriHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UriHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UriHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UriHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UriHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UriHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UriHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UriHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UriHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.UuidHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">UuidHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#UuidHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UuidHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="transit.write_handlers.UuidHandler.mask">
+<tt class="descname">mask</tt><em class="property"> = 18446744073709551615L</em><a class="headerlink" href="#transit.write_handlers.UuidHandler.mask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UuidHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UuidHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UuidHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UuidHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UuidHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UuidHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.UuidHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#UuidHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.UuidHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.VerboseDateTimeHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">VerboseDateTimeHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#VerboseDateTimeHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.VerboseDateTimeHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="transit.write_handlers.VerboseDateTimeHandler.rep">
+<em class="property">static </em><tt class="descname">rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#VerboseDateTimeHandler.rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.VerboseDateTimeHandler.rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.VerboseDateTimeHandler.string_rep">
+<em class="property">static </em><tt class="descname">string_rep</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#VerboseDateTimeHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.VerboseDateTimeHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="transit.write_handlers.VerboseDateTimeHandler.tag">
+<em class="property">static </em><tt class="descname">tag</tt><big>(</big><em>_</em><big>)</big><a class="reference internal" href="_modules/transit/write_handlers.html#VerboseDateTimeHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.VerboseDateTimeHandler.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.write_handlers.WriteHandler">
+<em class="property">class </em><tt class="descclassname">transit.write_handlers.</tt><tt class="descname">WriteHandler</tt><a class="reference internal" href="_modules/transit/write_handlers.html#WriteHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.WriteHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.class_hash.ClassDict" title="transit.class_hash.ClassDict"><tt class="xref py py-class docutils literal"><span class="pre">transit.class_hash.ClassDict</span></tt></a></p>
+<p>This is the master handler for encoding/writing Python data into
+Transit data, based on its type.
+The Handler itself is a dispatch map, that resolves on full type/object
+inheritance.</p>
+<p>These handlers can be overriden during the creation of a Transit Writer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-transit.writer">
+<span id="transit-writer-module"></span><h2>transit.writer module<a class="headerlink" href="#module-transit.writer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="transit.writer.JsonMarshaler">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">JsonMarshaler</tt><big>(</big><em>io</em>, <em>opts={}</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.writer.Marshaler" title="transit.writer.Marshaler"><tt class="xref py py-class docutils literal"><span class="pre">transit.writer.Marshaler</span></tt></a></p>
+<p>The Marshaler tailor to JSON.  To use this Marshaler, specify the
+&#8216;json&#8217; protocol when creating a Writer.</p>
+<dl class="attribute">
+<dt id="transit.writer.JsonMarshaler.JSON_MAX_INT">
+<tt class="descname">JSON_MAX_INT</tt><em class="property"> = 9223372036854775808L</em><a class="headerlink" href="#transit.writer.JsonMarshaler.JSON_MAX_INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.writer.JsonMarshaler.JSON_MIN_INT">
+<tt class="descname">JSON_MIN_INT</tt><em class="property"> = -9223372036854775808L</em><a class="headerlink" href="#transit.writer.JsonMarshaler.JSON_MIN_INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.writer.JsonMarshaler.default_opts">
+<tt class="descname">default_opts</tt><em class="property"> = {'min_int': -9223372036854775808L, 'max_int': 9223372036854775808L, 'prefer_strings': True}</em><a class="headerlink" href="#transit.writer.JsonMarshaler.default_opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_array_end">
+<tt class="descname">emit_array_end</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_array_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_array_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_array_start">
+<tt class="descname">emit_array_start</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_array_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_array_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_map">
+<tt class="descname">emit_map</tt><big>(</big><em>m</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emits array as per default JSON spec.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_map_end">
+<tt class="descname">emit_map_end</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_map_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_map_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_map_start">
+<tt class="descname">emit_map_start</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_map_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_map_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.emit_object">
+<tt class="descname">emit_object</tt><big>(</big><em>obj</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.emit_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.emit_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.pop_level">
+<tt class="descname">pop_level</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.pop_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.pop_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.push_level">
+<tt class="descname">push_level</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.push_level"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.push_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.push_map">
+<tt class="descname">push_map</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.push_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.push_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.JsonMarshaler.write_sep">
+<tt class="descname">write_sep</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#JsonMarshaler.write_sep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.JsonMarshaler.write_sep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.writer.Marshaler">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">Marshaler</tt><big>(</big><em>opts={}</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The base Marshaler from which all Marshalers inherit.</p>
+<p>The Marshaler specifies how to emit Transit data given encodeable Python
+objects.  The end of this process is specialized by other Marshalers to
+covert the final result into an on-the-wire payload (JSON or MsgPack).</p>
+<dl class="method">
+<dt id="transit.writer.Marshaler.are_stringable_keys">
+<tt class="descname">are_stringable_keys</tt><big>(</big><em>m</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.are_stringable_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.are_stringable_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether the keys within a map are stringable - a simple map,
+that can be optimized and whose keys can be cached</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.dispatch_map">
+<tt class="descname">dispatch_map</tt><big>(</big><em>rep</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.dispatch_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.dispatch_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to determine and dipatch the writing of a map - a simple
+map with strings as keys, or a complex map, whose keys are also
+compound types.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_array">
+<tt class="descname">emit_array</tt><big>(</big><em>a</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_boolean">
+<tt class="descname">emit_boolean</tt><big>(</big><em>b</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_boolean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_boolean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_cmap">
+<tt class="descname">emit_cmap</tt><big>(</big><em>m</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_cmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_cmap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_double">
+<tt class="descname">emit_double</tt><big>(</big><em>d</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_double"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_double" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_encoded">
+<tt class="descname">emit_encoded</tt><big>(</big><em>tag</em>, <em>handler</em>, <em>obj</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_encoded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_encoded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_int">
+<tt class="descname">emit_int</tt><big>(</big><em>i</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_int" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_map">
+<tt class="descname">emit_map</tt><big>(</big><em>m</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_nil">
+<tt class="descname">emit_nil</tt><big>(</big><em>_</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_nil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_nil" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_string">
+<tt class="descname">emit_string</tt><big>(</big><em>prefix</em>, <em>tag</em>, <em>string</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.emit_tagged">
+<tt class="descname">emit_tagged</tt><big>(</big><em>tag</em>, <em>rep</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.emit_tagged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.emit_tagged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.marshal">
+<tt class="descname">marshal</tt><big>(</big><em>obj</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.marshal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.marshal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marshal an individual obj, potentially as part of another container
+object (like a list/dictionary/etc).  Specify if this object is a key
+to a map/dict, and pass in the current cache being used.
+This method should only be called by a top-level marshalling call
+and should not be considered an entry-point for integration.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.marshal_top">
+<tt class="descname">marshal_top</tt><big>(</big><em>obj</em>, <em>cache=None</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.marshal_top"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.marshal_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a complete object that needs to be marshaled into Transit
+data, and optionally a cache, dispatch accordingly, and flush the data
+directly into the IO stream.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Marshaler.register">
+<tt class="descname">register</tt><big>(</big><em>obj_type</em>, <em>handler_class</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Marshaler.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Marshaler.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register custom converters for object types present in your
+application.  This allows you to extend Transit to encode new types.
+You must specify the obj type to be encoded, and the handler class
+that should be used by this marshaller.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.writer.MsgPackMarshaler">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">MsgPackMarshaler</tt><big>(</big><em>io</em>, <em>opts={}</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.writer.Marshaler" title="transit.writer.Marshaler"><tt class="xref py py-class docutils literal"><span class="pre">transit.writer.Marshaler</span></tt></a></p>
+<p>The Marshaler tailor to MsgPack.  To use this Marshaler, specify the
+&#8216;msgpack&#8217; protocol when creating a Writer.</p>
+<dl class="attribute">
+<dt id="transit.writer.MsgPackMarshaler.MSGPACK_MAX_INT">
+<tt class="descname">MSGPACK_MAX_INT</tt><em class="property"> = 9223372036854775807L</em><a class="headerlink" href="#transit.writer.MsgPackMarshaler.MSGPACK_MAX_INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.writer.MsgPackMarshaler.MSGPACK_MIN_INT">
+<tt class="descname">MSGPACK_MIN_INT</tt><em class="property"> = -9223372036854775808L</em><a class="headerlink" href="#transit.writer.MsgPackMarshaler.MSGPACK_MIN_INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.writer.MsgPackMarshaler.default_opts">
+<tt class="descname">default_opts</tt><em class="property"> = {'min_int': -9223372036854775808L, 'max_int': 9223372036854775807L, 'prefer_strings': False}</em><a class="headerlink" href="#transit.writer.MsgPackMarshaler.default_opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.emit_array_end">
+<tt class="descname">emit_array_end</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.emit_array_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.emit_array_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.emit_array_start">
+<tt class="descname">emit_array_start</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.emit_array_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.emit_array_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.emit_map_end">
+<tt class="descname">emit_map_end</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.emit_map_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.emit_map_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.emit_map_start">
+<tt class="descname">emit_map_start</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.emit_map_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.emit_map_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.emit_object">
+<tt class="descname">emit_object</tt><big>(</big><em>obj</em>, <em>as_map_key=False</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.emit_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.emit_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.MsgPackMarshaler.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/transit/writer.html#MsgPackMarshaler.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.MsgPackMarshaler.flush" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.writer.VerboseJsonMarshaler">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">VerboseJsonMarshaler</tt><big>(</big><em>io</em>, <em>opts={}</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#VerboseJsonMarshaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.VerboseJsonMarshaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#transit.writer.VerboseSettings" title="transit.writer.VerboseSettings"><tt class="xref py py-class docutils literal"><span class="pre">transit.writer.VerboseSettings</span></tt></a>, <a class="reference internal" href="#transit.writer.JsonMarshaler" title="transit.writer.JsonMarshaler"><tt class="xref py py-class docutils literal"><span class="pre">transit.writer.JsonMarshaler</span></tt></a></p>
+<p>JsonMarshaler class with VerboseSettings mixin</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.writer.VerboseSettings">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">VerboseSettings</tt><a class="reference internal" href="_modules/transit/writer.html#VerboseSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.VerboseSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin for JsonMarshaler that adds support for Verbose output/input.
+Verbosity is only suggest for debuging/inspecting purposes.</p>
+<dl class="method">
+<dt id="transit.writer.VerboseSettings.emit_map">
+<tt class="descname">emit_map</tt><big>(</big><em>m</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#VerboseSettings.emit_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.VerboseSettings.emit_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.VerboseSettings.emit_string">
+<tt class="descname">emit_string</tt><big>(</big><em>prefix</em>, <em>tag</em>, <em>string</em>, <em>as_map_key</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#VerboseSettings.emit_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.VerboseSettings.emit_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.VerboseSettings.emit_tagged">
+<tt class="descname">emit_tagged</tt><big>(</big><em>tag</em>, <em>rep</em>, <em>_</em>, <em>cache</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#VerboseSettings.emit_tagged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.VerboseSettings.emit_tagged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="transit.writer.Writer">
+<em class="property">class </em><tt class="descclassname">transit.writer.</tt><tt class="descname">Writer</tt><big>(</big><em>io</em>, <em>protocol='json'</em>, <em>opts={'cache_enabled': True}</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>The top-level object for writing out Python objects and converting them
+to Transit data.  During initialization, you must specify the protocol used
+for marshalling the data- json or msgpack.  You must also specify the io
+source used for writing (a file descriptor).  You may optionally pass in
+an options dictionary that will be forwarded onto the Marshaler.
+The cache is enabled by default.</p>
+<dl class="method">
+<dt id="transit.writer.Writer.register">
+<tt class="descname">register</tt><big>(</big><em>obj_type</em>, <em>handler_class</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Writer.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Writer.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register custom converters for object types present in your
+application.  This allows you to extend Transit to encode new types.
+You must specify the obj type to be encoded, and the handler class
+that should be used by the Marshaler during write-time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="transit.writer.Writer.write">
+<tt class="descname">write</tt><big>(</big><em>obj</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#Writer.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.Writer.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a Python object, marshal it into Transit data and write it to
+the &#8216;io&#8217; source.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="transit.writer.escape">
+<tt class="descclassname">transit.writer.</tt><tt class="descname">escape</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#escape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.escape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.writer.flatten_map">
+<tt class="descclassname">transit.writer.</tt><tt class="descname">flatten_map</tt><big>(</big><em>m</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#flatten_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.flatten_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a dictionary&#8217;s items into a flat list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="transit.writer.is_escapable">
+<tt class="descclassname">transit.writer.</tt><tt class="descname">is_escapable</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#transit.writer.is_escapable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="transit.writer.re_fn">
+<tt class="descclassname">transit.writer.</tt><tt class="descname">re_fn</tt><big>(</big><em>pat</em><big>)</big><a class="reference internal" href="_modules/transit/writer.html#re_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.writer.re_fn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-transit">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-transit" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">transit package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-transit.class_hash">transit.class_hash module</a></li>
+<li><a class="reference internal" href="#module-transit.constants">transit.constants module</a></li>
+<li><a class="reference internal" href="#module-transit.decoder">transit.decoder module</a></li>
+<li><a class="reference internal" href="#module-transit.helpers">transit.helpers module</a></li>
+<li><a class="reference internal" href="#module-transit.read_handlers">transit.read_handlers module</a></li>
+<li><a class="reference internal" href="#module-transit.reader">transit.reader module</a></li>
+<li><a class="reference internal" href="#module-transit.rolling_cache">transit.rolling_cache module</a></li>
+<li><a class="reference internal" href="#module-transit.transit_types">transit.transit_types module</a></li>
+<li><a class="reference internal" href="#module-transit.write_handlers">transit.write_handlers module</a></li>
+<li><a class="reference internal" href="#module-transit.writer">transit.writer module</a></li>
+<li><a class="reference internal" href="#module-transit">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to transit&#8217;s documentation!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/transit.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to transit’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">transit 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>transit.rolling_cache &mdash; transit 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="transit 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">transit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for transit.rolling_cache</h1><div class="highlight"><pre>
+<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c">##</span>
+<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c">## you may not use this file except in compliance with the License.</span>
+<span class="c">## You may obtain a copy of the License at</span>
+<span class="c">##</span>
+<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c">##</span>
+<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c">## See the License for the specific language governing permissions and</span>
+<span class="c">## limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">ESC</span><span class="p">,</span> <span class="n">SUB</span><span class="p">,</span> <span class="n">MAP_AS_ARR</span>
+
+<span class="n">FIRST_ORD</span> <span class="o">=</span> <span class="mi">48</span>
+<span class="n">CACHE_CODE_DIGITS</span> <span class="o">=</span> <span class="mi">44</span>
+<span class="n">CACHE_SIZE</span> <span class="o">=</span> <span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="n">CACHE_CODE_DIGITS</span>
+<span class="n">MIN_SIZE_CACHEABLE</span> <span class="o">=</span> <span class="mi">4</span>
+
+<div class="viewcode-block" id="is_cache_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cache_key">[docs]</a><span class="k">def</span> <span class="nf">is_cache_key</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SUB</span> <span class="ow">and</span> <span class="n">name</span> <span class="o">!=</span> <span class="n">MAP_AS_ARR</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="encode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.encode_key">[docs]</a><span class="k">def</span> <span class="nf">encode_key</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">lo</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">CACHE_CODE_DIGITS</span>
+    <span class="n">hi</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="n">CACHE_CODE_DIGITS</span>
+    <span class="k">if</span> <span class="n">hi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">hi</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="decode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.decode_key">[docs]</a><span class="k">def</span> <span class="nf">decode_key</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">sz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sz</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="is_cacheable"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cacheable">[docs]</a><span class="k">def</span> <span class="nf">is_cacheable</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">string</span> \
+            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MIN_SIZE_CACHEABLE</span> \
+            <span class="ow">and</span> <span class="p">(</span><span class="n">as_map_key</span> \
+            <span class="ow">or</span> <span class="p">(</span><span class="n">string</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;~#&quot;</span><span class="p">,</span> <span class="s">&quot;~$&quot;</span><span class="p">,</span> <span class="s">&quot;~:&quot;</span><span class="p">]))</span>
+</div>
+<div class="viewcode-block" id="RollingCache"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache">[docs]</a><span class="k">class</span> <span class="nc">RollingCache</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; This is the internal cache used by python-transit for cacheing and</span>
+<span class="sd">    expanding map keys during writing and reading.  The cache enables transit</span>
+<span class="sd">    to minimize the amount of duplicate data sent over the wire, effectively</span>
+<span class="sd">    compressing down the overall payload size.  The cache is not intended to</span>
+<span class="sd">    be used directly.&quot;&quot;&quot;</span>
+    <span class="c"># (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.</span>
+      <span class="c"># dict lookup should be amortized O(1), for list O(n)</span>
+    <span class="c"># (2) currently stores value read from the wire, should probably store value after decoding</span>
+    <span class="c"># so we don&#39;t do multiple decodes. Sped up parsing in ruby by 30%.</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c"># if index rolls over... (bug)</span>
+<div class="viewcode-block" id="RollingCache.decode"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.decode">[docs]</a>    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Always returns the name&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">is_cache_key</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="RollingCache.encode"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the name the first time and the key after that&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="RollingCache.size"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.size">[docs]</a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RollingCache.is_cache_full"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.is_cache_full">[docs]</a>    <span class="k">def</span> <span class="nf">is_cache_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">CACHE_SIZE</span>
+</div>
+<div class="viewcode-block" id="RollingCache.encache"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.encache">[docs]</a>    <span class="k">def</span> <span class="nf">encache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_cache_full</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="n">encode_key</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+        <span class="k">return</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="RollingCache.clear"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">transit 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
