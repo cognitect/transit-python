@@ -23,8 +23,16 @@ specification is complete._
 The [PYPI](https://pypi.python.org/pypi) package is
 [`transit-python`](https://pypi.python.org/pypi/transit-python)
 
- * Latest stable release: [0.8](https://pypi.python.org/pypi/transit-python/0.8)
+ * Latest stable release: [0.8](https://pypi.python.org/pypi/transit-python/0.8.174-)
 
+You can install with any of the following:
+
+ * `easy_install transit-python`
+ * `pip install --use-wheel --pre transit-python`
+
+You can uninstall with:
+
+ * `pip uninstall transit-python`
 
 ## Usage
 
