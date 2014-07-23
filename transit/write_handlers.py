@@ -98,7 +98,7 @@ class BooleanHandler(object):
         return b
     @staticmethod
     def string_rep(b):
-        return b and 't' or 'f'
+        return 't' if b else 'f'
 
 class ArrayHandler(object):
     @staticmethod
