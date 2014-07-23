@@ -1,0 +1,3 @@
+[submodule "tests/transit-format"]
+	path = tests/transit-format
+	url = git://github.com/cognitect/transit-format.git
