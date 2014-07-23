@@ -32,6 +32,7 @@ class ExemplarBaseTest(unittest.TestCase):
 def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
         test_path = os.getcwd() + "/transit-format/examples/0.8/simple/" + name
+
         def test_json(self):
             with open(self.test_path + ".json", 'r') as stream:
                 data = Reader(protocol="json").read(stream)
