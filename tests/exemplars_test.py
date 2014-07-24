@@ -14,10 +14,6 @@
 ## limitations under the License.
 import unittest
 
-# get parent directory into python path
-import sys, os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.path.pardir))
-
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
