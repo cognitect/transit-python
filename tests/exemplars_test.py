@@ -13,10 +13,7 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 import unittest
-
-# get parent directory into python path
-import sys, os
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.path.pardir))
+import os
 
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
@@ -34,18 +31,21 @@ class ExemplarBaseTest(unittest.TestCase):
 
 def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
+        test_dir = "/tests" if os.path.basename(os.getcwd()) != "tests" else ""
+        test_path = os.getcwd() + test_dir + "/transit-format/examples/0.8/simple/" + name
+
         def test_json(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".json", 'r') as stream:
+            with open(self.test_path + ".json", 'r') as stream:
                 data = Reader(protocol="json").read(stream)
                 self.assertEqual(val, data)
 
         def test_msgpack(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".mp", 'r') as stream:
+            with open(self.test_path + ".mp", 'r') as stream:
                 data = Reader(protocol="msgpack").read(stream)
                 self.assertEqual(val, data)
 
         def test_json_verbose(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".verbose.json", 'r') as stream:
+            with open(self.test_path + ".verbose.json", 'r') as stream:
                 data = Reader(protocol="json_verbose").read(stream)
                 self.assertEqual(val, data)
 

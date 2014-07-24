@@ -153,9 +153,13 @@ and the value will be one of any possible bool/int keyed value.
 
 ### Setup
 
-Transit Python requires Transit to be at the same directory level as
-transit-python for access to the exemplar files.
+transit-format is required to run the tests, and is currently added as
+a submodule.
 
+### Get transit-format
+```sh
+git submodule init && git submodule update
+```
 
 ### Benchmarks
 
@@ -173,6 +177,10 @@ python tests/exemplars_test.py
 
 ```sh
 pip install -e .
+```
+or
+```
+python setup.py install
 ```
 
 The version number is automatically incremented based on the number of commits.
