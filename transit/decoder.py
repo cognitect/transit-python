@@ -95,8 +95,7 @@ class Decoder(object):
         Arguments follow the same convention as the top-level 'decode'
         function"""
         if node:
-            decoded = self._decode(node[0], cache, as_map_key)
-            if decoded == MAP_AS_ARR:
+            if node[0] == MAP_AS_ARR:
                 # key must be decoded before value for caching to work.
                 returned_dict = {}
                 for k,v in pairs(node[1:]):
@@ -104,10 +103,9 @@ class Decoder(object):
                     val = self._decode(v, cache, as_map_key)
                     returned_dict[key] = val
                 return returned_dict
-#                return {self._decode(k, cache, True):
-#                        self._decode(v, cache, as_map_key)
-#                        for k,v in pairs(node[1:])}
-            elif isinstance(decoded, Tag):
+
+            decoded = self._decode(node[0], cache, as_map_key)
+            if isinstance(decoded, Tag):
                 return self.decode_tag(decoded.tag, self._decode(node[1], cache, as_map_key))
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
