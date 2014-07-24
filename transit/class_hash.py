@@ -23,7 +23,7 @@ class ClassDict(collections.MutableMapping):
         self.update(dict(*args, **kwargs))
 
     def __getitem__(self, key):
-        key = isinstance(key, type) and key or type(key)
+        key = key if isinstance(key, type) else type(key)
         if key in self.store:
             return self.store[key]
         else:
