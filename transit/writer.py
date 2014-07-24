@@ -61,6 +61,8 @@ def re_fn(pat):
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
 def escape(s):
+    if s is MAP_AS_ARR:
+        return MAP_AS_ARR
     if is_escapable(s):
         return ESC+s
     else:
