@@ -31,7 +31,8 @@ class ExemplarBaseTest(unittest.TestCase):
 
 def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
-        test_path = os.getcwd() + "/transit-format/examples/0.8/simple/" + name
+        test_dir = "/tests" if os.path.basename(os.getcwd()) != "tests" else ""
+        test_path = os.getcwd() + test_dir + "/transit-format/examples/0.8/simple/" + name
 
         def test_json(self):
             with open(self.test_path + ".json", 'r') as stream:
