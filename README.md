@@ -154,7 +154,9 @@ and the value will be one of any possible bool/int keyed value.
 ### Setup
 
 Transit Python requires Transit to be at the same directory level as
-transit-python for access to the exemplar files.
+transit-python for access to the exemplar files. You will also need
+to add transit-python to your PYTHONPATH. Tests should be run from the
+transit-python directory.
 
 
 ### Benchmarks
