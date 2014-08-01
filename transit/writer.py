@@ -280,11 +280,7 @@ class JsonMarshaler(Marshaler):
                     "max_int": JSON_MAX_INT,
                     "min_int": JSON_MIN_INT}
 
-    ## Yes this is basically a custom JSON encoder,
-    ## but I couldn't find an existing solution that worked
-    ## well with the lazy writing method we have in this
-    ## project.
-
+    ## Custom JSON encoder temporary solution to support lazy writing.
     def __init__(self, io, opts={}):
         self.io = io
         nopts = JsonMarshaler.default_opts.copy()

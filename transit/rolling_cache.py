@@ -48,10 +48,6 @@ class RollingCache(object):
     compressing down the overall payload size.  The cache is not intended to
     be used directly.
     """
-    # (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.
-      # dict lookup should be amortized O(1), for list O(n)
-    # (2) currently stores value read from the wire, should probably store value after decoding
-    # so we don't do multiple decodes. Sped up parsing in ruby by 30%.
     def __init__(self):
         self.key_to_value = {}
         self.value_to_key = {}
