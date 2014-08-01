@@ -373,7 +373,7 @@ class VerboseSettings(object):
 
     def emit_tagged(self, tag, rep, _, cache):
         self.emit_map_start(1)
-        self.emit_object(cache.encode(ESC + "#" + tag, True), True)
+        self.emit_object(ESC + "#" + tag, True)
         self.marshal(rep, False, cache)
         self.emit_map_end()
 
