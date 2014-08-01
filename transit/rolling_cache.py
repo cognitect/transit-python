@@ -42,11 +42,12 @@ def is_cacheable(string, as_map_key=False):
             or (string[:2] in ["~#", "~$", "~:"]))
 
 class RollingCache(object):
-    """ This is the internal cache used by python-transit for cacheing and
+    """This is the internal cache used by python-transit for cacheing and
     expanding map keys during writing and reading.  The cache enables transit
     to minimize the amount of duplicate data sent over the wire, effectively
     compressing down the overall payload size.  The cache is not intended to
-    be used directly."""
+    be used directly.
+    """
     # (1) should we use list or dict on read side? ##- probably dictionary is best for lookup by code.
       # dict lookup should be amortized O(1), for list O(n)
     # (2) currently stores value read from the wire, should probably store value after decoding

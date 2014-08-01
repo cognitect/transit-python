@@ -47,7 +47,7 @@ ground_decoders = {"_": rh.NoneHandler,
                    "'": rh.IdentityHandler}
 
 class Decoder(object):
-    """ The Decoder is the lowest level entry point for parsing, decoding, and
+    """The Decoder is the lowest level entry point for parsing, decoding, and
     fully converting Transit data into Python objects.
 
     During the creation of a Decoder object, you can specify custom options
@@ -55,7 +55,8 @@ class Decoder(object):
     can specify your own decoders and override many of the built in decoders,
     some decoders are silently enforced and cannot be overriden.  These are
     known as Ground Decoders, and are needed to maintain bottom-tier
-    compatibility."""
+    compatibility.
+    """
 
     def __init__(self, options={}):
         self.options = default_options.copy()
@@ -66,11 +67,12 @@ class Decoder(object):
         self.decoders.update(ground_decoders)
 
     def decode(self, node, cache=None, as_map_key=False):
-        """ Given a node of data (any supported decodeable obj - string, dict,
+        """Given a node of data (any supported decodeable obj - string, dict,
         list), return the decoded object.  Optionally set the current decode
         cache [None].  If None, a new RollingCache is instantiated and used.
         You may also hit to the decoder that this node is to be treated as a
-        map key [False].  This is used internally."""
+        map key [False].  This is used internally.
+        """
         if not cache:
             cache = RollingCache()
         return self._decode(node, cache, as_map_key)
@@ -89,11 +91,12 @@ class Decoder(object):
             return node
 
     def decode_list(self, node, cache, as_map_key):
-        """ Special case decodes map-as-array.
+        """Special case decodes map-as-array.
         Otherwise lists are treated as Python lists.
 
         Arguments follow the same convention as the top-level 'decode'
-        function"""
+        function.
+        """
         if node:
             if node[0] == MAP_AS_ARR:
                 # key must be decoded before value for caching to work.
@@ -110,8 +113,9 @@ class Decoder(object):
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
-        """ Decode a string - arguments follow the same convention as the
-        top-level 'decode' function"""
+        """Decode a string - arguments follow the same convention as the
+        top-level 'decode' function.
+        """
         if is_cache_key(string):
             return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
         if is_cacheable(string, as_map_key):
@@ -153,10 +157,11 @@ class Decoder(object):
         return string
 
     def register(self, key_or_tag, obj):
-        """ Register a custom Transit tag and new parsing function with the
+        """Register a custom Transit tag and new parsing function with the
         decoder.  Also, you can optionally set the 'default_decoder' with
         this function.  Your new tag and parse/decode function will be added
-        to the interal dictionary of decoders for this Decoder object"""
+        to the interal dictionary of decoders for this Decoder object.
+        """
         if key_or_tag == "default_decoder":
             self.options["default_decoder"] = obj
         else:
