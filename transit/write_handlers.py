@@ -245,7 +245,8 @@ class WriteHandler(ClassDict):
     The Handler itself is a dispatch map, that resolves on full type/object
     inheritance.
 
-    These handlers can be overriden during the creation of a Transit Writer."""
+    These handlers can be overriden during the creation of a Transit Writer.
+    """
 
     def __init__(self):
         super(WriteHandler, self).__init__()

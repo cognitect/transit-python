@@ -16,7 +16,7 @@
 import collections
 
 class ClassDict(collections.MutableMapping):
-    """ A dictionary that looks up class/type keys with inheritance"""
+    """A dictionary that looks up class/type keys with inheritance."""
 
     def __init__(self, *args, **kwargs):
         self.store = dict()
