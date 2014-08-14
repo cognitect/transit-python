@@ -273,8 +273,8 @@ class JsonMarshaler(Marshaler):
     """The Marshaler tailor to JSON.  To use this Marshaler, specify the
     'json' protocol when creating a Writer.
     """
-    JSON_MAX_INT = pow(2, 63)
-    JSON_MIN_INT = -pow(2, 63)
+    JSON_MAX_INT = pow(2, 53)
+    JSON_MIN_INT = -pow(2, 53)
 
     default_opts = {"prefer_strings": True,
                     "max_int": JSON_MAX_INT,
