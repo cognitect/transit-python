@@ -19,6 +19,11 @@ from write_handlers import WriteHandler
 from transit_types import TaggedValue
 import re
 
+JSON_ESCAPED_CHARS = [unichr(c) for c in range(0x20)] + ["\"", "\\", "\n"]
+
+def json_escape(s):
+    return u''.join([c.encode('unicode_escape') if c in JSON_ESCAPED_CHARS else c for c in s])
+
 class Writer(object):
     """The top-level object for writing out Python objects and converting them
     to Transit data.  During initialization, you must specify the protocol used
@@ -344,7 +349,7 @@ class JsonMarshaler(Marshaler):
         self.write_sep()
         if tp is str or tp is unicode:
             self.io.write("\"")
-            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
+            self.io.write(json_escape(obj))
             self.io.write("\"")
         elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
