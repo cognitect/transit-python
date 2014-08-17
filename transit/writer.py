@@ -22,7 +22,7 @@ import re
 JSON_ESCAPED_CHARS = [unichr(c) for c in range(0x20)] + ["\"", "\\", "\n"]
 
 def json_escape(s):
-    return u''.join([c.encode('unicode_escape') if c in JSON_ESCAPED_CHARS else c for c in s])
+    return u''.join([("\\" + c) if c in JSON_ESCAPED_CHARS else c for c in s])
 
 class Writer(object):
     """The top-level object for writing out Python objects and converting them
