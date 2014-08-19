@@ -346,6 +346,8 @@ class JsonMarshaler(Marshaler):
         self.write_sep()
         if tp is str or tp is unicode:
             self.io.write(u"\"")
+
+            # escapes in-line for perf 
             self.io.write(u"".join([(c.encode("unicode_escape"))
                                     if c in JSON_ESCAPED_CHARS
                                     else c for c in obj]).replace("\"", "\\\""))
