@@ -19,6 +19,8 @@ from write_handlers import WriteHandler
 from transit_types import TaggedValue
 import re
 
+JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ["\\", "\n"])
+
 class Writer(object):
     """The top-level object for writing out Python objects and converting them
     to Transit data.  During initialization, you must specify the protocol used
@@ -308,23 +310,23 @@ class JsonMarshaler(Marshaler):
         else:
             last = self.is_key[-1]
             if last:
-                self.io.write(":")
+                self.io.write(u":")
                 self.is_key[-1] = False
             elif last is False:
-                self.io.write(",")
+                self.io.write(u",")
                 self.is_key[-1] = True
             else:
             #elif last is None:
-                self.io.write(",")
+                self.io.write(u",")
 
     def emit_array_start(self, size):
         self.write_sep()
-        self.io.write("[")
+        self.io.write(u"[")
         self.push_level()
 
     def emit_array_end(self):
         self.pop_level()
-        self.io.write("]")
+        self.io.write(u"]")
 
     def emit_map(self, m, _, cache):
         """Emits array as per default JSON spec."""
@@ -332,26 +334,30 @@ class JsonMarshaler(Marshaler):
 
     def emit_map_start(self, size):
         self.write_sep()
-        self.io.write("{")
+        self.io.write(u"{")
         self.push_map()
 
     def emit_map_end(self):
         self.pop_level()
-        self.io.write("}")
+        self.io.write(u"}")
 
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
         if tp is str or tp is unicode:
-            self.io.write("\"")
-            self.io.write(obj.replace("\\", "\\\\").replace("\"", "\\\""))
-            self.io.write("\"")
+            self.io.write(u"\"")
+
+            # escapes in-line for perf 
+            self.io.write(u"".join([(c.encode("unicode_escape"))
+                                    if c in JSON_ESCAPED_CHARS
+                                    else c for c in obj]).replace("\"", "\\\""))
+            self.io.write(u"\"")
         elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
         elif tp is bool:
-            self.io.write("true" if obj else "false")
+            self.io.write(u"true" if obj else u"false")
         elif obj is None:
-            self.io.write("null")
+            self.io.write(u"null")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))
 
