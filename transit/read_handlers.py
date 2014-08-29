@@ -120,3 +120,13 @@ class IdentityHandler(object):
     def from_rep(i):
         return i
 
+class SpecialNumbersHandler(object):
+    @staticmethod
+    def from_rep(z):
+        if z == 'NaN':
+            return float('Nan')
+        if z == 'INF':
+            return float('Inf')
+        if z == '-INF':
+            return float('-Inf')
+        raise ValueError("Don't know how to handle: " + str(z) + " as \"z\"")
