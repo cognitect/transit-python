@@ -330,7 +330,12 @@ class JsonMarshaler(Marshaler):
 
     def emit_map(self, m, _, cache):
         """Emits array as per default JSON spec."""
-        self.emit_array([MAP_AS_ARR] + flatten_map(m), _, cache)
+        self.emit_array_start(None)
+        self.marshal(MAP_AS_ARR, False, cache)
+        for k, v in m.items():
+            self.marshal(k, True, cache)
+            self.marshal(v, False, cache)
+        self.emit_array_end()
 
     def emit_map_start(self, size):
         self.write_sep()
