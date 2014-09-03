@@ -141,15 +141,15 @@ class frozendict(Mapping, Hashable):
 
 class Link(object):
     # Class property constants for rendering types
-    LINK = "link"
-    IMAGE = "image"
+    LINK = u"link"
+    IMAGE = u"image"
 
     # Class property constants for keywords/obj properties.
-    HREF = "href"
-    REL = "rel"
-    PROMPT = "prompt"
-    NAME = "name"
-    RENDER = "render"
+    HREF = u"href"
+    REL = u"rel"
+    PROMPT = u"prompt"
+    NAME = u"name"
+    RENDER = u"render"
 
     def __init__(self, href=None, rel=None, name=None, render=None, prompt=None):
         self._dict = frozendict()

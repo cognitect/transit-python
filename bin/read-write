@@ -3,6 +3,7 @@
 import sys, os
 import fileinput, io
 from StringIO import StringIO
+import codecs
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + os.path.sep + os.path.pardir))
 
@@ -10,12 +11,14 @@ import transit.reader as treader
 import transit.writer as twriter
 
 transport = (len(sys.argv) > 1) and sys.argv[1].replace("-", "_") or "json"
+stdin = codecs.getreader("utf-8")(sys.stdin)
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
 
 def test_loop():
     r = treader.Reader(protocol=transport)
     buff = ''
     while True:
-        buff += sys.stdin.read(1)
+        buff += stdin.read(1)
         if buff.endswith('\n'):
             s = StringIO(buff[:-1])
             o = r.read(s)
