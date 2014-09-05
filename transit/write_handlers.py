@@ -183,7 +183,7 @@ class DateTimeHandler(object):
     @staticmethod
     def rep(d):
         td = d - DateTimeHandler.epoch
-        return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
+        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
     @staticmethod
     def verbose_handler():
         return VerboseDateTimeHandler
