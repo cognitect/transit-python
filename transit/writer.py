@@ -139,7 +139,7 @@ class Marshaler(object):
 
     def emit_tagged(self, tag, rep, cache):
         self.emit_array_start(2)
-        self.emit_object(cache.encode(ESC + "#" + tag, False), False)
+        self.emit_string(ESC, "#", tag, False, cache)
         self.marshal(rep, False, cache)
         self.emit_array_end()
 
