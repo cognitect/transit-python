@@ -27,6 +27,7 @@ class Reader(object):
             self.reader = JsonUnmarshaler()
         else:
             self.reader = MsgPackUnmarshaler()
+            self.unpacker = self.reader.unpacker
 
     def read(self, stream):
         """Given a readable file descriptor object (something `load`able by
@@ -41,6 +42,10 @@ class Reader(object):
         """
         self.reader.decoder.register(key_or_tag, f_val)
 
+    def readeach(self, stream):
+        for o in self.reader.loadeach(stream):
+            yield o
+
 class JsonUnmarshaler(object):
     """The top-level Unmarshaler used by the Reader for JSON payloads.  While
     you may use this directly, it is strongly discouraged.
@@ -51,6 +56,8 @@ class JsonUnmarshaler(object):
     def load(self, stream):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 
+    def loadeach(self, stream):
+        raise NotImplementedError
 
 class MsgPackUnmarshaler(object):
     """The top-level Unmarshaler used by the Reader for MsgPacke payloads.
@@ -58,7 +65,12 @@ class MsgPackUnmarshaler(object):
     """
     def __init__(self):
         self.decoder = Decoder()
+        self.unpacker = msgpack.Unpacker(object_pairs_hook=OrderedDict)
 
     def load(self, stream):
         return self.decoder.decode(msgpack.load(stream, object_pairs_hook=OrderedDict))
 
+    def loadeach(self, stream):
+#        unpacker = msgpack.Unpacker(stream, object_pairs_hook=OrderedDict)
+        for o in self.unpacker:
+            yield self.decoder.decode(o)
