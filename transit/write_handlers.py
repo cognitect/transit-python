@@ -19,6 +19,7 @@ import uuid
 import datetime, time
 from dateutil import tz
 from math import isnan
+import struct
 
 ## This file contains Write Handlers - all the top-level objects used when
 ## writing Transit data.  These object must all be immutable and pickleable.
@@ -152,14 +153,12 @@ class SymbolHandler(object):
         return str(s)
 
 class UuidHandler(object):
-    mask = pow(2, 64) - 1
     @staticmethod
     def tag(_):
         return "u"
     @staticmethod
     def rep(u):
-        i = u.int
-        return (i >> 64, i & UuidHandler.mask)
+        return struct.unpack('>qq', u.bytes)
     @staticmethod
     def string_rep(u):
         return str(u)
@@ -183,7 +182,7 @@ class DateTimeHandler(object):
     @staticmethod
     def rep(d):
         td = d - DateTimeHandler.epoch
-        return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
+        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
     @staticmethod
     def verbose_handler():
         return VerboseDateTimeHandler
