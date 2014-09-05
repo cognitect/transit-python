@@ -382,7 +382,7 @@ class VerboseSettings(object):
         self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        return self.emit_object(str(prefix) + tag + escape(string), as_map_key)
+        return self.emit_object(unicode(prefix) + tag + escape(string), as_map_key)
 
     def emit_map(self, m, _, cache):
         self.emit_map_start(len(m))

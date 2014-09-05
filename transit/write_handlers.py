@@ -18,6 +18,7 @@ from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
 import uuid
 import datetime, time
 from dateutil import tz
+from math import isnan
 
 ## This file contains Write Handlers - all the top-level objects used when
 ## writing Transit data.  These object must all be immutable and pickleable.
@@ -69,10 +70,16 @@ class BigIntHandler(object):
 
 class FloatHandler(object):
     @staticmethod
-    def tag(_):
-        return "f"
+    def tag(f):
+        return "z" if isnan(f) or f in (float('Inf'), float('-Inf')) else "f"
     @staticmethod
     def rep(f):
+        if isnan(f):
+            return "NaN"
+        if f == float('Inf'):
+            return "INF"
+        if f == float("-Inf"):
+            return "-INF"
         return str(f)
     @staticmethod
     def string_rep(f):
@@ -272,4 +279,3 @@ class WriteHandler(ClassDict):
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
         self[Link] = LinkHandler
-

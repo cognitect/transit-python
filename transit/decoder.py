@@ -34,6 +34,7 @@ default_options = {"decoders": {"_": rh.NoneHandler,
                                 "t": rh.DateHandler,
                                 "m": rh.DateHandler,
                                 "n": rh.BigIntegerHandler,
+                                "z": rh.SpecialNumbersHandler,
                                 "link": rh.LinkHandler,
                                 "list": rh.ListHandler,
                                 "set": rh.SetHandler,
@@ -141,7 +142,7 @@ class Decoder(object):
             if isinstance(key, Tag):
                 return self.decode_tag(key.tag, self._decode(value, cache, as_map_key))
             else:
-                return {key: self._decode(value, cache, False)}
+                return transit_types.frozendict({key: self._decode(value, cache, False)})
 
     def parse_string(self, string, cache, as_map_key):
         if string.startswith(ESC):

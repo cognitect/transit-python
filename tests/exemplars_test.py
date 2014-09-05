@@ -24,12 +24,14 @@ from helpers import ints_centered_on, hash_of_size, array_of_symbools
 from uuid import UUID
 from datetime import datetime
 import dateutil.tz
+from math import isnan
 
 class ExemplarBaseTest(unittest.TestCase):
     pass
 
 def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
+
         def test_json(self):
             with open("../transit-format/examples/0.8/simple/" + name + ".json", 'r') as stream:
                 data = Reader(protocol="json").read(stream)
@@ -83,8 +85,13 @@ def exemplar(name, val):
             try:
                 return unittest.TestCase.assertEqual(self, val, data)
             except AssertionError as e:
-                e.args += (name, "failed")
-                raise
+                if not False in [isnan(v) and isnan(d) or isnan(v) == isnan(d)
+                                 for v, d in zip (val, data)]:
+                    return unittest.TestCase.assertEqual(self, filter(lambda x: not isnan(x), val),
+                                                               filter(lambda x: not isnan(x), data))
+                else:
+                    e.args += (name, "failed")
+                    raise
 
     globals()["test_" + name + "_json"] = ExemplarTest
 
@@ -210,6 +217,8 @@ exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
 
 exemplar("maps_unrecognized_keys", (TaggedValue("abcde", Keyword("anything")),
                                    TaggedValue("fghij", Keyword("anything-else")),))
+
+exemplar("vector_special_numbers", (float("nan"), float("inf"), float("-inf")))
 
 # Doesn't exist in simple examples but gave me tests to verify Link.
 #exemplar("link", Link("http://www.blah.com", "test", "test", "link", "test"))
