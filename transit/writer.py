@@ -137,7 +137,7 @@ class Marshaler(object):
         self.marshal(flatten_map(m), False, cache)
         self.emit_map_end()
 
-    def emit_tagged(self, tag, rep, _, cache):
+    def emit_tagged(self, tag, rep, cache):
         self.emit_array_start(2)
         self.emit_object(cache.encode(ESC + "#" + tag, False), False)
         self.marshal(rep, False, cache)
@@ -157,13 +157,13 @@ class Marshaler(object):
                                                                                 "rep": rep,
                                                                                 "obj": obj}))
             else:
-                self.emit_tagged(tag, rep, False, cache)
+                self.emit_tagged(tag, rep, cache)
         elif as_map_key:
             raise AssertionError("Cannot be used as a map key: " + str({"tag": tag,
                                                                                 "rep": rep,
                                                                                 "obj": obj}))
         else:
-            self.emit_tagged(tag, rep, False, cache)
+            self.emit_tagged(tag, rep, cache)
 
     def marshal(self, obj, as_map_key, cache):
         """Marshal an individual obj, potentially as part of another container
@@ -225,7 +225,7 @@ marshal_dispatch = {"_": Marshaler.emit_nil,
                     "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", rep, as_map_key, cache),
                     "i": Marshaler.emit_int,
                     "d": Marshaler.emit_double,
-                    "'": lambda self, rep, _, cache: Marshaler.emit_tagged(self, "'", rep, False, cache),
+                    "'": lambda self, rep, _, cache: Marshaler.emit_tagged(self, "'", rep, cache),
                     "array": Marshaler.emit_array,
                     "map": Marshaler.dispatch_map}
 
@@ -391,7 +391,7 @@ class VerboseSettings(object):
             self.marshal(v, False, cache)
         self.emit_map_end()
 
-    def emit_tagged(self, tag, rep, _, cache):
+    def emit_tagged(self, tag, rep, cache):
         self.emit_map_start(1)
         self.emit_object(ESC + "#" + tag, True)
         self.marshal(rep, False, cache)
