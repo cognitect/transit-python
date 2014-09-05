@@ -43,6 +43,11 @@ class Reader(object):
         self.reader.decoder.register(key_or_tag, f_val)
 
     def readeach(self, stream):
+        """Temporary hook for API while streaming reads are in experimental
+        phase. Read each object from stream as available with generator. Not
+        implemented yet for JSON. Msgpack requires unpacker property to be
+        fed stream using unpacker.feed() method.
+        """
         for o in self.reader.loadeach(stream):
             yield o
 
