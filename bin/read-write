@@ -14,7 +14,7 @@ stdin = codecs.getreader("utf-8")(sys.stdin)
 stdout = codecs.getwriter("utf-8")(sys.stdout)
 
 
-def sosjson_rw_loop():
+def json_rw_loop():
     r = treader.Reader(protocol=transport)
     while True:
         for o in r.readeach(stdin):
@@ -40,7 +40,7 @@ def msgpack_rw_loop():
 if transport == "msgpack":
     msgpack_rw_loop()
 else:
-    sosjson_rw_loop()
+    json_rw_loop()
 
 
 # If you want to use this with pipe, or interactively...
