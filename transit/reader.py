@@ -33,7 +33,7 @@ class Reader(object):
     def read(self, stream):
         """Given a readable file descriptor object (something `load`able by
         msgpack or json), read the data, and return the Python representation
-        of the contents.
+        of the contents. One-shot reader.
         """
         return self.reader.load(stream)
 
@@ -45,9 +45,10 @@ class Reader(object):
 
     def readeach(self, stream):
         """Temporary hook for API while streaming reads are in experimental
-        phase. Read each object from stream as available with generator. Not
-        implemented yet for JSON. Msgpack requires unpacker property to be
-        fed stream using unpacker.feed() method.
+        phase. Read each object from stream as available with generator. 
+        JSON blocks indefinitely waiting on JSON entities to arrive. MsgPack
+        requires unpacker property to be fed stream using unpacker.feed()
+        method.
         """
         for o in self.reader.loadeach(stream):
             yield o
@@ -67,7 +68,7 @@ class JsonUnmarshaler(object):
             yield self.decoder.decode(o)
 
 class MsgPackUnmarshaler(object):
-    """The top-level Unmarshaler used by the Reader for MsgPacke payloads.
+    """The top-level Unmarshaler used by the Reader for MsgPack payloads.
     While you may use this directly, it is strongly discouraged.
     """
     def __init__(self):
