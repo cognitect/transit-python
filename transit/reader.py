@@ -13,6 +13,7 @@
 ## limitations under the License.
 
 import json
+import sosjson
 import msgpack
 from decoder import Decoder
 from collections import OrderedDict
@@ -62,7 +63,8 @@ class JsonUnmarshaler(object):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 
     def loadeach(self, stream):
-        raise NotImplementedError
+        for o in sosjson.items(stream):
+            yield self.decoder.decode(o)
 
 class MsgPackUnmarshaler(object):
     """The top-level Unmarshaler used by the Reader for MsgPacke payloads.
