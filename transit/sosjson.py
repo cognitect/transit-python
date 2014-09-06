@@ -24,12 +24,13 @@ def read_chunk(stream):
                 chunk += stream.read(1)
     return chunk
 
-def items(stream):
+def items(stream, **kwargs):
     """External facing items. Will return item from stream as available.
-    Currently waits in loop waiting for next item.
+    Currently waits in loop waiting for next item. Can pass keywords that
+    json.loads accepts (such as object_pairs_hook)
     """
     for s in yield_json(stream):
-        yield json.loads(s)
+        yield json.loads(s, **kwargs)
 
 def yield_json(stream):
     """Uses array and object delimiter counts for balancing.

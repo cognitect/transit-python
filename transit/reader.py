@@ -43,7 +43,7 @@ class Reader(object):
         """
         self.reader.decoder.register(key_or_tag, f_val)
 
-    def readeach(self, stream):
+    def readeach(self, stream, **kwargs):
         """Temporary hook for API while streaming reads are in experimental
         phase. Read each object from stream as available with generator. 
         JSON blocks indefinitely waiting on JSON entities to arrive. MsgPack
@@ -64,7 +64,7 @@ class JsonUnmarshaler(object):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 
     def loadeach(self, stream):
-        for o in sosjson.items(stream):
+        for o in sosjson.items(stream, object_pairs_hook=OrderedDict):
             yield self.decoder.decode(o)
 
 class MsgPackUnmarshaler(object):
@@ -79,6 +79,5 @@ class MsgPackUnmarshaler(object):
         return self.decoder.decode(msgpack.load(stream, object_pairs_hook=OrderedDict))
 
     def loadeach(self, stream):
-#        unpacker = msgpack.Unpacker(stream, object_pairs_hook=OrderedDict)
         for o in self.unpacker:
             yield self.decoder.decode(o)
