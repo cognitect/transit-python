@@ -13,6 +13,7 @@
 ## limitations under the License.
 
 import json
+import sosjson
 import msgpack
 from decoder import Decoder
 from collections import OrderedDict
@@ -32,7 +33,7 @@ class Reader(object):
     def read(self, stream):
         """Given a readable file descriptor object (something `load`able by
         msgpack or json), read the data, and return the Python representation
-        of the contents.
+        of the contents. One-shot reader.
         """
         return self.reader.load(stream)
 
@@ -42,11 +43,12 @@ class Reader(object):
         """
         self.reader.decoder.register(key_or_tag, f_val)
 
-    def readeach(self, stream):
+    def readeach(self, stream, **kwargs):
         """Temporary hook for API while streaming reads are in experimental
-        phase. Read each object from stream as available with generator. Not
-        implemented yet for JSON. Msgpack requires unpacker property to be
-        fed stream using unpacker.feed() method.
+        phase. Read each object from stream as available with generator. 
+        JSON blocks indefinitely waiting on JSON entities to arrive. MsgPack
+        requires unpacker property to be fed stream using unpacker.feed()
+        method.
         """
         for o in self.reader.loadeach(stream):
             yield o
@@ -62,10 +64,11 @@ class JsonUnmarshaler(object):
         return self.decoder.decode(json.load(stream, object_pairs_hook=OrderedDict))
 
     def loadeach(self, stream):
-        raise NotImplementedError
+        for o in sosjson.items(stream, object_pairs_hook=OrderedDict):
+            yield self.decoder.decode(o)
 
 class MsgPackUnmarshaler(object):
-    """The top-level Unmarshaler used by the Reader for MsgPacke payloads.
+    """The top-level Unmarshaler used by the Reader for MsgPack payloads.
     While you may use this directly, it is strongly discouraged.
     """
     def __init__(self):
@@ -76,6 +79,5 @@ class MsgPackUnmarshaler(object):
         return self.decoder.decode(msgpack.load(stream, object_pairs_hook=OrderedDict))
 
     def loadeach(self, stream):
-#        unpacker = msgpack.Unpacker(stream, object_pairs_hook=OrderedDict)
         for o in self.unpacker:
             yield self.decoder.decode(o)
