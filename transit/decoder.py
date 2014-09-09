@@ -134,7 +134,14 @@ class Decoder(object):
         if len(hash) != 1:
             h = {}
             for k, v in hash.items():
-                h[self._decode(k, cache, True)] = self._decode(v, cache, False)
+                # crude/verbose implementation, but this is only version that
+                # plays nice w/cache for both msgpack and json thus far.
+                # -- e.g., we have to specify encode/decode order for key/val
+                # -- explicitly, all implicit ordering has broken in corner 
+                # -- cases, thus these extraneous seeming assignments
+                key = self._decode(k, cache, True)
+                val = self._decode(v, cache, False)
+                h[key] = val
             return transit_types.frozendict(h)
         else:
             key,value = hash.items()[0]
