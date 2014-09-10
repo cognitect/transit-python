@@ -62,7 +62,7 @@ class FloatHandler(object):
 class UuidHandler(object):
     @staticmethod
     def from_rep(u):
-        """ Given a string, return a UUID object"""
+        """Given a string, return a UUID object."""
         if isinstance(u, basestring):
             return uuid.UUID(u)
 
@@ -87,7 +87,7 @@ class DateHandler(object):
         return DateHandler._convert_timestamp(long(d))
     @staticmethod
     def _convert_timestamp(ms):
-        """ Given a timestamp in ms, return a DateTime object"""
+        """Given a timestamp in ms, return a DateTime object."""
         return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
 
 class BigIntegerHandler(object):
@@ -120,3 +120,13 @@ class IdentityHandler(object):
     def from_rep(i):
         return i
 
+class SpecialNumbersHandler(object):
+    @staticmethod
+    def from_rep(z):
+        if z == 'NaN':
+            return float('Nan')
+        if z == 'INF':
+            return float('Inf')
+        if z == '-INF':
+            return float('-Inf')
+        raise ValueError("Don't know how to handle: " + str(z) + " as \"z\"")

@@ -18,6 +18,8 @@ from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
 import uuid
 import datetime, time
 from dateutil import tz
+from math import isnan
+import struct
 
 ## This file contains Write Handlers - all the top-level objects used when
 ## writing Transit data.  These object must all be immutable and pickleable.
@@ -69,10 +71,16 @@ class BigIntHandler(object):
 
 class FloatHandler(object):
     @staticmethod
-    def tag(_):
-        return "f"
+    def tag(f):
+        return "z" if isnan(f) or f in (float('Inf'), float('-Inf')) else "f"
     @staticmethod
     def rep(f):
+        if isnan(f):
+            return "NaN"
+        if f == float('Inf'):
+            return "INF"
+        if f == float("-Inf"):
+            return "-INF"
         return str(f)
     @staticmethod
     def string_rep(f):
@@ -98,7 +106,7 @@ class BooleanHandler(object):
         return b
     @staticmethod
     def string_rep(b):
-        return b and 't' or 'f'
+        return 't' if b else 'f'
 
 class ArrayHandler(object):
     @staticmethod
@@ -145,14 +153,12 @@ class SymbolHandler(object):
         return str(s)
 
 class UuidHandler(object):
-    mask = pow(2, 64) - 1
     @staticmethod
     def tag(_):
         return "u"
     @staticmethod
     def rep(u):
-        i = u.int
-        return (i >> 64, i & UuidHandler.mask)
+        return struct.unpack('>qq', u.bytes)
     @staticmethod
     def string_rep(u):
         return str(u)
@@ -176,7 +182,7 @@ class DateTimeHandler(object):
     @staticmethod
     def rep(d):
         td = d - DateTimeHandler.epoch
-        return long((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
+        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
     @staticmethod
     def verbose_handler():
         return VerboseDateTimeHandler
@@ -245,7 +251,8 @@ class WriteHandler(ClassDict):
     The Handler itself is a dispatch map, that resolves on full type/object
     inheritance.
 
-    These handlers can be overriden during the creation of a Transit Writer."""
+    These handlers can be overriden during the creation of a Transit Writer.
+    """
 
     def __init__(self):
         super(WriteHandler, self).__init__()
@@ -271,4 +278,3 @@ class WriteHandler(ClassDict):
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
         self[Link] = LinkHandler
-

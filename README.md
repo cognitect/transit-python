@@ -7,6 +7,7 @@ support for marshalling data to/from Python.
 
  * [Rationale](http://blog.cognitect.com/blog/2014/7/22/transit)
  * [API docs](http://cognitect.github.io/transit-python/)
+  * [Mirrored for PyPI](http://pythonhosted.org/transit-python/)
  * [Specification](http://github.com/cognitect/transit-format)
 
 This implementation's major.minor version number corresponds to the
@@ -38,12 +39,12 @@ You can uninstall with:
 
 ```python
 # io can be any Python file descriptor,
-# like you would typical use with JSON's load/dump
+# like you would typically use with JSON's load/dump
 
 from transit.writer import Writer
 from transit.reader import Reader
 
-writer = Writer("json", io) # or "json-verbose", "msgpack"
+writer = Writer(io, "json") # or "json-verbose", "msgpack"
 writer.write(value)
 
 reader = Reader("json") # or "msgpack"
@@ -152,8 +153,10 @@ and the value will be one of any possible bool/int keyed value.
 
 ### Setup
 
-Transit Python requires Transit to be at the same directory level as
-transit-python for access to the exemplar files.
+Transit Python requires [Transit](http://github.com/cognitect/transit-format) to be at the same directory level as
+transit-python for access to the exemplar files. You will also need
+to add transit-python to your PYTHONPATH. Tests should be run from the
+transit-python directory.
 
 
 ### Benchmarks
