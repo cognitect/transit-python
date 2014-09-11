@@ -101,7 +101,7 @@ class Marshaler(object):
         return self.emit_string(ESC, "_", None, True, cache) if as_map_key else self.emit_object(None)
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        encoded = cache.encode(str(prefix)+tag+escape(string), as_map_key)
+        encoded = cache.encode(str(prefix)+tag+string, as_map_key)
         # TODO: Remove this optimization for the time being - it breaks the cache
         #if "cache_enabled" in self.opts and is_cacheable(encoded, as_map_key):
         #    return self.emit_object(cache.value_to_key[encoded], as_map_key)
@@ -222,7 +222,7 @@ class Marshaler(object):
 
 marshal_dispatch = {"_": Marshaler.emit_nil,
                     "?": Marshaler.emit_boolean,
-                    "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", rep, as_map_key, cache),
+                    "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", escape(rep), as_map_key, cache),
                     "i": lambda self, rep, as_map_key, cache: Marshaler.emit_int(self, "i", rep, as_map_key, cache),
                     "n": lambda self, rep, as_map_key, cache: Marshaler.emit_int(self, "n", rep, as_map_key, cache),
                     "d": Marshaler.emit_double,
@@ -383,7 +383,7 @@ class VerboseSettings(object):
         self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        return self.emit_object(unicode(prefix) + tag + escape(string), as_map_key)
+        return self.emit_object(unicode(prefix) + tag + string, as_map_key)
 
     def emit_map(self, m, _, cache):
         self.emit_map_start(len(m))
