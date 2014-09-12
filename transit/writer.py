@@ -16,7 +16,7 @@ from constants import *
 from rolling_cache import RollingCache, is_cacheable
 import msgpack
 from write_handlers import WriteHandler
-from transit_types import TaggedValue, Boolean
+from transit_types import TaggedValue
 import re
 
 JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ["\\", "\n"])
