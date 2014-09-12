@@ -103,7 +103,7 @@ class BooleanHandler(object):
         return '?'
     @staticmethod
     def rep(b):
-        return b
+        return bool(b)
     @staticmethod
     def string_rep(b):
         return 't' if b else 'f'
