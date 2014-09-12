@@ -15,6 +15,7 @@
 import json
 import sosjson
 import msgpack
+import transit_types
 from decoder import Decoder
 from collections import OrderedDict
 

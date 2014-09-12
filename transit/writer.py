@@ -360,7 +360,7 @@ class JsonMarshaler(Marshaler):
             self.io.write(u"\"")
         elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
-        elif tp is bool or tp is Boolean:
+        elif tp is bool:
             self.io.write(u"true" if obj else u"false")
         elif obj is None:
             self.io.write(u"null")

@@ -17,7 +17,7 @@ import unittest
 
 from transit.reader import Reader
 from transit.writer import Writer
-from transit.transit_types import Symbol, frozendict
+from transit.transit_types import Symbol, frozendict, true, false
 from StringIO import StringIO
 
 class RegressionBaseTest(unittest.TestCase):

@@ -190,10 +190,13 @@ class Link(object):
         return [self.href, self.rel, self.name, self.render, self.prompt]
 
 class Boolean(object):
-    """To allow a separate t/f that don't hash as 1/0. Don't call this directly.
+    """To allow a separate t/f that won't hash as 1/0. Don't call directly,
+    instead use true and false as singleton objects. Can use with type check.
+
     Note that the Booleans are for preserving hash/set bools that duplicate 1/0
-    and not designed for use in Python. You can get a Python bool using bool(x)
-    where x is true or false.
+    and not designed for use in Python outside of logical evaluation (don't treat
+    as an int, they're not). You can get a Python bool using bool(x)
+    where x is a true or false Boolean.
     """
     def __init__(self, name):
         self.v = True if name == "true" else False

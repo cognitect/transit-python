@@ -108,8 +108,7 @@ class ListHandler(object):
 class SetHandler(object):
     @staticmethod
     def from_rep(s):
-        return frozenset([x for x in s if not type(x) is bool] +
-                         [transit_types.Boolean(str(x).lower()) for x in s if type(x) is bool])
+        return frozenset(s)
 
 class CmapHandler(object):
     @staticmethod
