@@ -47,7 +47,7 @@ class SymbolHandler(object):
 class BooleanHandler(object):
     @staticmethod
     def from_rep(x):
-        return x == "t"
+        return transit_types.true if x == "t" else transit_types.false
 
 class IntHandler(object):
     @staticmethod
@@ -108,7 +108,8 @@ class ListHandler(object):
 class SetHandler(object):
     @staticmethod
     def from_rep(s):
-        return frozenset(s)
+        return frozenset([x for x in s if not type(x) is bool] +
+                         [transit_types.Boolean(str(x).lower()) for x in s if type(x) is bool])
 
 class CmapHandler(object):
     @staticmethod

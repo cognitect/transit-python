@@ -16,7 +16,7 @@ from constants import *
 from rolling_cache import RollingCache, is_cacheable
 import msgpack
 from write_handlers import WriteHandler
-from transit_types import TaggedValue
+from transit_types import TaggedValue, Boolean
 import re
 
 JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ["\\", "\n"])
@@ -360,7 +360,7 @@ class JsonMarshaler(Marshaler):
             self.io.write(u"\"")
         elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
-        elif tp is bool:
+        elif tp is bool or tp is Boolean:
             self.io.write(u"true" if obj else u"false")
         elif obj is None:
             self.io.write(u"null")
