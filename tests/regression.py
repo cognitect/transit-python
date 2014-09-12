@@ -37,12 +37,27 @@ def regression(name, value):
 
     globals()["test_" + name + "_json"] = RegressionTest
 
-regression("cache_consistency", ({"Problem?":True},
+regression("cache_consistency", ({"Problem?":true},
                                   Symbol("Here"),
                                   Symbol("Here")))
 regression("one_pair_frozendict", frozendict({"a":1}))
 regression("json_int_max", (2**53+100, 2**63+100))
 regression("newline_in_string", "a\nb")
+
+class BoolTest(unittest.TestCase):
+    """Even though we're roundtripping transit_types.true and transit_types.false
+    now, make sure we can still write Python bools.
+    """
+    def test_write_bool(self):
+        for protocol in ("json", "json-verbose", "msgpack"):
+            io = StringIO()
+            w = Writer(io, protocol)
+            w.write((True, False))
+            r = Reader(protocol)
+            io.seek(0)
+            out_data = r.read(io)
+            assert out_data[0] == true
+            assert out_data[1] == false
 
 if __name__ == '__main__':
     unittest.main()
