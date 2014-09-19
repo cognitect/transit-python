@@ -47,7 +47,7 @@ class SymbolHandler(object):
 class BooleanHandler(object):
     @staticmethod
     def from_rep(x):
-        return x == "t"
+        return transit_types.true if x == "t" else transit_types.false
 
 class IntHandler(object):
     @staticmethod

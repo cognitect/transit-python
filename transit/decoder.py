@@ -18,6 +18,7 @@ from collections import OrderedDict
 from helpers import pairs
 import read_handlers as rh
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
+from transit_types import true, false
 
 class Tag(object):
     def __init__(self, tag):
@@ -88,8 +89,9 @@ class Decoder(object):
             return self.decode_list(node, cache, as_map_key)
         elif tp is str:
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
-        else:
-            return node
+        elif tp is bool:
+            return true if node else false
+        return node
 
     def decode_list(self, node, cache, as_map_key):
         """Special case decodes map-as-array.

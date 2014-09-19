@@ -17,7 +17,7 @@ import unittest
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
-from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, true, false
 from StringIO import StringIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
@@ -96,7 +96,7 @@ def exemplar(name, val):
     globals()["test_" + name + "_json"] = ExemplarTest
 
 ARRAY_SIMPLE = (1, 2, 3)
-ARRAY_MIXED = (0, 1, 2.0, True, False, 'five', Keyword("six"), Symbol("seven"), '~eight', None)
+ARRAY_MIXED = (0, 1, 2.0, true, false, 'five', Keyword("six"), Symbol("seven"), '~eight', None)
 ARRAY_NESTED = (ARRAY_SIMPLE, ARRAY_MIXED)
 SMALL_STRINGS = ("", "a", "ab", "abc", "abcd", "abcde", "abcdef")
 POWERS_OF_TWO = tuple(map(lambda x: pow(2, x), range(66)))
@@ -131,14 +131,14 @@ MAP_SIMPLE = frozendict({Keyword("a"): 1,
 
 MAP_MIXED = frozendict({Keyword("a"): 1,
                         Keyword("b"): u"a string",
-                        Keyword("c"): True})
+                        Keyword("c"): true})
 
 MAP_NESTED = frozendict({Keyword("simple"): MAP_SIMPLE,
                          Keyword("mixed"): MAP_MIXED})
 
 exemplar("nil", None)
-exemplar("true", True)
-exemplar("false", False)
+exemplar("true", true)
+exemplar("false", false)
 exemplar("zero", 0)
 exemplar("one", 1)
 exemplar("one_string", "hello")

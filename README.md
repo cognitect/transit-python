@@ -95,8 +95,6 @@ writer.write(TaggedValue("ints", [1,2,3]))
 
 ### Python's bool and int
 
-All caveats of the Python language apply to decoding Transit data.
-
 In Python, bools are subclasses of int (that is, `True` is actually `1`).
 
 ```python
@@ -108,7 +106,7 @@ In Python, bools are subclasses of int (that is, `True` is actually `1`).
 True
 ```
 
-This only becomes problematic when decoding a map that contains bool and
+This becomes problematic when decoding a map that contains bool and
 int keys.  The bool keys may be overridden (ie: you'll only see the int key),
 and the value will be one of any possible bool/int keyed value.
 
@@ -116,6 +114,14 @@ and the value will be one of any possible bool/int keyed value.
 >>> {1: "Hello", True: "World"}
 {1: 'World'}
 ```
+
+To counter this problem, the latest version of Transit Python introduces a
+Boolean type with singleton (by convention of use) instances of "true" and
+"false." A Boolean can be converted to a native Python bool with bool(x) where
+x is the "true" or "false" instance. Logical evaluation works correctly with
+Booleans (that is, they override the __nonzero__ method and correctly evaluate
+as true and false in simple logical evaluation), but uses of a Boolean as an
+integer will fail.
 
 ### Default type mapping
 

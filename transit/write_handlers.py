@@ -14,7 +14,7 @@
 
 from constants import *
 from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link
+from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
 import uuid
 import datetime, time
 from dateutil import tz
@@ -103,7 +103,7 @@ class BooleanHandler(object):
         return '?'
     @staticmethod
     def rep(b):
-        return b
+        return bool(b)
     @staticmethod
     def string_rep(b):
         return 't' if b else 'f'
@@ -258,6 +258,7 @@ class WriteHandler(ClassDict):
         super(WriteHandler, self).__init__()
         self[type(None)] = NoneHandler
         self[bool] = BooleanHandler
+        self[Boolean] = BooleanHandler
         self[str] = StringHandler
         self[unicode] = StringHandler
         self[list] = ArrayHandler
