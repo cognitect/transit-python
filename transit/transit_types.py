@@ -188,3 +188,29 @@ class Link(object):
     @property
     def as_array(self):
         return [self.href, self.rel, self.name, self.render, self.prompt]
+
+class Boolean(object):
+    """To allow a separate t/f that won't hash as 1/0. Don't call directly,
+    instead use true and false as singleton objects. Can use with type check.
+
+    Note that the Booleans are for preserving hash/set bools that duplicate 1/0
+    and not designed for use in Python outside of logical evaluation (don't treat
+    as an int, they're not). You can get a Python bool using bool(x)
+    where x is a true or false Boolean.
+    """
+    def __init__(self, name):
+        self.v = True if name == "true" else False
+        self.name = name
+
+    def __nonzero__(self):
+        return self.v
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
+# lowercase rep matches java/clojure
+false = Boolean("false")
+true = Boolean("true")
