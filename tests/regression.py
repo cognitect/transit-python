@@ -18,6 +18,7 @@ import unittest
 from transit.reader import Reader
 from transit.writer import Writer
 from transit.transit_types import Symbol, frozendict, true, false
+from decimal import Decimal
 from StringIO import StringIO
 
 class RegressionBaseTest(unittest.TestCase):
@@ -43,6 +44,7 @@ regression("cache_consistency", ({"Problem?":true},
 regression("one_pair_frozendict", frozendict({"a":1}))
 regression("json_int_max", (2**53+100, 2**63+100))
 regression("newline_in_string", "a\nb")
+regression("big_decimal", Decimal("190234710272.2394720347203642836434"))
 
 class BooleanTest(unittest.TestCase):
     """Even though we're roundtripping transit_types.true and
