@@ -72,7 +72,7 @@ class BooleanTest(unittest.TestCase):
     Boolean values.
     """
     def test_write_bool(self):
-        for protocol in ("json", "json-verbose", "msgpack"):
+        for protocol in ("json", "json_verbose", "msgpack"):
             io = StringIO()
             w = Writer(io, protocol)
             w.write((True, False))
