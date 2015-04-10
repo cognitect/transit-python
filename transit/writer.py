@@ -34,8 +34,11 @@ class Writer(object):
             self.marshaler = JsonMarshaler(io, opts=opts)
         elif protocol == "json_verbose":
             self.marshaler = VerboseJsonMarshaler(io, opts=opts)
-        else:
+        elif protocol == "msgpack":
             self.marshaler = MsgPackMarshaler(io, opts=opts)
+        else:
+            raise ValueError("'" + protocol + "' is not a supported protocol. " +
+                             "Protocol must be 'json', 'json_verbose', or 'msgpack'.")
 
     def write(self, obj):
         """Given a Python object, marshal it into Transit data and write it to
@@ -353,7 +356,7 @@ class JsonMarshaler(Marshaler):
         if tp is str or tp is unicode:
             self.io.write(u"\"")
 
-            # escapes in-line for perf 
+            # escapes in-line for perf
             self.io.write(u"".join([(c.encode("unicode_escape"))
                                     if c in JSON_ESCAPED_CHARS
                                     else c for c in obj]).replace("\"", "\\\""))

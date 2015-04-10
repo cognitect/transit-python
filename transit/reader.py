@@ -26,9 +26,12 @@ class Reader(object):
     def __init__(self, protocol="json"):
         if protocol in ("json", "json_verbose"):
             self.reader = JsonUnmarshaler()
-        else:
+        elif protocol == "msgpack":
             self.reader = MsgPackUnmarshaler()
             self.unpacker = self.reader.unpacker
+        else:
+            raise ValueError("'" + protocol + "' is not a supported protocol. " +
+                             "Protocol must be 'json', 'json_verbose', or 'msgpack'.")
 
     def read(self, stream):
         """Given a readable file descriptor object (something `load`able by
@@ -45,7 +48,7 @@ class Reader(object):
 
     def readeach(self, stream, **kwargs):
         """Temporary hook for API while streaming reads are in experimental
-        phase. Read each object from stream as available with generator. 
+        phase. Read each object from stream as available with generator.
         JSON blocks indefinitely waiting on JSON entities to arrive. MsgPack
         requires unpacker property to be fed stream using unpacker.feed()
         method.
