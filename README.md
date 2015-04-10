@@ -161,9 +161,13 @@ integer will fail.
 
 Transit Python requires [Transit](http://github.com/cognitect/transit-format) to be at the same directory level as
 transit-python for access to the exemplar files. You will also need
-to add transit-python to your PYTHONPATH. Tests should be run from the
-transit-python directory.
+to add transit-python to your PYTHONPATH.
 
+```sh
+export PYTHONPATH=$(pwd)
+```
+
+Tests should be run from the transit-python directory.
 
 ### Benchmarks
 
@@ -210,4 +214,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
