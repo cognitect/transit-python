@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>transit.decoder &mdash; transit 0.8 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="transit 0.8 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">transit 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for transit.decoder</h1><div class="highlight"><pre>
+<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c">##</span>
+<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c">## you may not use this file except in compliance with the License.</span>
+<span class="c">## You may obtain a copy of the License at</span>
+<span class="c">##</span>
+<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c">##</span>
+<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c">## See the License for the specific language governing permissions and</span>
+<span class="c">## limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">transit_types</span>
+<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">helpers</span> <span class="kn">import</span> <span class="n">pairs</span>
+<span class="kn">import</span> <span class="nn">read_handlers</span> <span class="kn">as</span> <span class="nn">rh</span>
+<span class="kn">from</span> <span class="nn">rolling_cache</span> <span class="kn">import</span> <span class="n">RollingCache</span><span class="p">,</span> <span class="n">is_cacheable</span><span class="p">,</span> <span class="n">is_cache_key</span>
+<span class="kn">from</span> <span class="nn">transit_types</span> <span class="kn">import</span> <span class="n">true</span><span class="p">,</span> <span class="n">false</span>
+
+<div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../transit.html#transit.decoder.Tag">[docs]</a><span class="k">class</span> <span class="nc">Tag</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="n">tag</span>
+</div>
+<span class="n">default_options</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;decoders&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;_&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">NoneHandler</span><span class="p">,</span>
+                                <span class="s">&quot;:&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">KeywordHandler</span><span class="p">,</span>
+                                <span class="s">&quot;$&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">SymbolHandler</span><span class="p">,</span>
+                                <span class="s">&quot;?&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">BooleanHandler</span><span class="p">,</span>
+                                <span class="s">&quot;i&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">IntHandler</span><span class="p">,</span>
+                                <span class="s">&quot;d&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">FloatHandler</span><span class="p">,</span>
+                                <span class="s">&quot;f&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">BigDecimalHandler</span><span class="p">,</span>
+                                <span class="s">&quot;u&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">UuidHandler</span><span class="p">,</span>
+                                <span class="s">&quot;r&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">UriHandler</span><span class="p">,</span>
+                                <span class="s">&quot;t&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">DateHandler</span><span class="p">,</span>
+                                <span class="s">&quot;m&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">DateHandler</span><span class="p">,</span>
+                                <span class="s">&quot;n&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">BigIntegerHandler</span><span class="p">,</span>
+                                <span class="s">&quot;z&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">SpecialNumbersHandler</span><span class="p">,</span>
+                                <span class="s">&quot;link&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">LinkHandler</span><span class="p">,</span>
+                                <span class="s">&quot;list&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">ListHandler</span><span class="p">,</span>
+                                <span class="s">&quot;set&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">SetHandler</span><span class="p">,</span>
+                                <span class="s">&quot;cmap&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">CmapHandler</span><span class="p">,</span>
+                                <span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">IdentityHandler</span><span class="p">},</span>
+                   <span class="s">&quot;default_decoder&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">DefaultHandler</span><span class="p">}</span>
+
+<span class="n">ground_decoders</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;_&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">NoneHandler</span><span class="p">,</span>
+                   <span class="s">&quot;?&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">BooleanHandler</span><span class="p">,</span>
+                   <span class="s">&quot;i&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">IntHandler</span><span class="p">,</span>
+                   <span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="n">rh</span><span class="o">.</span><span class="n">IdentityHandler</span><span class="p">}</span>
+
+<div class="viewcode-block" id="Decoder"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder">[docs]</a><span class="k">class</span> <span class="nc">Decoder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The Decoder is the lowest level entry point for parsing, decoding, and</span>
+<span class="sd">    fully converting Transit data into Python objects.</span>
+
+<span class="sd">    During the creation of a Decoder object, you can specify custom options</span>
+<span class="sd">    in a dictionary.  One such option is &#39;decoders&#39;.  Note that while you</span>
+<span class="sd">    can specify your own decoders and override many of the built in decoders,</span>
+<span class="sd">    some decoders are silently enforced and cannot be overriden.  These are</span>
+<span class="sd">    known as Ground Decoders, and are needed to maintain bottom-tier</span>
+<span class="sd">    compatibility.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">default_options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">&quot;decoders&quot;</span><span class="p">]</span>
+        <span class="c"># Always ensure we control the ground decoders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ground_decoders</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Decoder.decode"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.decode">[docs]</a>    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Given a node of data (any supported decodeable obj - string, dict,</span>
+<span class="sd">        list), return the decoded object.  Optionally set the current decode</span>
+<span class="sd">        cache [None].  If None, a new RollingCache is instantiated and used.</span>
+<span class="sd">        You may also hit to the decoder that this node is to be treated as a</span>
+<span class="sd">        map key [False].  This is used internally.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="n">RollingCache</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">unicode</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_string</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">dict</span> <span class="ow">or</span> <span class="n">tp</span> <span class="ow">is</span> <span class="n">OrderedDict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_hash</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_list</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_string</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tp</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">true</span> <span class="k">if</span> <span class="n">node</span> <span class="k">else</span> <span class="n">false</span>
+        <span class="k">return</span> <span class="n">node</span>
+
+<div class="viewcode-block" id="Decoder.decode_list"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.decode_list">[docs]</a>    <span class="k">def</span> <span class="nf">decode_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Special case decodes map-as-array.</span>
+<span class="sd">        Otherwise lists are treated as Python lists.</span>
+
+<span class="sd">        Arguments follow the same convention as the top-level &#39;decode&#39;</span>
+<span class="sd">        function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">MAP_AS_ARR</span><span class="p">:</span>
+                <span class="c"># key must be decoded before value for caching to work.</span>
+                <span class="n">returned_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+                    <span class="n">returned_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="k">return</span> <span class="n">returned_dict</span>
+
+            <span class="n">decoded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decoded</span><span class="p">,</span> <span class="n">Tag</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_tag</span><span class="p">(</span><span class="n">decoded</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">node</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Decoder.decode_string"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.decode_string">[docs]</a>    <span class="k">def</span> <span class="nf">decode_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Decode a string - arguments follow the same convention as the</span>
+<span class="sd">        top-level &#39;decode&#39; function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">is_cache_key</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">cache</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">),</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Decoder.decode_tag"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.decode_tag">[docs]</a>    <span class="k">def</span> <span class="nf">decode_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
+        <span class="n">decoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">decoder</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">decoder</span><span class="o">.</span><span class="n">from_rep</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">&quot;default_decoder&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">from_rep</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Decoder.decode_hash"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.decode_hash">[docs]</a>    <span class="k">def</span> <span class="nf">decode_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">hash</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">hash</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c"># crude/verbose implementation, but this is only version that</span>
+                <span class="c"># plays nice w/cache for both msgpack and json thus far.</span>
+                <span class="c"># -- e.g., we have to specify encode/decode order for key/val</span>
+                <span class="c"># -- explicitly, all implicit ordering has broken in corner </span>
+                <span class="c"># -- cases, thus these extraneous seeming assignments</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+                <span class="n">h</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">return</span> <span class="n">transit_types</span><span class="o">.</span><span class="n">frozendict</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="nb">hash</span><span class="o">.</span><span class="n">items</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Tag</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode_tag</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">transit_types</span><span class="o">.</span><span class="n">frozendict</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="bp">False</span><span class="p">)})</span>
+</div>
+<div class="viewcode-block" id="Decoder.parse_string"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.parse_string">[docs]</a>    <span class="k">def</span> <span class="nf">parse_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">ESC</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">string</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">from_rep</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="k">elif</span> <span class="n">m</span> <span class="o">==</span> <span class="n">ESC</span> <span class="ow">or</span> <span class="n">m</span> <span class="o">==</span> <span class="n">SUB</span> <span class="ow">or</span> <span class="n">m</span> <span class="o">==</span> <span class="n">RES</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">string</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">m</span> <span class="o">==</span> <span class="s">&quot;#&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Tag</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">&quot;default_decoder&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">from_rep</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">string</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">string</span>
+</div>
+<div class="viewcode-block" id="Decoder.register"><a class="viewcode-back" href="../../transit.html#transit.decoder.Decoder.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_or_tag</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Register a custom Transit tag and new parsing function with the</span>
+<span class="sd">        decoder.  Also, you can optionally set the &#39;default_decoder&#39; with</span>
+<span class="sd">        this function.  Your new tag and parse/decode function will be added</span>
+<span class="sd">        to the interal dictionary of decoders for this Decoder object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key_or_tag</span> <span class="o">==</span> <span class="s">&quot;default_decoder&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s">&quot;default_decoder&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="p">[</span><span class="n">key_or_tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">transit 0.8 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, Cognitect.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
