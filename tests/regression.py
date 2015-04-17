@@ -14,10 +14,11 @@
 
 # This test suite verifies that issues corrected remain corrected.
 import unittest
-
+import json
 from transit.reader import Reader
 from transit.writer import Writer
 from transit.transit_types import Symbol, frozendict, true, false
+from decimal import Decimal
 from StringIO import StringIO
 
 class RegressionBaseTest(unittest.TestCase):
@@ -43,6 +44,25 @@ regression("cache_consistency", ({"Problem?":true},
 regression("one_pair_frozendict", frozendict({"a":1}))
 regression("json_int_max", (2**53+100, 2**63+100))
 regression("newline_in_string", "a\nb")
+regression("big_decimal", Decimal("190234710272.2394720347203642836434"))
+
+def json_int_boundary(value, expected_type):
+    class JsonIntBoundaryTest(unittest.TestCase):
+
+        def test_max_is_number(self):
+            for protocol in ("json", "json_verbose"):
+                io = StringIO()
+                w = Writer(io, protocol)
+                w.write([value])
+                actual_type = type(json.loads(io.getvalue())[0])
+                self.assertEqual(expected_type, actual_type)
+
+    globals()["test_json_int_boundary_" + str(value)] = JsonIntBoundaryTest
+
+json_int_boundary(2**53-1, int)
+json_int_boundary(2**53, unicode)
+json_int_boundary(-2**53+1, int)
+json_int_boundary(-2**53, unicode)
 
 class BooleanTest(unittest.TestCase):
     """Even though we're roundtripping transit_types.true and
@@ -52,7 +72,7 @@ class BooleanTest(unittest.TestCase):
     Boolean values.
     """
     def test_write_bool(self):
-        for protocol in ("json", "json-verbose", "msgpack"):
+        for protocol in ("json", "json_verbose", "msgpack"):
             io = StringIO()
             w = Writer(io, protocol)
             w.write((True, False))

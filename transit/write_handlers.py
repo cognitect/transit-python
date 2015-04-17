@@ -16,6 +16,7 @@ from constants import *
 from class_hash import ClassDict
 from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
 import uuid
+from decimal import Decimal
 import datetime, time
 from dateutil import tz
 from math import isnan
@@ -69,10 +70,21 @@ class BigIntHandler(object):
     def string_rep(n):
         return str(n)
 
+class BigDecimalHandler(object):
+    @staticmethod
+    def tag(_):
+        return "f"
+    @staticmethod
+    def rep(n):
+        return str(n)
+    @staticmethod
+    def string_rep(n):
+        return str(n)
+
 class FloatHandler(object):
     @staticmethod
     def tag(f):
-        return "z" if isnan(f) or f in (float('Inf'), float('-Inf')) else "f"
+        return "z" if isnan(f) or f in (float('Inf'), float('-Inf')) else "d"
     @staticmethod
     def rep(f):
         if isnan(f):
@@ -81,7 +93,7 @@ class FloatHandler(object):
             return "INF"
         if f == float("-Inf"):
             return "-INF"
-        return str(f)
+        return f
     @staticmethod
     def string_rep(f):
         return str(f)
@@ -279,3 +291,4 @@ class WriteHandler(ClassDict):
         self[frozendict] = MapHandler
         self[TaggedValue] = TaggedValueHandler
         self[Link] = LinkHandler
+        self[Decimal] = BigDecimalHandler
