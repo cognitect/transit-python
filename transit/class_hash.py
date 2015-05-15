@@ -27,7 +27,7 @@ class ClassDict(collections.MutableMapping):
         if key in self.store:
             return self.store[key]
         else:
-            for t in key.__bases__:
+            for t in key.mro():
                 value = t in self.store and self.store[t]
                 if value:
                     return value
