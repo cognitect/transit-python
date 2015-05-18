@@ -191,17 +191,17 @@ exemplar("vector_1936_keywords_repeated_twice", tuple(array_of_symbools(1936, 19
 exemplar("vector_1937_keywords_repeated_twice", tuple(array_of_symbools(1937, 1937*2)))
 
 exemplar("map_10_items", hash_of_size(10))
-exemplar("maps_two_char_sym_keys", ({Keyword("aa"): 1, Keyword("bb"): 2},
-                                    {Keyword("aa"): 3, Keyword("bb"): 4},
-                                    {Keyword("aa"): 5, Keyword("bb"): 6}))
+exemplar("maps_two_char_sym_keys", ({Symbol("aa"): 1, Symbol("bb"): 2},
+                                    {Symbol("aa"): 3, Symbol("bb"): 4},
+                                    {Symbol("aa"): 5, Symbol("bb"): 6}))
 
-exemplar("maps_three_char_sym_keys", ({Keyword("aaa"): 1, Keyword("bbb"): 2},
-                                      {Keyword("aaa"): 3, Keyword("bbb"): 4},
-                                      {Keyword("aaa"): 5, Keyword("bbb"): 6}))
+exemplar("maps_three_char_sym_keys", ({Symbol("aaa"): 1, Symbol("bbb"): 2},
+                                      {Symbol("aaa"): 3, Symbol("bbb"): 4},
+                                      {Symbol("aaa"): 5, Symbol("bbb"): 6}))
 
-exemplar("maps_four_char_sym_keys", ({Keyword("aaaa"): 1, Keyword("bbbb"): 2},
-                                     {Keyword("aaaa"): 3, Keyword("bbbb"): 4},
-                                     {Keyword("aaaa"): 5, Keyword("bbbb"): 6}))
+exemplar("maps_four_char_sym_keys", ({Symbol("aaaa"): 1, Symbol("bbbb"): 2},
+                                     {Symbol("aaaa"): 3, Symbol("bbbb"): 4},
+                                     {Symbol("aaaa"): 5, Symbol("bbbb"): 6}))
 
 exemplar("maps_two_char_string_keys", ({"aa": 1, "bb": 2},
                                        {"aa": 3, "bb": 4},
