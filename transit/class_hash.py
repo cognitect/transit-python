@@ -31,6 +31,12 @@ class ClassDict(collections.MutableMapping):
                 value = t in self.store and self.store[t]
                 if value:
                     return value
+            # only use mro if __bases__ doesn't work to
+            # avoid its perf overhead.
+            for t in key.mro():
+                value = t in self.store and self.store[t]
+                if value:
+                    return value
             raise KeyError("No handler found for: " + str(key))
 
     def __setitem__(self, key, value):

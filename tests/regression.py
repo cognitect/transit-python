@@ -17,6 +17,7 @@ import unittest
 import json
 from transit.reader import Reader
 from transit.writer import Writer
+from transit.class_hash import ClassDict
 from transit.transit_types import Symbol, frozendict, true, false
 from decimal import Decimal
 from StringIO import StringIO
@@ -95,6 +96,23 @@ class BooleanTest(unittest.TestCase):
         assert not (true and false)
         assert true and true
         assert not (false and false)
+
+# Helper classes for inheritance unit test.
+class parent(object):
+    pass
+class child(parent):
+    pass
+class grandchild(child):
+    pass
+
+class ClassDictInheritanceTest(unittest.TestCase):
+    """ Fix from issue #18: class_hash should iterate over all ancestors
+    in proper mro, not just over direct ancestor.
+    """
+    def test_inheritance(self):
+        cd = ClassDict()
+        cd[parent] = "test"
+        assert grandchild in cd
 
 if __name__ == '__main__':
     unittest.main()
