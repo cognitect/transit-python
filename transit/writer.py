@@ -146,8 +146,7 @@ class Marshaler(object):
         self.marshal(rep, False, cache)
         self.emit_array_end()
 
-    def emit_encoded(self, tag, handler, obj, as_map_key, cache):
-        rep = handler.rep(obj)
+    def emit_encoded(self, tag, rep, handler, obj, as_map_key, cache):
         if len(tag) == 1:
             if isinstance(rep, basestring):
                 self.emit_string(ESC, tag, rep, as_map_key, cache)
@@ -183,7 +182,7 @@ class Marshaler(object):
         if f:
             f(self, rep, as_map_key, cache)
         else:
-            self.emit_encoded(tag, handler, obj, as_map_key, cache)
+            self.emit_encoded(tag, rep, handler, obj, as_map_key, cache)
 
     def marshal_top(self, obj, cache=None):
         """Given a complete object that needs to be marshaled into Transit
