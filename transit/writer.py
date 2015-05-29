@@ -177,11 +177,10 @@ class Marshaler(object):
         """
         handler = self.handlers[obj]
         tag = handler.tag(obj)
-        rep = handler.string_rep(obj) if as_map_key else handler.rep(obj)
         f = marshal_dispatch.get(tag)
 
         if f:
-            f(self, rep, as_map_key, cache)
+            f(self, handler.string_rep(obj) if as_map_key else handler.rep(obj), as_map_key, cache)
         else:
             self.emit_encoded(tag, handler, obj, as_map_key, cache)
 
