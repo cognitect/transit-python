@@ -14,9 +14,34 @@
 
 import collections
 
-class Keyword(object):
+class Named(object):
+    def __init__(self):
+        self._name = None
+        self._namespace = None
+
+    def _parse(self):
+        if not self._name:
+            p = self.str.split('/', 1)
+            if len(p) == 1:
+                self._name = self.str
+            else:
+                self._namespace = p[0] or None
+                self._name = p[1] or "/"
+
+    @property
+    def name(self):
+        self._parse()
+        return self._name
+
+    @property
+    def namespace(self):
+        self._parse()
+        return self._namespace
+
+class Keyword(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
+        Named.__init__(self)
         self.str = value
         self.hv = value.__hash__()
 
@@ -25,6 +50,9 @@ class Keyword(object):
 
     def __eq__(self, other):
         return isinstance(other, Keyword) and self.str == other.str
+
+    def __ne__(self, other):
+        return not self == other
 
     def __call__(self, mp):
         return mp[self] # Maybe this should be .get()
@@ -35,9 +63,10 @@ class Keyword(object):
     def __str__(self):
         return self.str
 
-class Symbol(object):
+class Symbol(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
+        Named.__init__(self)
         self.str = value
         self.hv = value.__hash__()
 
