@@ -12,7 +12,7 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-import collections
+from collections import Mapping, Hashable
 
 class Keyword(object):
     def __init__(self, value):
@@ -25,6 +25,9 @@ class Keyword(object):
 
     def __eq__(self, other):
         return isinstance(other, Keyword) and self.str == other.str
+
+    def __ne__(self, other):
+        return not self == other
 
     def __call__(self, mp):
         return mp[self] # Maybe this should be .get()
@@ -124,7 +127,6 @@ class URI(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "uri", rep)
 
-from collections import Mapping, Hashable, namedtuple
 class frozendict(Mapping, Hashable):
     def __init__(self, *args, **kwargs):
         self._dict = dict(*args, **kwargs)
