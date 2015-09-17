@@ -12,14 +12,15 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-from constants import *
-from rolling_cache import RollingCache, is_cacheable
 import msgpack
+import re
+from constants import SUB, ESC, RES, MAP_AS_ARR, QUOTE
+from rolling_cache import RollingCache
 from write_handlers import WriteHandler
 from transit_types import TaggedValue
-import re
 
 JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ["\\", "\n"])
+
 
 class Writer(object):
     """The top-level object for writing out Python objects and converting them
@@ -54,11 +55,13 @@ class Writer(object):
         """
         self.marshaler.register(obj_type, handler_class)
 
+
 def flatten_map(m):
     """Expand a dictionary's items into a flat list
     """
     # This is the fastest way to do this in Python
     return [item for t in m.items() for item in t]
+
 
 def re_fn(pat):
     compiled = re.compile(pat)
@@ -69,6 +72,7 @@ def re_fn(pat):
 
 is_escapable = re_fn("^" + re.escape(SUB) + "|" + ESC + "|" + RES)
 
+
 def escape(s):
     if s is MAP_AS_ARR:
         return MAP_AS_ARR
@@ -77,6 +81,7 @@ def escape(s):
     else:
         return s
 
+
 class Marshaler(object):
     """The base Marshaler from which all Marshalers inherit.
 
@@ -84,7 +89,7 @@ class Marshaler(object):
     objects.  The end of this process is specialized by other Marshalers to
     covert the final result into an on-the-wire payload (JSON or MsgPack).
     """
-    def __init__(self, opts = {}):
+    def __init__(self, opts={}):
         self.opts = opts
         self._init_handlers()
 
@@ -105,7 +110,7 @@ class Marshaler(object):
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         encoded = cache.encode(str(prefix)+tag+string, as_map_key)
-        # TODO: Remove this optimization for the time being - it breaks the cache
+        # TODO: Remove this optimization for the time being - it breaks cache
         #if "cache_enabled" in self.opts and is_cacheable(encoded, as_map_key):
         #    return self.emit_object(cache.value_to_key[encoded], as_map_key)
         return self.emit_object(encoded, as_map_key)
@@ -163,8 +168,8 @@ class Marshaler(object):
                 self.emit_tagged(tag, rep, cache)
         elif as_map_key:
             raise AssertionError("Cannot be used as a map key: " + str({"tag": tag,
-                                                                                "rep": rep,
-                                                                                "obj": obj}))
+                                                                        "rep": rep,
+                                                                        "obj": obj}))
         else:
             self.emit_tagged(tag, rep, cache)
 
@@ -203,7 +208,6 @@ class Marshaler(object):
             self.flush()
         else:
             raise AssertionError("Handler must provide a non-nil tag: " + str(handler))
-
 
     def dispatch_map(self, rep, as_map_key, cache):
         """Used to determine and dipatch the writing of a map - a simple
@@ -251,7 +255,6 @@ class MsgPackMarshaler(Marshaler):
         nopts.update(opts)
         Marshaler.__init__(self, nopts)
 
-
     def emit_array_start(self, size):
         self.packer.pack_array_header(size)
 
@@ -274,6 +277,7 @@ class MsgPackMarshaler(Marshaler):
 
 REPLACE_RE = re.compile("\"")
 
+
 class JsonMarshaler(Marshaler):
     """The Marshaler tailor to JSON.  To use this Marshaler, specify the
     'json' protocol when creating a Writer.
@@ -285,7 +289,6 @@ class JsonMarshaler(Marshaler):
                     "max_int": JSON_MAX_INT,
                     "min_int": JSON_MIN_INT}
 
-    ## Custom JSON encoder temporary solution to support lazy writing.
     def __init__(self, io, opts={}):
         self.io = io
         nopts = JsonMarshaler.default_opts.copy()
@@ -319,7 +322,6 @@ class JsonMarshaler(Marshaler):
                 self.io.write(u",")
                 self.is_key[-1] = True
             else:
-            #elif last is None:
                 self.io.write(u",")
 
     def emit_array_start(self, size):
@@ -403,5 +405,4 @@ class VerboseSettings(object):
 
 class VerboseJsonMarshaler(VerboseSettings, JsonMarshaler):
     """JsonMarshaler class with VerboseSettings mixin."""
-    pass # All from inheritance and mixin
-
+    pass  # all from inheritance and mixin
