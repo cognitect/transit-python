@@ -18,7 +18,7 @@ import json
 from transit.reader import Reader
 from transit.writer import Writer
 from transit.class_hash import ClassDict
-from transit.transit_types import Symbol, frozendict, true, false
+from transit.transit_types import Symbol, frozendict, true, false, Keyword, Named
 from decimal import Decimal
 from StringIO import StringIO
 
@@ -113,6 +113,33 @@ class ClassDictInheritanceTest(unittest.TestCase):
         cd = ClassDict()
         cd[parent] = "test"
         assert grandchild in cd
+
+class NamedTests(unittest.TestCase):
+    """ Verify behavior for newly introduced built-in Named name/namespace
+    parsing. Accomplished through transit_types.Named, a mixin for
+    transit_types.Keyword and transit_types.Symbol.
+    """
+    def test_named(self):
+        k = Keyword("blah")
+        s = Symbol("blah")
+        assert k.name == "blah"
+        assert s.name == "blah"
+
+    def test_namespaced(self):
+        k = Keyword("ns/name")
+        s = Symbol("ns/name")
+        assert k.name == "name"
+        assert s.name == "name"
+        assert k.namespace == "ns"
+        assert s.namespace == "ns"
+
+    def test_slash(self):
+        k = Keyword("/")
+        s = Symbol("/")
+        assert k.name == "/"
+        assert s.name == "/"
+        assert k.namespace is None
+        assert s.namespace is None
 
 if __name__ == '__main__':
     unittest.main()
