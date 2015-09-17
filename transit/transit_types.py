@@ -23,7 +23,7 @@ class Named(object):
         else:
             self._namespace = p[0] or None
             self._name = p[1] or "/"
-        return (self._name, self._namespace)
+        return self._name, self._namespace
 
     @property
     def name(self):
