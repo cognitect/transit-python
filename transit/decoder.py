@@ -13,12 +13,13 @@
 ## limitations under the License.
 
 import transit_types
-from constants import *
+from constants import MAP_AS_ARR, ESC, SUB, RES
 from collections import OrderedDict
 from helpers import pairs
 import read_handlers as rh
 from rolling_cache import RollingCache, is_cacheable, is_cache_key
 from transit_types import true, false
+
 
 class Tag(object):
     def __init__(self, tag):
@@ -49,6 +50,7 @@ ground_decoders = {"_": rh.NoneHandler,
                    "i": rh.IntHandler,
                    "'": rh.IdentityHandler}
 
+
 class Decoder(object):
     """The Decoder is the lowest level entry point for parsing, decoding, and
     fully converting Transit data into Python objects.
@@ -60,7 +62,6 @@ class Decoder(object):
     known as Ground Decoders, and are needed to maintain bottom-tier
     compatibility.
     """
-
     def __init__(self, options={}):
         self.options = default_options.copy()
         self.options.update(options)
@@ -105,7 +106,7 @@ class Decoder(object):
             if node[0] == MAP_AS_ARR:
                 # key must be decoded before value for caching to work.
                 returned_dict = {}
-                for k,v in pairs(node[1:]):
+                for k, v in pairs(node[1:]):
                     key = self._decode(k, cache, True)
                     val = self._decode(v, cache, as_map_key)
                     returned_dict[key] = val
@@ -113,7 +114,8 @@ class Decoder(object):
 
             decoded = self._decode(node[0], cache, as_map_key)
             if isinstance(decoded, Tag):
-                return self.decode_tag(decoded.tag, self._decode(node[1], cache, as_map_key))
+                return self.decode_tag(decoded.tag,
+                                       self._decode(node[1], cache, as_map_key))
         return tuple(self._decode(x, cache, as_map_key) for x in node)
 
     def decode_string(self, string, cache, as_map_key):
@@ -121,7 +123,8 @@ class Decoder(object):
         top-level 'decode' function.
         """
         if is_cache_key(string):
-            return self.parse_string(cache.decode(string, as_map_key), cache, as_map_key)
+            return self.parse_string(cache.decode(string, as_map_key),
+                                     cache, as_map_key)
         if is_cacheable(string, as_map_key):
             cache.encode(string, as_map_key)
         return self.parse_string(string, cache, as_map_key)
@@ -140,19 +143,19 @@ class Decoder(object):
                 # crude/verbose implementation, but this is only version that
                 # plays nice w/cache for both msgpack and json thus far.
                 # -- e.g., we have to specify encode/decode order for key/val
-                # -- explicitly, all implicit ordering has broken in corner 
+                # -- explicitly, all implicit ordering has broken in corner
                 # -- cases, thus these extraneous seeming assignments
                 key = self._decode(k, cache, True)
                 val = self._decode(v, cache, False)
                 h[key] = val
             return transit_types.frozendict(h)
         else:
-            key,value = hash.items()[0]
+            key, value = hash.items()[0]
             key = self._decode(key, cache, True)
             if isinstance(key, Tag):
-                return self.decode_tag(key.tag, self._decode(value, cache, as_map_key))
-            else:
-                return transit_types.frozendict({key: self._decode(value, cache, False)})
+                return self.decode_tag(key.tag,
+                                       self._decode(value, cache, as_map_key))
+        return transit_types.frozendict({key: self._decode(value, cache, False)})
 
     def parse_string(self, string, cache, as_map_key):
         if string.startswith(ESC):
@@ -164,7 +167,8 @@ class Decoder(object):
             elif m == "#":
                 return Tag(string[2:])
             else:
-                return self.options["default_decoder"].from_rep(string[1], string[2:])
+                return self.options["default_decoder"].from_rep(string[1],
+                                                                string[2:])
         return string
 
     def register(self, key_or_tag, obj):
@@ -177,4 +181,3 @@ class Decoder(object):
             self.options["default_decoder"] = obj
         else:
             self.decoders[key_or_tag] = obj
-
