@@ -21,6 +21,7 @@ import json
 SKIP = [" ", "\n", "\t"]
 ESCAPE = "\\"
 
+
 def read_chunk(stream):
     """Ignore whitespace outside of strings. If we hit a string, read it in
     its entirety.
@@ -37,6 +38,7 @@ def read_chunk(stream):
                 chunk += stream.read(1)
     return chunk
 
+
 def items(stream, **kwargs):
     """External facing items. Will return item from stream as available.
     Currently waits in loop waiting for next item. Can pass keywords that
@@ -44,6 +46,7 @@ def items(stream, **kwargs):
     """
     for s in yield_json(stream):
         yield json.loads(s, **kwargs)
+
 
 def yield_json(stream):
     """Uses array and object delimiter counts for balancing.

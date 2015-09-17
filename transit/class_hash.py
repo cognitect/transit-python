@@ -15,6 +15,7 @@
 # Hash that looks up class keys with inheritance.
 import collections
 
+
 class ClassDict(collections.MutableMapping):
     """A dictionary that looks up class/type keys with inheritance."""
 
@@ -50,4 +51,3 @@ class ClassDict(collections.MutableMapping):
 
     def __len__(self):
         return len(self.store)
-
