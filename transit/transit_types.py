@@ -14,7 +14,25 @@
 
 from collections import Mapping, Hashable
 
-class Keyword(object):
+class Named(object):
+    def _parse(self):
+        p = self.str.split('/', 1)
+        if len(p) == 1:
+            self._name = self.str
+            self._namespace = None
+        else:
+            self._namespace = p[0] or None
+            self._name = p[1] or "/"
+        return (self._name, self._namespace)
+
+    @property
+    def name(self):
+        return self._name if hasattr(self, "_name") else self._parse()[0]
+    @property
+    def namespace(self):
+        return self._namespace if hasattr(self, "_namespace") else self._parse()[1]
+
+class Keyword(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
@@ -38,7 +56,7 @@ class Keyword(object):
     def __str__(self):
         return self.str
 
-class Symbol(object):
+class Symbol(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
