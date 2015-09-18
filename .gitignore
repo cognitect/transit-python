@@ -2,3 +2,6 @@
 *.swp
 apidoc/_build
 dist/
+build/*
+!build/release
+*.egg*
