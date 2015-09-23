@@ -20,7 +20,7 @@ def mapcat(f, i):
 
 
 def pairs(i):
-    return zip(*[iter(i)] * 2)
+    return itertools.izip(*[iter(i)] * 2)
 
 
 cycle = itertools.cycle
