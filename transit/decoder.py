@@ -105,12 +105,9 @@ class Decoder(object):
         if node:
             if node[0] == MAP_AS_ARR:
                 # key must be decoded before value for caching to work.
-                returned_dict = {}
-                for k, v in pairs(node[1:]):
-                    key = self._decode(k, cache, True)
-                    val = self._decode(v, cache, as_map_key)
-                    returned_dict[key] = val
-                return returned_dict
+                return dict((self._decode(k, cache, True),
+                             self._decode(v, cache, as_map_key))
+                            for k, v in pairs(node[1:]))
 
             decoded = self._decode(node[0], cache, as_map_key)
             if isinstance(decoded, Tag):
