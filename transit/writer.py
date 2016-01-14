@@ -226,15 +226,15 @@ class Marshaler(object):
         """
         self.handlers[obj_type] = handler_class
 
-marshal_dispatch = {"_": Marshaler.emit_nil,
-                    "?": Marshaler.emit_boolean,
+marshal_dispatch = {"_": lambda self, rep, as_map_key, cache: self.emit_nil(rep, as_map_key, cache),
+                    "?": lambda self, rep, as_map_key, cache: self.emit_boolean(rep, as_map_key, cache),
                     "s": lambda self, rep, as_map_key, cache: self.emit_string("", "", escape(rep), as_map_key, cache),
                     "i": lambda self, rep, as_map_key, cache: self.emit_int("i", rep, as_map_key, cache),
                     "n": lambda self, rep, as_map_key, cache: self.emit_int("n", rep, as_map_key, cache),
-                    "d": Marshaler.emit_double,
+                    "d": lambda self, rep, as_map_key, cache: self.emit_double(rep, as_map_key, cache),
                     "'": lambda self, rep, _, cache: self.emit_tagged("'", rep, cache),
-                    "array": Marshaler.emit_array,
-                    "map": Marshaler.dispatch_map}
+                    "array": lambda self, rep, as_map_key, cache: self.emit_array(rep, as_map_key, cache),
+                    "map": lambda self, rep, as_map_key, cache: self.dispatch_map(rep, as_map_key, cache)}
 
 
 class MsgPackMarshaler(Marshaler):
