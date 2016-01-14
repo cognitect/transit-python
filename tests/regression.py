@@ -47,6 +47,22 @@ regression("json_int_max", (2**53+100, 2**63+100))
 regression("newline_in_string", "a\nb")
 regression("big_decimal", Decimal("190234710272.2394720347203642836434"))
 
+def json_verbose_cache_bug():
+    class JsonVerboseCacheBug(RegressionBaseTest):
+        """Can't rely on roundtrip behavior to test this bug, have to
+           actually verify that both keys are written for json_verbose
+           behavior to be correct."""
+
+        def test_key_not_cached(self):
+            io = StringIO()
+            w = Writer(io, "json_verbose")
+            w.write([{'myKey1':42},{'myKey1':42}])
+            self.assertEqual(io.getvalue(), u"[{\"myKey1\":42},{\"myKey1\":42}]")
+
+    globals()["test_json_verbose_cache_bug"] = JsonVerboseCacheBug
+
+json_verbose_cache_bug()
+
 def json_int_boundary(value, expected_type):
     class JsonIntBoundaryTest(unittest.TestCase):
 
