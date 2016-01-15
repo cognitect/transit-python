@@ -226,15 +226,15 @@ class Marshaler(object):
         """
         self.handlers[obj_type] = handler_class
 
-marshal_dispatch = {"_": Marshaler.emit_nil,
-                    "?": Marshaler.emit_boolean,
-                    "s": lambda self, rep, as_map_key, cache: Marshaler.emit_string(self, "", "", escape(rep), as_map_key, cache),
-                    "i": lambda self, rep, as_map_key, cache: Marshaler.emit_int(self, "i", rep, as_map_key, cache),
-                    "n": lambda self, rep, as_map_key, cache: Marshaler.emit_int(self, "n", rep, as_map_key, cache),
-                    "d": Marshaler.emit_double,
-                    "'": lambda self, rep, _, cache: Marshaler.emit_tagged(self, "'", rep, cache),
-                    "array": Marshaler.emit_array,
-                    "map": Marshaler.dispatch_map}
+marshal_dispatch = {"_": lambda self, rep, as_map_key, cache: self.emit_nil(rep, as_map_key, cache),
+                    "?": lambda self, rep, as_map_key, cache: self.emit_boolean(rep, as_map_key, cache),
+                    "s": lambda self, rep, as_map_key, cache: self.emit_string("", "", escape(rep), as_map_key, cache),
+                    "i": lambda self, rep, as_map_key, cache: self.emit_int("i", rep, as_map_key, cache),
+                    "n": lambda self, rep, as_map_key, cache: self.emit_int("n", rep, as_map_key, cache),
+                    "d": lambda self, rep, as_map_key, cache: self.emit_double(rep, as_map_key, cache),
+                    "'": lambda self, rep, _, cache: self.emit_tagged("'", rep, cache),
+                    "array": lambda self, rep, as_map_key, cache: self.emit_array(rep, as_map_key, cache),
+                    "map": lambda self, rep, as_map_key, cache: self.dispatch_map(rep, as_map_key, cache)}
 
 
 class MsgPackMarshaler(Marshaler):
