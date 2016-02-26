@@ -1,0 +1,2 @@
+#!/bin/bash
+m4 -DREVISION=`bin/revision` setup.py.m4 > setup.py
