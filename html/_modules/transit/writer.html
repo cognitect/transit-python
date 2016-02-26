@@ -61,14 +61,15 @@
 <span class="c">## See the License for the specific language governing permissions and</span>
 <span class="c">## limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">rolling_cache</span> <span class="kn">import</span> <span class="n">RollingCache</span><span class="p">,</span> <span class="n">is_cacheable</span>
 <span class="kn">import</span> <span class="nn">msgpack</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">SUB</span><span class="p">,</span> <span class="n">ESC</span><span class="p">,</span> <span class="n">RES</span><span class="p">,</span> <span class="n">MAP_AS_ARR</span><span class="p">,</span> <span class="n">QUOTE</span>
+<span class="kn">from</span> <span class="nn">rolling_cache</span> <span class="kn">import</span> <span class="n">RollingCache</span>
 <span class="kn">from</span> <span class="nn">write_handlers</span> <span class="kn">import</span> <span class="n">WriteHandler</span>
 <span class="kn">from</span> <span class="nn">transit_types</span> <span class="kn">import</span> <span class="n">TaggedValue</span>
-<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="n">JSON_ESCAPED_CHARS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="nb">unichr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x20</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">])</span>
+
 
 <div class="viewcode-block" id="Writer"><a class="viewcode-back" href="../../transit.html#transit.writer.Writer">[docs]</a><span class="k">class</span> <span class="nc">Writer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The top-level object for writing out Python objects and converting them</span>
@@ -102,12 +103,14 @@
 <span class="sd">        that should be used by the Marshaler during write-time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">marshaler</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">obj_type</span><span class="p">,</span> <span class="n">handler_class</span><span class="p">)</span>
+
 </div></div>
 <div class="viewcode-block" id="flatten_map"><a class="viewcode-back" href="../../transit.html#transit.writer.flatten_map">[docs]</a><span class="k">def</span> <span class="nf">flatten_map</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Expand a dictionary&#39;s items into a flat list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># This is the fastest way to do this in Python</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+
 </div>
 <div class="viewcode-block" id="re_fn"><a class="viewcode-back" href="../../transit.html#transit.writer.re_fn">[docs]</a><span class="k">def</span> <span class="nf">re_fn</span><span class="p">(</span><span class="n">pat</span><span class="p">):</span>
     <span class="n">compiled</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pat</span><span class="p">)</span>
@@ -118,6 +121,7 @@
 </div>
 <span class="n">is_escapable</span> <span class="o">=</span> <span class="n">re_fn</span><span class="p">(</span><span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">SUB</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;|&quot;</span> <span class="o">+</span> <span class="n">ESC</span> <span class="o">+</span> <span class="s">&quot;|&quot;</span> <span class="o">+</span> <span class="n">RES</span><span class="p">)</span>
 
+
 <div class="viewcode-block" id="escape"><a class="viewcode-back" href="../../transit.html#transit.writer.escape">[docs]</a><span class="k">def</span> <span class="nf">escape</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="n">MAP_AS_ARR</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">MAP_AS_ARR</span>
@@ -125,6 +129,7 @@
         <span class="k">return</span> <span class="n">ESC</span><span class="o">+</span><span class="n">s</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">s</span>
+
 </div>
 <div class="viewcode-block" id="Marshaler"><a class="viewcode-back" href="../../transit.html#transit.writer.Marshaler">[docs]</a><span class="k">class</span> <span class="nc">Marshaler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The base Marshaler from which all Marshalers inherit.</span>
@@ -133,7 +138,7 @@
 <span class="sd">    objects.  The end of this process is specialized by other Marshalers to</span>
 <span class="sd">    covert the final result into an on-the-wire payload (JSON or MsgPack).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{}):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">opts</span> <span class="o">=</span> <span class="n">opts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_handlers</span><span class="p">()</span>
 
@@ -154,7 +159,7 @@
 </div>
 <div class="viewcode-block" id="Marshaler.emit_string"><a class="viewcode-back" href="../../transit.html#transit.writer.Marshaler.emit_string">[docs]</a>    <span class="k">def</span> <span class="nf">emit_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">):</span>
         <span class="n">encoded</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span><span class="o">+</span><span class="n">tag</span><span class="o">+</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
-        <span class="c"># TODO: Remove this optimization for the time being - it breaks the cache</span>
+        <span class="c"># TODO: Remove this optimization for the time being - it breaks cache</span>
         <span class="c">#if &quot;cache_enabled&quot; in self.opts and is_cacheable(encoded, as_map_key):</span>
         <span class="c">#    return self.emit_object(cache.value_to_key[encoded], as_map_key)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_object</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span>
@@ -212,8 +217,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">emit_tagged</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">as_map_key</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Cannot be used as a map key: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">({</span><span class="s">&quot;tag&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span>
-                                                                                <span class="s">&quot;rep&quot;</span><span class="p">:</span> <span class="n">rep</span><span class="p">,</span>
-                                                                                <span class="s">&quot;obj&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">}))</span>
+                                                                        <span class="s">&quot;rep&quot;</span><span class="p">:</span> <span class="n">rep</span><span class="p">,</span>
+                                                                        <span class="s">&quot;obj&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">}))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emit_tagged</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
 </div>
@@ -226,11 +231,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="n">rep</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">string_rep</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">as_map_key</span> <span class="k">else</span> <span class="n">handler</span><span class="o">.</span><span class="n">rep</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">marshal_dispatch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="o">.</span><span class="n">string_rep</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">as_map_key</span> <span class="k">else</span> <span class="n">handler</span><span class="o">.</span><span class="n">rep</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emit_encoded</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
 </div>
@@ -253,7 +257,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&quot;Handler must provide a non-nil tag: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">handler</span><span class="p">))</span>
-
 </div>
 <div class="viewcode-block" id="Marshaler.dispatch_map"><a class="viewcode-back" href="../../transit.html#transit.writer.Marshaler.dispatch_map">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used to determine and dipatch the writing of a map - a simple</span>
@@ -272,15 +275,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="n">obj_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler_class</span>
 </div></div>
-<span class="n">marshal_dispatch</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;_&quot;</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_nil</span><span class="p">,</span>
-                    <span class="s">&quot;?&quot;</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_boolean</span><span class="p">,</span>
-                    <span class="s">&quot;s&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="n">rep</span><span class="p">),</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
-                    <span class="s">&quot;i&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;i&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
-                    <span class="s">&quot;n&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;n&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
-                    <span class="s">&quot;d&quot;</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_double</span><span class="p">,</span>
-                    <span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_tagged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;&#39;&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
-                    <span class="s">&quot;array&quot;</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">emit_array</span><span class="p">,</span>
-                    <span class="s">&quot;map&quot;</span><span class="p">:</span> <span class="n">Marshaler</span><span class="o">.</span><span class="n">dispatch_map</span><span class="p">}</span>
+<span class="n">marshal_dispatch</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;_&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_nil</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;?&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_boolean</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;s&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_string</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="n">rep</span><span class="p">),</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;i&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_int</span><span class="p">(</span><span class="s">&quot;i&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;n&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_int</span><span class="p">(</span><span class="s">&quot;n&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;d&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_double</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;&#39;&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_tagged</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;array&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emit_array</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">),</span>
+                    <span class="s">&quot;map&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_map</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">,</span> <span class="n">cache</span><span class="p">)}</span>
 
 
 <div class="viewcode-block" id="MsgPackMarshaler"><a class="viewcode-back" href="../../transit.html#transit.writer.MsgPackMarshaler">[docs]</a><span class="k">class</span> <span class="nc">MsgPackMarshaler</span><span class="p">(</span><span class="n">Marshaler</span><span class="p">):</span>
@@ -300,7 +303,6 @@
         <span class="n">nopts</span> <span class="o">=</span> <span class="n">MsgPackMarshaler</span><span class="o">.</span><span class="n">default_opts</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">nopts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
         <span class="n">Marshaler</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nopts</span><span class="p">)</span>
-
 
 <div class="viewcode-block" id="MsgPackMarshaler.emit_array_start"><a class="viewcode-back" href="../../transit.html#transit.writer.MsgPackMarshaler.emit_array_start">[docs]</a>    <span class="k">def</span> <span class="nf">emit_array_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">packer</span><span class="o">.</span><span class="n">pack_array_header</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
@@ -324,6 +326,7 @@
 </div></div>
 <span class="n">REPLACE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">)</span>
 
+
 <div class="viewcode-block" id="JsonMarshaler"><a class="viewcode-back" href="../../transit.html#transit.writer.JsonMarshaler">[docs]</a><span class="k">class</span> <span class="nc">JsonMarshaler</span><span class="p">(</span><span class="n">Marshaler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The Marshaler tailor to JSON.  To use this Marshaler, specify the</span>
 <span class="sd">    &#39;json&#39; protocol when creating a Writer.</span>
@@ -335,7 +338,6 @@
                     <span class="s">&quot;max_int&quot;</span><span class="p">:</span> <span class="n">JSON_MAX_INT</span><span class="p">,</span>
                     <span class="s">&quot;min_int&quot;</span><span class="p">:</span> <span class="n">JSON_MIN_INT</span><span class="p">}</span>
 
-    <span class="c">## Custom JSON encoder temporary solution to support lazy writing.</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">io</span> <span class="o">=</span> <span class="n">io</span>
         <span class="n">nopts</span> <span class="o">=</span> <span class="n">JsonMarshaler</span><span class="o">.</span><span class="n">default_opts</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -369,7 +371,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&quot;,&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">is_key</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
-            <span class="c">#elif last is None:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&quot;,&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="JsonMarshaler.emit_array_start"><a class="viewcode-back" href="../../transit.html#transit.writer.JsonMarshaler.emit_array_start">[docs]</a>    <span class="k">def</span> <span class="nf">emit_array_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
@@ -453,8 +454,8 @@
 </div></div>
 <div class="viewcode-block" id="VerboseJsonMarshaler"><a class="viewcode-back" href="../../transit.html#transit.writer.VerboseJsonMarshaler">[docs]</a><span class="k">class</span> <span class="nc">VerboseJsonMarshaler</span><span class="p">(</span><span class="n">VerboseSettings</span><span class="p">,</span> <span class="n">JsonMarshaler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;JsonMarshaler class with VerboseSettings mixin.&quot;&quot;&quot;</span>
-    <span class="k">pass</span> <span class="c"># All from inheritance and mixin</span>
-</pre></div></div>
+    <span class="k">pass</span>  <span class="c"># all from inheritance and mixin</span></div>
+</pre></div>
 
           </div>
         </div>

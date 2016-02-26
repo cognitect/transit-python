@@ -67,6 +67,7 @@
 <span class="kn">from</span> <span class="nn">decoder</span> <span class="kn">import</span> <span class="n">Decoder</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
+
 <div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../transit.html#transit.reader.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The top-level object for reading in Transit data and converting it to</span>
 <span class="sd">    Python objects.  During initialization, you must specify the protocol used</span>
@@ -79,8 +80,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">MsgPackUnmarshaler</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">unpacker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">unpacker</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">protocol</span> <span class="o">+</span> <span class="s">&quot;&#39; is not a supported protocol. &quot;</span> <span class="o">+</span>
-                             <span class="s">&quot;Protocol must be &#39;json&#39;, &#39;json_verbose&#39;, or &#39;msgpack&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">protocol</span> <span class="o">+</span> <span class="s">&quot;&#39; is not a supported. &quot;</span> <span class="o">+</span>
+                             <span class="s">&quot;Protocol must be:&quot;</span> <span class="o">+</span>
+                             <span class="s">&quot;&#39;json&#39;, &#39;json_verbose&#39;, or &#39;msgpack&#39;.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Reader.read"><a class="viewcode-back" href="../../transit.html#transit.reader.Reader.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given a readable file descriptor object (something `load`able by</span>
@@ -104,6 +106,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">loadeach</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">o</span>
+
 </div></div>
 <div class="viewcode-block" id="JsonUnmarshaler"><a class="viewcode-back" href="../../transit.html#transit.reader.JsonUnmarshaler">[docs]</a><span class="k">class</span> <span class="nc">JsonUnmarshaler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The top-level Unmarshaler used by the Reader for JSON payloads.  While</span>
@@ -113,11 +116,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">()</span>
 
 <div class="viewcode-block" id="JsonUnmarshaler.load"><a class="viewcode-back" href="../../transit.html#transit.reader.JsonUnmarshaler.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span>
+                                             <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="JsonUnmarshaler.loadeach"><a class="viewcode-back" href="../../transit.html#transit.reader.JsonUnmarshaler.loadeach">[docs]</a>    <span class="k">def</span> <span class="nf">loadeach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">sosjson</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">):</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
 </div></div>
 <div class="viewcode-block" id="MsgPackUnmarshaler"><a class="viewcode-back" href="../../transit.html#transit.reader.MsgPackUnmarshaler">[docs]</a><span class="k">class</span> <span class="nc">MsgPackUnmarshaler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The top-level Unmarshaler used by the Reader for MsgPack payloads.</span>
@@ -128,7 +133,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">unpacker</span> <span class="o">=</span> <span class="n">msgpack</span><span class="o">.</span><span class="n">Unpacker</span><span class="p">(</span><span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MsgPackUnmarshaler.load"><a class="viewcode-back" href="../../transit.html#transit.reader.MsgPackUnmarshaler.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">msgpack</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">msgpack</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span>
+                                                <span class="n">object_pairs_hook</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="MsgPackUnmarshaler.loadeach"><a class="viewcode-back" href="../../transit.html#transit.reader.MsgPackUnmarshaler.loadeach">[docs]</a>    <span class="k">def</span> <span class="nf">loadeach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unpacker</span><span class="p">:</span>

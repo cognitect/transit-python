@@ -513,7 +513,7 @@ be used directly.</p>
 <p>To allow a separate t/f that won&#8217;t hash as 1/0. Don&#8217;t call directly,
 instead use true and false as singleton objects. Can use with type check.</p>
 <p>Note that the Booleans are for preserving hash/set bools that duplicate 1/0
-and not designed for use in Python outside of logical evaluation (don&#8217;t treat
+and not designed for use in Python outside logical evaluation (don&#8217;t treat
 as an int, they&#8217;re not). You can get a Python bool using bool(x)
 where x is a true or false Boolean.</p>
 </dd></dl>
@@ -527,7 +527,7 @@ where x is a true or false Boolean.</p>
 <dl class="class">
 <dt id="transit.transit_types.Keyword">
 <em class="property">class </em><code class="descclassname">transit.transit_types.</code><code class="descname">Keyword</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/transit_types.html#Keyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Keyword" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.Named" title="transit.transit_types.Named"><code class="xref py py-class docutils literal"><span class="pre">transit.transit_types.Named</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
@@ -613,6 +613,22 @@ where x is a true or false Boolean.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="transit.transit_types.Named">
+<em class="property">class </em><code class="descclassname">transit.transit_types.</code><code class="descname">Named</code><a class="reference internal" href="_modules/transit/transit_types.html#Named"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Named" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="transit.transit_types.Named.name">
+<code class="descname">name</code><a class="headerlink" href="#transit.transit_types.Named.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="transit.transit_types.Named.namespace">
+<code class="descname">namespace</code><a class="headerlink" href="#transit.transit_types.Named.namespace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="transit.transit_types.Set">
 <em class="property">class </em><code class="descclassname">transit.transit_types.</code><code class="descname">Set</code><span class="sig-paren">(</span><em>rep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/transit_types.html#Set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#transit.transit_types.TaggedValue" title="transit.transit_types.TaggedValue"><code class="xref py py-class docutils literal"><span class="pre">transit.transit_types.TaggedValue</span></code></a></p>
@@ -621,7 +637,7 @@ where x is a true or false Boolean.</p>
 <dl class="class">
 <dt id="transit.transit_types.Symbol">
 <em class="property">class </em><code class="descclassname">transit.transit_types.</code><code class="descname">Symbol</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/transit_types.html#Symbol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.transit_types.Symbol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#transit.transit_types.Named" title="transit.transit_types.Named"><code class="xref py py-class docutils literal"><span class="pre">transit.transit_types.Named</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
@@ -866,12 +882,12 @@ where x is a true or false Boolean.</p>
 
 <dl class="staticmethod">
 <dt id="transit.write_handlers.MapHandler.string_rep">
-<em class="property">static </em><code class="descname">string_rep</code><span class="sig-paren">(</span><em>_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.string_rep" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">string_rep</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.string_rep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.string_rep" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
 <dt id="transit.write_handlers.MapHandler.tag">
-<em class="property">static </em><code class="descname">tag</code><span class="sig-paren">(</span><em>_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.tag" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">tag</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/transit/write_handlers.html#MapHandler.tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#transit.write_handlers.MapHandler.tag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -61,15 +61,17 @@
 <span class="c">## See the License for the specific language governing permissions and</span>
 <span class="c">## limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">ESC</span><span class="p">,</span> <span class="n">SUB</span><span class="p">,</span> <span class="n">MAP_AS_ARR</span>
+<span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">SUB</span><span class="p">,</span> <span class="n">MAP_AS_ARR</span>
 
 <span class="n">FIRST_ORD</span> <span class="o">=</span> <span class="mi">48</span>
 <span class="n">CACHE_CODE_DIGITS</span> <span class="o">=</span> <span class="mi">44</span>
 <span class="n">CACHE_SIZE</span> <span class="o">=</span> <span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="n">CACHE_CODE_DIGITS</span>
 <span class="n">MIN_SIZE_CACHEABLE</span> <span class="o">=</span> <span class="mi">4</span>
 
+
 <div class="viewcode-block" id="is_cache_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cache_key">[docs]</a><span class="k">def</span> <span class="nf">is_cache_key</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SUB</span> <span class="ow">and</span> <span class="n">name</span> <span class="o">!=</span> <span class="n">MAP_AS_ARR</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="encode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.encode_key">[docs]</a><span class="k">def</span> <span class="nf">encode_key</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
     <span class="n">lo</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">CACHE_CODE_DIGITS</span>
@@ -77,18 +79,21 @@
     <span class="k">if</span> <span class="n">hi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
     <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">hi</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="decode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.decode_key">[docs]</a><span class="k">def</span> <span class="nf">decode_key</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">sz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sz</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> \
+           <span class="p">(</span><span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">))</span>
+
 </div>
 <div class="viewcode-block" id="is_cacheable"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cacheable">[docs]</a><span class="k">def</span> <span class="nf">is_cacheable</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">string</span> \
-            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MIN_SIZE_CACHEABLE</span> \
-            <span class="ow">and</span> <span class="p">(</span><span class="n">as_map_key</span> \
-            <span class="ow">or</span> <span class="p">(</span><span class="n">string</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;~#&quot;</span><span class="p">,</span> <span class="s">&quot;~$&quot;</span><span class="p">,</span> <span class="s">&quot;~:&quot;</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">string</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MIN_SIZE_CACHEABLE</span> \
+                  <span class="ow">and</span> <span class="p">(</span><span class="n">as_map_key</span> \
+                  <span class="ow">or</span> <span class="p">(</span><span class="n">string</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;~#&quot;</span><span class="p">,</span> <span class="s">&quot;~$&quot;</span><span class="p">,</span> <span class="s">&quot;~:&quot;</span><span class="p">]))</span>
+
 </div>
 <div class="viewcode-block" id="RollingCache"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache">[docs]</a><span class="k">class</span> <span class="nc">RollingCache</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is the internal cache used by python-transit for cacheing and</span>
@@ -133,8 +138,8 @@
         <span class="k">return</span> <span class="n">name</span>
 </div>
 <div class="viewcode-block" id="RollingCache.clear"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span>
-</pre></div></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span></div></div>
+</pre></div>
 
           </div>
         </div>
