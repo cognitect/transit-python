@@ -12,9 +12,31 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-import collections
+from collections import Mapping, Hashable
 
-class Keyword(object):
+
+class Named(object):
+    def _parse(self):
+        p = self.str.split('/', 1)
+        if len(p) == 1:
+            self._name = self.str
+            self._namespace = None
+        else:
+            self._namespace = p[0] or None
+            self._name = p[1] or "/"
+        return self._name, self._namespace
+
+    @property
+    def name(self):
+        return self._name if hasattr(self, "_name") else self._parse()[0]
+
+    @property
+    def namespace(self):
+        return self._namespace if hasattr(self, "_namespace") \
+                               else self._parse()[1]
+
+
+class Keyword(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
@@ -26,8 +48,11 @@ class Keyword(object):
     def __eq__(self, other):
         return isinstance(other, Keyword) and self.str == other.str
 
+    def __ne__(self, other):
+        return not self == other
+
     def __call__(self, mp):
-        return mp[self] # Maybe this should be .get()
+        return mp[self]
 
     def __repr__(self):
         return "<Keyword " + self.str + ">"
@@ -35,7 +60,8 @@ class Keyword(object):
     def __str__(self):
         return self.str
 
-class Symbol(object):
+
+class Symbol(Named):
     def __init__(self, value):
         assert isinstance(value, basestring)
         self.str = value
@@ -61,6 +87,7 @@ class Symbol(object):
 
 kw_cache = {}
 
+
 class _KWS(object):
     def __getattr__(self, item):
         value = self(item)
@@ -76,10 +103,12 @@ class _KWS(object):
 
 kws = _KWS()
 
+
 class TaggedValue(object):
     def __init__(self, tag, rep):
         self.tag = tag
         self.rep = rep
+
     def __eq__(self, other):
         if isinstance(other, TaggedValue):
             return self.tag == other.tag and \
@@ -100,44 +129,56 @@ class TaggedValue(object):
     def __repr__(self):
         return self.tag + " " + repr(self.rep)
 
+
 class Set(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "set", rep)
+
 
 class CMap(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "cmap", rep)
 
+
 class Vector(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "vector", rep)
+
 
 class Array(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "array", rep)
 
+
 class List(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "list", rep)
+
 
 class URI(TaggedValue):
     def __init__(self, rep):
         TaggedValue.__init__(self, "uri", rep)
 
-from collections import Mapping, Hashable, namedtuple
+
 class frozendict(Mapping, Hashable):
     def __init__(self, *args, **kwargs):
         self._dict = dict(*args, **kwargs)
+
     def __len__(self):
         return len(self._dict)
+
     def __iter__(self):
         return iter(self._dict)
+
     def __getitem__(self, key):
         return self._dict[key]
+
     def __hash__(self):
         return hash(frozenset(self._dict.items()))
+
     def __repr__(self):
         return 'frozendict(%r)' % (self._dict,)
+
 
 class Link(object):
     # Class property constants for rendering types
@@ -151,7 +192,8 @@ class Link(object):
     NAME = u"name"
     RENDER = u"render"
 
-    def __init__(self, href=None, rel=None, name=None, render=None, prompt=None):
+    def __init__(self, href=None, rel=None, name=None, render=None,
+                 prompt=None):
         self._dict = frozendict()
         assert href and rel
         if render:
@@ -164,37 +206,45 @@ class Link(object):
 
     def __eq__(self, other):
         return self._dict == other._dict
+
     def __ne__(self, other):
         return self._dict != other._dict
 
     @property
     def href(self):
         return self._dict[Link.HREF]
+
     @property
     def rel(self):
         return self._dict[Link.REL]
+
     @property
     def prompt(self):
         return self._dict[Link.PROMPT]
+
     @property
     def name(self):
         return self._dict[Link.NAME]
+
     @property
     def render(self):
         return self._dict[Link.RENDER]
+
     @property
     def as_map(self):
         return self._dict
+
     @property
     def as_array(self):
         return [self.href, self.rel, self.name, self.render, self.prompt]
+
 
 class Boolean(object):
     """To allow a separate t/f that won't hash as 1/0. Don't call directly,
     instead use true and false as singleton objects. Can use with type check.
 
     Note that the Booleans are for preserving hash/set bools that duplicate 1/0
-    and not designed for use in Python outside of logical evaluation (don't treat
+    and not designed for use in Python outside logical evaluation (don't treat
     as an int, they're not). You can get a Python bool using bool(x)
     where x is a true or false Boolean.
     """

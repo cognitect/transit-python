@@ -12,15 +12,17 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-from constants import ESC, SUB, MAP_AS_ARR
+from constants import SUB, MAP_AS_ARR
 
 FIRST_ORD = 48
 CACHE_CODE_DIGITS = 44
 CACHE_SIZE = CACHE_CODE_DIGITS * CACHE_CODE_DIGITS
 MIN_SIZE_CACHEABLE = 4
 
+
 def is_cache_key(name):
     return len(name) and (name[0] == SUB and name != MAP_AS_ARR)
+
 
 def encode_key(i):
     lo = i % CACHE_CODE_DIGITS
@@ -29,17 +31,20 @@ def encode_key(i):
         return "^" + chr(lo + FIRST_ORD)
     return "^" + chr(hi + FIRST_ORD) + chr(lo + FIRST_ORD)
 
+
 def decode_key(s):
     sz = len(s)
     if sz == 2:
         return ord(s[1]) - FIRST_ORD
-    return (ord(s[2]) - FIRST_ORD) + (CACHE_CODE_DIGITS * (ord(s[1]) - FIRST_ORD))
+    return (ord(s[2]) - FIRST_ORD) + \
+           (CACHE_CODE_DIGITS * (ord(s[1]) - FIRST_ORD))
+
 
 def is_cacheable(string, as_map_key=False):
-    return string \
-            and len(string) >= MIN_SIZE_CACHEABLE \
-            and (as_map_key \
-            or (string[:2] in ["~#", "~$", "~:"]))
+    return string and len(string) >= MIN_SIZE_CACHEABLE \
+                  and (as_map_key \
+                  or (string[:2] in ["~#", "~$", "~:"]))
+
 
 class RollingCache(object):
     """This is the internal cache used by python-transit for cacheing and
@@ -85,4 +90,3 @@ class RollingCache(object):
 
     def clear(self):
         self.value_to_key = {}
-
