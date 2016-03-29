@@ -46,6 +46,7 @@ regression("one_pair_frozendict", frozendict({"a":1}))
 regression("json_int_max", (2**53+100, 2**63+100))
 regression("newline_in_string", "a\nb")
 regression("big_decimal", Decimal("190234710272.2394720347203642836434"))
+regression("dict_in_set", frozenset(frozendict({"test":"case"})))
 
 def json_verbose_cache_bug():
     class JsonVerboseCacheBug(RegressionBaseTest):
