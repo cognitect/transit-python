@@ -110,7 +110,7 @@ class Decoder(object):
                     key = self._decode(k, cache, True)
                     val = self._decode(v, cache, as_map_key)
                     returned_dict[key] = val
-                return returned_dict
+                return transit_types.frozendict(returned_dict)
 
             decoded = self._decode(node[0], cache, as_map_key)
             if isinstance(decoded, Tag):
