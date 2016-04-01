@@ -67,11 +67,10 @@ class JsonUnmarshaler(object):
         self.decoder = Decoder()
 
     def load(self, stream):
-        return self.decoder.decode(json.load(stream,
-                                             object_pairs_hook=OrderedDict))
+        return self.decoder.decode(json.load(stream))
 
     def loadeach(self, stream):
-        for o in sosjson.items(stream, object_pairs_hook=OrderedDict):
+        for o in sosjson.items(stream):
             yield self.decoder.decode(o)
 
 
