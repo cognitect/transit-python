@@ -18,7 +18,7 @@ import json
 from transit.reader import Reader
 from transit.writer import Writer
 from transit.class_hash import ClassDict
-from transit.transit_types import Symbol, frozendict, true, false, Keyword, Named
+from transit.transit_types import Symbol, frozendict, true, false, Keyword
 from decimal import Decimal
 from StringIO import StringIO
 
