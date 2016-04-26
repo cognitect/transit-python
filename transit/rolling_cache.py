@@ -11,7 +11,6 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
-
 from constants import SUB, MAP_AS_ARR
 
 FIRST_ORD = 48
@@ -43,7 +42,7 @@ def decode_key(s):
 def is_cacheable(string, as_map_key=False):
     return string and len(string) >= MIN_SIZE_CACHEABLE \
                   and (as_map_key \
-                  or (string[:2] in ["~#", "~$", "~:"]))
+                  or (string[:2] in [u"~#", u"~$", u"~:"]))
 
 
 class RollingCache(object):

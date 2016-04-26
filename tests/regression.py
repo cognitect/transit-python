@@ -11,6 +11,7 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+from __future__ import unicode_literals
 
 # This test suite verifies that issues corrected remain corrected.
 import unittest
@@ -58,7 +59,7 @@ def json_verbose_cache_bug():
             io = StringIO()
             w = Writer(io, "json_verbose")
             w.write([{'myKey1':42},{'myKey1':42}])
-            self.assertEqual(io.getvalue(), u"[{\"myKey1\":42},{\"myKey1\":42}]")
+            self.assertEqual(io.getvalue(), "[{\"myKey1\":42},{\"myKey1\":42}]")
 
     globals()["test_json_verbose_cache_bug"] = JsonVerboseCacheBug
 

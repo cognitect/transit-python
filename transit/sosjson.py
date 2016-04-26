@@ -15,6 +15,7 @@
 # at a time and returns json.loads of that string.
 
 # Ugly implementation at moment
+from __future__ import unicode_literals
 from copy import copy
 import json
 
@@ -51,7 +52,7 @@ def items(stream, **kwargs):
 def yield_json(stream):
     """Uses array and object delimiter counts for balancing.
     """
-    buff = u""
+    buff = ""
     arr_count = 0
     obj_count = 0
     while True:
@@ -67,11 +68,11 @@ def yield_json(stream):
             arr_count -= 1
             if obj_count == arr_count == 0:
                 json_item = copy(buff)
-                buff = u""
+                buff = ""
                 yield json_item
         if buff.endswith('}'):
             obj_count -= 1
             if obj_count == arr_count == 0:
                 json_item = copy(buff)
-                buff = u""
+                buff = ""
                 yield json_item

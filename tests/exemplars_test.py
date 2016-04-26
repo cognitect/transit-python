@@ -12,6 +12,7 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+from __future__ import unicode_literals
 import unittest
 
 # then import transit stuff
@@ -130,7 +131,7 @@ MAP_SIMPLE = frozendict({Keyword("a"): 1,
                          Keyword("c"): 3})
 
 MAP_MIXED = frozendict({Keyword("a"): 1,
-                        Keyword("b"): u"a string",
+                        Keyword("b"): "a string",
                         Keyword("c"): true})
 
 MAP_NESTED = frozendict({Keyword("simple"): MAP_SIMPLE,

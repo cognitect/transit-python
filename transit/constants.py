@@ -14,6 +14,7 @@
 
 # These are constants used throughout the source code.
 # They refer to Tag codes used when reading and wrting transit.
+from __future__ import unicode_literals
 
 ESC = "~"
 SUB = "^"

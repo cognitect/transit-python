@@ -11,7 +11,7 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
-
+from __future__ import unicode_literals
 from collections import Mapping, Hashable
 
 
@@ -182,15 +182,15 @@ class frozendict(Mapping, Hashable):
 
 class Link(object):
     # Class property constants for rendering types
-    LINK = u"link"
-    IMAGE = u"image"
+    LINK = "link"
+    IMAGE = "image"
 
     # Class property constants for keywords/obj properties.
-    HREF = u"href"
-    REL = u"rel"
-    PROMPT = u"prompt"
-    NAME = u"name"
-    RENDER = u"render"
+    HREF = "href"
+    REL = "rel"
+    PROMPT = "prompt"
+    NAME = "name"
+    RENDER = "render"
 
     def __init__(self, href=None, rel=None, name=None, render=None,
                  prompt=None):

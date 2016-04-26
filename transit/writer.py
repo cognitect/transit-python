@@ -11,6 +11,7 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+from __future__ import unicode_literals
 
 import msgpack
 import re
@@ -316,22 +317,22 @@ class JsonMarshaler(Marshaler):
         else:
             last = self.is_key[-1]
             if last:
-                self.io.write(u":")
+                self.io.write(":")
                 self.is_key[-1] = False
             elif last is False:
-                self.io.write(u",")
+                self.io.write(",")
                 self.is_key[-1] = True
             else:
-                self.io.write(u",")
+                self.io.write(",")
 
     def emit_array_start(self, size):
         self.write_sep()
-        self.io.write(u"[")
+        self.io.write("[")
         self.push_level()
 
     def emit_array_end(self):
         self.pop_level()
-        self.io.write(u"]")
+        self.io.write("]")
 
     def emit_map(self, m, _, cache):
         """Emits array as per default JSON spec."""
@@ -344,30 +345,30 @@ class JsonMarshaler(Marshaler):
 
     def emit_map_start(self, size):
         self.write_sep()
-        self.io.write(u"{")
+        self.io.write("{")
         self.push_map()
 
     def emit_map_end(self):
         self.pop_level()
-        self.io.write(u"}")
+        self.io.write("}")
 
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
         if tp is str or tp is unicode:
-            self.io.write(u"\"")
+            self.io.write("\"")
 
             # escapes in-line for perf
-            self.io.write(u"".join([(c.encode("unicode_escape"))
+            self.io.write("".join([(c.encode("unicode_escape"))
                                     if c in JSON_ESCAPED_CHARS
                                     else c for c in obj]).replace("\"", "\\\""))
-            self.io.write(u"\"")
+            self.io.write("\"")
         elif tp is int or tp is long or tp is float:
             self.io.write(str(obj))
         elif tp is bool:
-            self.io.write(u"true" if obj else u"false")
+            self.io.write("true" if obj else "false")
         elif obj is None:
-            self.io.write(u"null")
+            self.io.write("null")
         else:
             raise AssertionError("Don't know how to encode: " + str(obj))
 
