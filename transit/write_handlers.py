@@ -1,16 +1,16 @@
-## Copyright 2014 Cognitect. All Rights Reserved.
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##      http://www.apache.org/licenses/LICENSE-2.0
-##
-## Unless required by applicable law or agreed to in writing, software
-## distributed under the License is distributed on an "AS-IS" BASIS,
-## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-## See the License for the specific language governing permissions and
-## limitations under the License.
+# Copyright 2014 Cognitect. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import uuid
 import datetime
@@ -18,11 +18,11 @@ import struct
 from class_hash import ClassDict
 from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
 from decimal import Decimal
-from dateutil import tz
+import dateutil
 from math import isnan
 
-## This file contains Write Handlers - all the top-level objects used when
-## writing Transit data.  These object must all be immutable and pickleable.
+# This file contains Write Handlers - all the top-level objects used when
+# writing Transit data.  These object must all be immutable and pickleable.
 
 
 class TaggedMap(object):
@@ -230,7 +230,9 @@ class UriHandler(object):
 
 
 class DateTimeHandler(object):
-    epoch = datetime.datetime(1970, 1, 1).replace(tzinfo=tz.tzutc())
+    "time zero in UTC"
+    epoch_utc = datetime.datetime.utcfromtimestamp(0).replace(
+        tzinfo=dateutil.tz.tzutc())
 
     @staticmethod
     def tag(_):
@@ -238,8 +240,9 @@ class DateTimeHandler(object):
 
     @staticmethod
     def rep(d):
-        td = d - DateTimeHandler.epoch
-        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
+        td = d - DateTimeHandler.epoch_utc
+        return int((td.microseconds +
+                    (td.seconds + td.days * 24 * 3600) * 10**6) / 1e3)
 
     @staticmethod
     def verbose_handler():

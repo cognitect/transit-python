@@ -1,16 +1,16 @@
-## Copyright 2014 Cognitect. All Rights Reserved.
-##
-## Licensed under the Apache License, Version 2.0 (the "License");
-## you may not use this file except in compliance with the License.
-## You may obtain a copy of the License at
-##
-##      http://www.apache.org/licenses/LICENSE-2.0
-##
-## Unless required by applicable law or agreed to in writing, software
-## distributed under the License is distributed on an "AS-IS" BASIS,
-## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-## See the License for the specific language governing permissions and
-## limitations under the License.
+# Copyright 2014 Cognitect. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import transit_types
 from constants import MAP_AS_ARR, ESC, SUB, RES
@@ -85,13 +85,13 @@ class Decoder(object):
         tp = type(node)
         if tp is unicode:
             return self.decode_string(node, cache, as_map_key)
-        elif tp is dict or tp is OrderedDict:
-            return self.decode_hash(node, cache, as_map_key)
-        elif tp is list:
-            return self.decode_list(node, cache, as_map_key)
-        elif tp is str:
+        if tp is str:
             return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
-        elif tp is bool:
+        if tp is dict or tp is OrderedDict:
+            return self.decode_hash(node, cache, as_map_key)
+        if tp is list:
+            return self.decode_list(node, cache, as_map_key)
+        if tp is bool:
             return true if node else false
         return node
 
@@ -155,7 +155,8 @@ class Decoder(object):
             if isinstance(key, Tag):
                 return self.decode_tag(key.tag,
                                        self._decode(value, cache, as_map_key))
-        return transit_types.frozendict({key: self._decode(value, cache, False)})
+        return transit_types.frozendict(
+            {key: self._decode(value, cache, False)})
 
     def parse_string(self, string, cache, as_map_key):
         if string.startswith(ESC):
