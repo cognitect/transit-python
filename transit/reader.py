@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import json
-import sosjson
+from transit import sosjson
 import msgpack
-from decoder import Decoder
+from transit.decoder import Decoder
 from collections import OrderedDict
 
 
@@ -67,8 +67,9 @@ class JsonUnmarshaler(object):
         self.decoder = Decoder()
 
     def load(self, stream):
-        return self.decoder.decode(json.load(stream,
-                                             object_pairs_hook=OrderedDict))
+        jdata = json.load(stream, object_pairs_hook=OrderedDict)
+        ddata = self.decoder.decode(jdata)
+        return ddata
 
     def loadeach(self, stream):
         for o in sosjson.items(stream, object_pairs_hook=OrderedDict):

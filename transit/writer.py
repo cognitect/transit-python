@@ -14,12 +14,23 @@
 
 import msgpack
 import re
-from constants import SUB, ESC, RES, MAP_AS_ARR, QUOTE
-from rolling_cache import RollingCache
-from write_handlers import WriteHandler
-from transit_types import TaggedValue
+from transit.constants import SUB, ESC, RES, MAP_AS_ARR, QUOTE
+from transit.rolling_cache import RollingCache
+from transit.write_handlers import WriteHandler
+from transit.transit_types import TaggedValue
+import six
 
-JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ['\\', '\n'])
+JSON_ESCAPED_CHARS = set([six.unichr(c) for c in range(0x20)] + ['\\', '\n'])
+
+
+def json_esc(s):
+    sesc = "".join(
+        [
+            (c.encode('unicode_escape'))
+            if c in JSON_ESCAPED_CHARS
+            else c for c in s
+        ]).replace("\"", "\\\"")
+    return sesc
 
 
 class Writer(object):
@@ -134,7 +145,8 @@ class Marshaler(object):
 
     def emit_array(self, a, _, cache):
         self.emit_array_start(len(a))
-        map(lambda x: self.marshal(x, False, cache), a)
+        for x in a:
+            self.marshal(x, False, cache)
         self.emit_array_end()
 
     # use map as object from above, have to overwrite default parser.
@@ -160,11 +172,11 @@ class Marshaler(object):
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
-            if isinstance(rep, basestring):
+            if isinstance(rep, six.string_types):
                 self.emit_string(ESC, tag, rep, as_map_key, cache)
             elif as_map_key or self.opts['prefer_strings']:
                 rep = handler.string_rep(obj)
-                if isinstance(rep, basestring):
+                if isinstance(rep, six.string_types):
                     self.emit_string(ESC, tag, rep, as_map_key, cache)
                 else:
                     raise AssertionError(
@@ -372,15 +384,9 @@ class JsonMarshaler(Marshaler):
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp is str or tp is unicode:
-            self.io.write(u"\"")
-
-            # escapes in-line for perf
-            self.io.write(u"".join([(c.encode('unicode_escape'))
-                                    if c in JSON_ESCAPED_CHARS
-                                    else c for c in obj]).replace("\"", "\\\""))
-            self.io.write(u"\"")
-        elif tp is int or tp is long or tp is float:
+        if isinstance(obj, six.string_types):
+            self.io.write(u'\"{}\"'.format(json_esc(obj)))
+        elif tp is float or tp is int or (six.PY2 and tp is long):
             self.io.write(str(obj))
         elif tp is bool:
             self.io.write(u'true' if obj else u'false')
@@ -396,7 +402,7 @@ class VerboseSettings(object):
     """
     @staticmethod
     def _verbose_handlers(handlers):
-        for k, v in handlers.iteritems():
+        for k, v in six.iteritems(handlers):
             if hasattr(v, 'verbose_handler'):
                 handlers[k] = v.verbose_handler()
         return handlers
@@ -405,7 +411,7 @@ class VerboseSettings(object):
         self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        return self.emit_object(unicode(prefix) + tag + string, as_map_key)
+        return self.emit_object(six.text_type(prefix) + tag + string, as_map_key)
 
     def emit_map(self, m, _, cache):
         self.emit_map_start(len(m))

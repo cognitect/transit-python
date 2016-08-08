@@ -18,7 +18,7 @@ import unittest
 from transit.reader import Reader
 from transit.writer import Writer
 from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, true, false
-from StringIO import StringIO
+from six import StringIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
 from uuid import UUID
@@ -27,6 +27,7 @@ import dateutil
 from math import isnan
 import os
 import sys
+import six
 
 
 class ExemplarBaseTest(unittest.TestCase):
@@ -122,14 +123,17 @@ def exemplar(name, val):
             except AssertionError as e:
                 if False not in [isnan(v) and isnan(d) or isnan(v) == isnan(d)
                                  for v, d in zip(val, data)]:
-                    return unittest.TestCase.assertEqual(
-                        self,
-                        filter(lambda x: not isnan(x), val),
-                        filter(lambda x: not isnan(x), data))
+                    try:
+                        return unittest.TestCase.assertEqual(
+                            self,
+                            list(six.moves.filter(lambda x: not isnan(x), val)),
+                            list(six.moves.filter(lambda x: not isnan(x), data)))
+                    except AssertionError as e:
+                        e.args += (name, 'failed')
+                        raise
                 else:
                     e.args += (name, 'failed')
                     raise
-
     globals()['test_{}_json'.format(name)] = ExemplarTest
 
 ARRAY_SIMPLE = (1, 2, 3)
@@ -150,11 +154,16 @@ UUIDS = (UUID('5a2cbea3-e8c6-428b-b525-21239370dd55'),
          UUID('501a978e-3a3e-4060-b3be-1cf2bd4b1a38'),
          UUID('b3ba141a-a776-48e4-9fae-a28ea8571f58'))
 
+if six.PY2:
+    utf8_uri = u'http://www.詹姆斯.com/'
+else:
+    utf8_uri = b'http://www.\xc3\xa8\xc2\xa9\xc2\xb9\xc3\xa5\xc2\xa7\xe2\x80\xa0\xc3\xa6\xe2\x80\x93\xc2\xaf.com/'.decode()
+
 URIS = (
   URI(u'http://example.com'),
   URI(u'ftp://example.com'),
   URI(u'file:///path/to/file.txt'),
-  URI(u'http://www.詹姆斯.com/'))
+  URI(utf8_uri))
 
 epoch_utc = datetime.datetime.utcfromtimestamp(0).replace(
     tzinfo=dateutil.tz.tzutc())
@@ -276,7 +285,7 @@ exemplar('vector_special_numbers', (float('nan'), float('inf'), float('-inf')))
 def make_hash_exemplar(n):
     exemplar('map_%s_nested' % (n,), {Keyword('f'): hash_of_size(n),
                                       Keyword('s'): hash_of_size(n)})
-map(make_hash_exemplar, [10, 1935, 1936, 1937])
+list(map(make_hash_exemplar, [10, 1935, 1936, 1937]))
 
 if __name__ == '__main__':
     unittest.main()

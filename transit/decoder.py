@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import transit_types
-from constants import MAP_AS_ARR, ESC, SUB, RES
+from transit import transit_types
+from transit.constants import MAP_AS_ARR, ESC, SUB, RES
 from collections import OrderedDict
-from helpers import pairs
-import read_handlers as rh
-from rolling_cache import RollingCache, is_cacheable, is_cache_key
-from transit_types import true, false
+from transit.helpers import pairs
+import transit.read_handlers as rh
+from transit.rolling_cache import RollingCache, is_cacheable, is_cache_key
+from transit.transit_types import true, false
+import six
 
 
 class Tag(object):
@@ -83,16 +84,18 @@ class Decoder(object):
 
     def _decode(self, node, cache, as_map_key):
         tp = type(node)
-        if tp is unicode:
+        # handles py3 strings(unicode) and py2 unicode
+        if isinstance(node, six.text_type):
             return self.decode_string(node, cache, as_map_key)
-        if tp is str:
-            return self.decode_string(unicode(node, "utf-8"), cache, as_map_key)
         if tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         if tp is list:
             return self.decode_list(node, cache, as_map_key)
         if tp is bool:
             return true if node else false
+        # handles py2 strings, py3 strings handled above
+        if isinstance(node, six.string_types):
+            return self.decode_string(six.text_type(node), cache, as_map_key)
         return node
 
     def decode_list(self, node, cache, as_map_key):
@@ -150,11 +153,13 @@ class Decoder(object):
                 h[key] = val
             return transit_types.frozendict(h)
         else:
-            key, value = hash.items()[0]
-            key = self._decode(key, cache, True)
+            keyv = list(hash)[0]
+            value = hash[keyv]
+            key = self._decode(keyv, cache, True)
             if isinstance(key, Tag):
-                return self.decode_tag(key.tag,
-                                       self._decode(value, cache, as_map_key))
+                return self.decode_tag(
+                    key.tag,
+                    self._decode(value, cache, as_map_key))
         return transit_types.frozendict(
             {key: self._decode(value, cache, False)})
 

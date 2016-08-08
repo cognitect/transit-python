@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from constants import SUB, MAP_AS_ARR
+from transit.constants import SUB, MAP_AS_ARR
 
 FIRST_ORD = 48
 CACHE_CODE_DIGITS = 44

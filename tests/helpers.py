@@ -14,7 +14,7 @@
 
 from transit.transit_types import Keyword, frozendict
 from transit.helpers import cycle, take
-from itertools import izip
+import six
 
 
 def ints_centered_on(m, n=5):
@@ -30,4 +30,4 @@ def array_of_symbools(m, n=None):
 
 
 def hash_of_size(n):
-    return frozendict(izip(array_of_symbools(n), range(0, n+1)))
+    return frozendict(six.moves.zip(array_of_symbools(n), range(0, n+1)))

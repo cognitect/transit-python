@@ -21,6 +21,7 @@ from transit.class_hash import ClassDict
 from transit.transit_types import Symbol, frozendict, true, false, Keyword
 from decimal import Decimal
 from StringIO import StringIO
+import six
 
 
 class RegressionBaseTest(unittest.TestCase):
@@ -85,9 +86,9 @@ def json_int_boundary(value, expected_type):
     globals()['test_json_int_boundary_{}'.format(value)] = JsonIntBoundaryTest
 
 json_int_boundary(2**53-1, int)
-json_int_boundary(2**53, unicode)
+json_int_boundary(2**53, six.text_type)
 json_int_boundary(-2**53+1, int)
-json_int_boundary(-2**53, unicode)
+json_int_boundary(-2**53, six.text_type)
 
 
 class BooleanTest(unittest.TestCase):

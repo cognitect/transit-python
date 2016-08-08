@@ -15,11 +15,12 @@
 import uuid
 import datetime
 import struct
-from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
+from transit.class_hash import ClassDict
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
 from decimal import Decimal
-import dateutil
+from dateutil import tz
 from math import isnan
+import six
 
 # This file contains Write Handlers - all the top-level objects used when
 # writing Transit data.  These object must all be immutable and pickleable.
@@ -138,11 +139,13 @@ class BooleanHandler(object):
 
     @staticmethod
     def rep(b):
-        return bool(b)
+        val = b.v if type(b) == Boolean else bool(b)
+        return val
 
     @staticmethod
     def string_rep(b):
-        return 't' if b else 'f'
+        val = b.v if type(b) == Boolean else bool(b)
+        return 't' if val else 'f'
 
 
 class ArrayHandler(object):
@@ -232,7 +235,7 @@ class UriHandler(object):
 class DateTimeHandler(object):
     "time zero in UTC"
     epoch_utc = datetime.datetime.utcfromtimestamp(0).replace(
-        tzinfo=dateutil.tz.tzutc())
+        tzinfo=tz.tzutc())
 
     @staticmethod
     def tag(_):
@@ -323,14 +326,17 @@ class WriteHandler(ClassDict):
         self[type(None)] = NoneHandler
         self[bool] = BooleanHandler
         self[Boolean] = BooleanHandler
-        self[str] = StringHandler
-        self[unicode] = StringHandler
+        # str on py3, unicode on py 2
+        self[six.text_type] = StringHandler
+        if six.PY2:
+            self[str] = StringHandler
         self[list] = ArrayHandler
         self[tuple] = ArrayHandler
         self[dict] = MapHandler
         self[int] = IntHandler
         self[float] = FloatHandler
-        self[long] = BigIntHandler
+        if six.PY2:
+            self[long] = BigIntHandler
         self[Keyword] = KeywordHandler
         self[Symbol] = SymbolHandler
         self[uuid.UUID] = UuidHandler
