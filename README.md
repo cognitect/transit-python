@@ -69,6 +69,7 @@ For example:
 ## Supported Python versions
 
  * 2.7.X
+ * 3.5.X and greater
 
 
 ## Type Mapping
