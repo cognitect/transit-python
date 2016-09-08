@@ -18,7 +18,7 @@ from setuptools import setup, find_packages
 import subprocess
 
 setup(name="transit-python",
-      version="0.8.279",
+      version="0.8.284",
       description="Transit marshalling for Python",
       author="Cognitect",
       url="https://github.com/cognitect/transit-python",
