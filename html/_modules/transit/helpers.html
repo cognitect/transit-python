@@ -47,31 +47,31 @@
           <div class="body" role="main">
             
   <h1>Source code for transit.helpers</h1><div class="highlight"><pre>
-<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
-<span class="c">##</span>
-<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="c">## you may not use this file except in compliance with the License.</span>
-<span class="c">## You may obtain a copy of the License at</span>
-<span class="c">##</span>
-<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="c">##</span>
-<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
-<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
-<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="c">## See the License for the specific language governing permissions and</span>
-<span class="c">## limitations under the License.</span>
+<span class="c1">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c1">##</span>
+<span class="c1">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">## you may not use this file except in compliance with the License.</span>
+<span class="c1">## You may obtain a copy of the License at</span>
+<span class="c1">##</span>
+<span class="c1">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">##</span>
+<span class="c1">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c1">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">## See the License for the specific language governing permissions and</span>
+<span class="c1">## limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">itertools</span>
 
 
 <div class="viewcode-block" id="mapcat"><a class="viewcode-back" href="../../transit.html#transit.helpers.mapcat">[docs]</a><span class="k">def</span> <span class="nf">mapcat</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="pairs"><a class="viewcode-back" href="../../transit.html#transit.helpers.pairs">[docs]</a><span class="k">def</span> <span class="nf">pairs</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">izip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">izip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span></div>
 
-</div>
+
 <span class="n">cycle</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span>
 
 
@@ -116,7 +116,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Cognitect.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>

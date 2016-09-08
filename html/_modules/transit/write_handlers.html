@@ -47,19 +47,19 @@
           <div class="body" role="main">
             
   <h1>Source code for transit.write_handlers</h1><div class="highlight"><pre>
-<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
-<span class="c">##</span>
-<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="c">## you may not use this file except in compliance with the License.</span>
-<span class="c">## You may obtain a copy of the License at</span>
-<span class="c">##</span>
-<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="c">##</span>
-<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
-<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
-<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="c">## See the License for the specific language governing permissions and</span>
-<span class="c">## limitations under the License.</span>
+<span class="c1">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c1">##</span>
+<span class="c1">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">## you may not use this file except in compliance with the License.</span>
+<span class="c1">## You may obtain a copy of the License at</span>
+<span class="c1">##</span>
+<span class="c1">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">##</span>
+<span class="c1">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c1">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">## See the License for the specific language governing permissions and</span>
+<span class="c1">## limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
@@ -70,8 +70,8 @@
 <span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">tz</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isnan</span>
 
-<span class="c">## This file contains Write Handlers - all the top-level objects used when</span>
-<span class="c">## writing Transit data.  These object must all be immutable and pickleable.</span>
+<span class="c1">## This file contains Write Handlers - all the top-level objects used when</span>
+<span class="c1">## writing Transit data.  These object must all be immutable and pickleable.</span>
 
 
 <div class="viewcode-block" id="TaggedMap"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap">[docs]</a><span class="k">class</span> <span class="nc">TaggedMap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -81,280 +81,280 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_str</span> <span class="o">=</span> <span class="nb">str</span>
 
 <div class="viewcode-block" id="TaggedMap.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag</span>
-</div>
-<div class="viewcode-block" id="TaggedMap.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rep</span>
-</div>
-<div class="viewcode-block" id="TaggedMap.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag</span></div>
 
-</div></div>
+<div class="viewcode-block" id="TaggedMap.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rep</span></div>
+
+<div class="viewcode-block" id="TaggedMap.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedMap.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str</span></div></div>
+
+
 <div class="viewcode-block" id="NoneHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.NoneHandler">[docs]</a><span class="k">class</span> <span class="nc">NoneHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="NoneHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.NoneHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;_&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;_&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="NoneHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.NoneHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
-</div>
+        <span class="k">return</span> <span class="bp">None</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="NoneHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.NoneHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="IntHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.IntHandler">[docs]</a><span class="k">class</span> <span class="nc">IntHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="IntHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.IntHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;i&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;i&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="IntHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.IntHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">i</span>
-</div>
+        <span class="k">return</span> <span class="n">i</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="IntHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.IntHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="BigIntHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigIntHandler">[docs]</a><span class="k">class</span> <span class="nc">BigIntHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigIntHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigIntHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;n&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;n&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigIntHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigIntHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigIntHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigIntHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="BigDecimalHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigDecimalHandler">[docs]</a><span class="k">class</span> <span class="nc">BigDecimalHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigDecimalHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigDecimalHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;f&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;f&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigDecimalHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigDecimalHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BigDecimalHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BigDecimalHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="FloatHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.FloatHandler">[docs]</a><span class="k">class</span> <span class="nc">FloatHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="FloatHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.FloatHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;z&quot;</span> <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s">&#39;Inf&#39;</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-Inf&#39;</span><span class="p">))</span> <span class="k">else</span> <span class="s">&quot;d&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;z&quot;</span> <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;Inf&#39;</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-Inf&#39;</span><span class="p">))</span> <span class="k">else</span> <span class="s2">&quot;d&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="FloatHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.FloatHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">&quot;NaN&quot;</span>
-        <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;Inf&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">&quot;INF&quot;</span>
-        <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;-Inf&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">&quot;-INF&quot;</span>
-        <span class="k">return</span> <span class="n">f</span>
-</div>
+            <span class="k">return</span> <span class="s2">&quot;NaN&quot;</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;Inf&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;INF&quot;</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-Inf&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;-INF&quot;</span>
+        <span class="k">return</span> <span class="n">f</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="FloatHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.FloatHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="StringHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.StringHandler">[docs]</a><span class="k">class</span> <span class="nc">StringHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="StringHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.StringHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;s&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;s&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="StringHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.StringHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">s</span>
-</div>
+        <span class="k">return</span> <span class="n">s</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="StringHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.StringHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">s</span>
+        <span class="k">return</span> <span class="n">s</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="BooleanHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BooleanHandler">[docs]</a><span class="k">class</span> <span class="nc">BooleanHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BooleanHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BooleanHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;?&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;?&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BooleanHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BooleanHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="BooleanHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.BooleanHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;t&#39;</span> <span class="k">if</span> <span class="n">b</span> <span class="k">else</span> <span class="s">&#39;f&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;t&#39;</span> <span class="k">if</span> <span class="n">b</span> <span class="k">else</span> <span class="s1">&#39;f&#39;</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="ArrayHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.ArrayHandler">[docs]</a><span class="k">class</span> <span class="nc">ArrayHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="ArrayHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.ArrayHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;array&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;array&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="ArrayHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.ArrayHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">a</span>
-</div>
+        <span class="k">return</span> <span class="n">a</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="ArrayHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.ArrayHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="MapHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.MapHandler">[docs]</a><span class="k">class</span> <span class="nc">MapHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="MapHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.MapHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;map&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;map&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="MapHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.MapHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">m</span>
-</div>
+        <span class="k">return</span> <span class="n">m</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="MapHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.MapHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="KeywordHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.KeywordHandler">[docs]</a><span class="k">class</span> <span class="nc">KeywordHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="KeywordHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.KeywordHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;:&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;:&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="KeywordHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.KeywordHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="KeywordHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.KeywordHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="SymbolHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SymbolHandler">[docs]</a><span class="k">class</span> <span class="nc">SymbolHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SymbolHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SymbolHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;$&#39;</span>
-</div>
+        <span class="k">return</span> <span class="s1">&#39;$&#39;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SymbolHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SymbolHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SymbolHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SymbolHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="UuidHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UuidHandler">[docs]</a><span class="k">class</span> <span class="nc">UuidHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UuidHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UuidHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;u&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;u&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UuidHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UuidHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;&gt;qq&#39;</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;qq&#39;</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UuidHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UuidHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="UriHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UriHandler">[docs]</a><span class="k">class</span> <span class="nc">UriHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UriHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UriHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;r&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;r&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UriHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UriHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">rep</span>
-</div>
+        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">rep</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="UriHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.UriHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">rep</span>
+        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">rep</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="DateTimeHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.DateTimeHandler">[docs]</a><span class="k">class</span> <span class="nc">DateTimeHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">epoch</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzutc</span><span class="p">())</span>
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="DateTimeHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.DateTimeHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;m&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;m&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="DateTimeHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.DateTimeHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
         <span class="n">td</span> <span class="o">=</span> <span class="n">d</span> <span class="o">-</span> <span class="n">DateTimeHandler</span><span class="o">.</span><span class="n">epoch</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">td</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">td</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="DateTimeHandler.verbose_handler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.DateTimeHandler.verbose_handler">[docs]</a>    <span class="k">def</span> <span class="nf">verbose_handler</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">VerboseDateTimeHandler</span>
-</div>
+        <span class="k">return</span> <span class="n">VerboseDateTimeHandler</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="DateTimeHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.DateTimeHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">DateTimeHandler</span><span class="o">.</span><span class="n">rep</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">DateTimeHandler</span><span class="o">.</span><span class="n">rep</span><span class="p">(</span><span class="n">d</span><span class="p">))</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="VerboseDateTimeHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.VerboseDateTimeHandler">[docs]</a><span class="k">class</span> <span class="nc">VerboseDateTimeHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="VerboseDateTimeHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.VerboseDateTimeHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;t&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;t&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="VerboseDateTimeHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.VerboseDateTimeHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="VerboseDateTimeHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.VerboseDateTimeHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="SetHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SetHandler">[docs]</a><span class="k">class</span> <span class="nc">SetHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SetHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SetHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;set&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;set&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SetHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SetHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">TaggedMap</span><span class="p">(</span><span class="s">&quot;array&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">TaggedMap</span><span class="p">(</span><span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SetHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.SetHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TaggedValueHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedValueHandler">[docs]</a><span class="k">class</span> <span class="nc">TaggedValueHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="TaggedValueHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedValueHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">tv</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tv</span><span class="o">.</span><span class="n">tag</span>
-</div>
+        <span class="k">return</span> <span class="n">tv</span><span class="o">.</span><span class="n">tag</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="TaggedValueHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedValueHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">tv</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tv</span><span class="o">.</span><span class="n">rep</span>
-</div>
+        <span class="k">return</span> <span class="n">tv</span><span class="o">.</span><span class="n">rep</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="TaggedValueHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.TaggedValueHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="LinkHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.LinkHandler">[docs]</a><span class="k">class</span> <span class="nc">LinkHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="LinkHandler.tag"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.LinkHandler.tag">[docs]</a>    <span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;link&quot;</span>
-</div>
+        <span class="k">return</span> <span class="s2">&quot;link&quot;</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="LinkHandler.rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.LinkHandler.rep">[docs]</a>    <span class="k">def</span> <span class="nf">rep</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">as_map</span>
-</div>
+        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">as_map</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="LinkHandler.string_rep"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.LinkHandler.string_rep">[docs]</a>    <span class="k">def</span> <span class="nf">string_rep</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="WriteHandler"><a class="viewcode-back" href="../../transit.html#transit.write_handlers.WriteHandler">[docs]</a><span class="k">class</span> <span class="nc">WriteHandler</span><span class="p">(</span><span class="n">ClassDict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is the master handler for encoding/writing Python data into</span>
 <span class="sd">    Transit data, based on its type.</span>
@@ -429,7 +429,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Cognitect.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>

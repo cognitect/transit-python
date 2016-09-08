@@ -47,44 +47,44 @@
           <div class="body" role="main">
             
   <h1>Source code for transit.transit_types</h1><div class="highlight"><pre>
-<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
-<span class="c">##</span>
-<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="c">## you may not use this file except in compliance with the License.</span>
-<span class="c">## You may obtain a copy of the License at</span>
-<span class="c">##</span>
-<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="c">##</span>
-<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
-<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
-<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="c">## See the License for the specific language governing permissions and</span>
-<span class="c">## limitations under the License.</span>
+<span class="c1">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c1">##</span>
+<span class="c1">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">## you may not use this file except in compliance with the License.</span>
+<span class="c1">## You may obtain a copy of the License at</span>
+<span class="c1">##</span>
+<span class="c1">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">##</span>
+<span class="c1">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c1">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">## See the License for the specific language governing permissions and</span>
+<span class="c1">## limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Hashable</span>
 
 
 <div class="viewcode-block" id="Named"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Named">[docs]</a><span class="k">class</span> <span class="nc">Named</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s">&quot;/&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;/&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_name&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_name&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;_namespace&quot;</span><span class="p">)</span> \
-                               <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namespace</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_namespace&quot;</span><span class="p">)</span> \
+                               <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Keyword"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Keyword">[docs]</a><span class="k">class</span> <span class="nc">Keyword</span><span class="p">(</span><span class="n">Named</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span>
@@ -104,12 +104,12 @@
         <span class="k">return</span> <span class="n">mp</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;&lt;Keyword &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span> <span class="o">+</span> <span class="s">&quot;&gt;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;Keyword &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Symbol"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Symbol">[docs]</a><span class="k">class</span> <span class="nc">Symbol</span><span class="p">(</span><span class="n">Named</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span>
@@ -132,8 +132,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str</span></div>
+
 <span class="n">kw_cache</span> <span class="o">=</span> <span class="p">{}</span>
 
 
@@ -176,39 +176,39 @@
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Set"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Set">[docs]</a><span class="k">class</span> <span class="nc">Set</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;set&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;set&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="CMap"><a class="viewcode-back" href="../../transit.html#transit.transit_types.CMap">[docs]</a><span class="k">class</span> <span class="nc">CMap</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;cmap&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;cmap&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Vector"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Vector">[docs]</a><span class="k">class</span> <span class="nc">Vector</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;vector&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;vector&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Array"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Array">[docs]</a><span class="k">class</span> <span class="nc">Array</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;array&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="List"><a class="viewcode-back" href="../../transit.html#transit.transit_types.List">[docs]</a><span class="k">class</span> <span class="nc">List</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;list&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="URI"><a class="viewcode-back" href="../../transit.html#transit.transit_types.URI">[docs]</a><span class="k">class</span> <span class="nc">URI</span><span class="p">(</span><span class="n">TaggedValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">):</span>
-        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;uri&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span>
+        <span class="n">TaggedValue</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">rep</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="frozendict"><a class="viewcode-back" href="../../transit.html#transit.transit_types.frozendict">[docs]</a><span class="k">class</span> <span class="nc">frozendict</span><span class="p">(</span><span class="n">Mapping</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -226,20 +226,20 @@
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;frozendict(</span><span class="si">%r</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">,)</span>
+        <span class="k">return</span> <span class="s1">&#39;frozendict(</span><span class="si">%r</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">,)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="c"># Class property constants for rendering types</span>
-    <span class="n">LINK</span> <span class="o">=</span> <span class="s">u&quot;link&quot;</span>
-    <span class="n">IMAGE</span> <span class="o">=</span> <span class="s">u&quot;image&quot;</span>
+    <span class="c1"># Class property constants for rendering types</span>
+    <span class="n">LINK</span> <span class="o">=</span> <span class="s2">u&quot;link&quot;</span>
+    <span class="n">IMAGE</span> <span class="o">=</span> <span class="s2">u&quot;image&quot;</span>
 
-    <span class="c"># Class property constants for keywords/obj properties.</span>
-    <span class="n">HREF</span> <span class="o">=</span> <span class="s">u&quot;href&quot;</span>
-    <span class="n">REL</span> <span class="o">=</span> <span class="s">u&quot;rel&quot;</span>
-    <span class="n">PROMPT</span> <span class="o">=</span> <span class="s">u&quot;prompt&quot;</span>
-    <span class="n">NAME</span> <span class="o">=</span> <span class="s">u&quot;name&quot;</span>
-    <span class="n">RENDER</span> <span class="o">=</span> <span class="s">u&quot;render&quot;</span>
+    <span class="c1"># Class property constants for keywords/obj properties.</span>
+    <span class="n">HREF</span> <span class="o">=</span> <span class="s2">u&quot;href&quot;</span>
+    <span class="n">REL</span> <span class="o">=</span> <span class="s2">u&quot;rel&quot;</span>
+    <span class="n">PROMPT</span> <span class="o">=</span> <span class="s2">u&quot;prompt&quot;</span>
+    <span class="n">NAME</span> <span class="o">=</span> <span class="s2">u&quot;name&quot;</span>
+    <span class="n">RENDER</span> <span class="o">=</span> <span class="s2">u&quot;render&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">prompt</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -285,9 +285,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">as_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">href</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">href</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Boolean"><a class="viewcode-back" href="../../transit.html#transit.transit_types.Boolean">[docs]</a><span class="k">class</span> <span class="nc">Boolean</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;To allow a separate t/f that won&#39;t hash as 1/0. Don&#39;t call directly,</span>
 <span class="sd">    instead use true and false as singleton objects. Can use with type check.</span>
@@ -298,7 +298,7 @@
 <span class="sd">    where x is a true or false Boolean.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&quot;true&quot;</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="bp">True</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="k">else</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
     <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -308,11 +308,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
 
-<span class="c"># lowercase rep matches java/clojure</span></div>
-<span class="n">false</span> <span class="o">=</span> <span class="n">Boolean</span><span class="p">(</span><span class="s">&quot;false&quot;</span><span class="p">)</span>
-<span class="n">true</span> <span class="o">=</span> <span class="n">Boolean</span><span class="p">(</span><span class="s">&quot;true&quot;</span><span class="p">)</span>
+<span class="c1"># lowercase rep matches java/clojure</span>
+<span class="n">false</span> <span class="o">=</span> <span class="n">Boolean</span><span class="p">(</span><span class="s2">&quot;false&quot;</span><span class="p">)</span>
+<span class="n">true</span> <span class="o">=</span> <span class="n">Boolean</span><span class="p">(</span><span class="s2">&quot;true&quot;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -352,7 +352,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Cognitect.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>

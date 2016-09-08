@@ -47,19 +47,19 @@
           <div class="body" role="main">
             
   <h1>Source code for transit.rolling_cache</h1><div class="highlight"><pre>
-<span class="c">## Copyright 2014 Cognitect. All Rights Reserved.</span>
-<span class="c">##</span>
-<span class="c">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="c">## you may not use this file except in compliance with the License.</span>
-<span class="c">## You may obtain a copy of the License at</span>
-<span class="c">##</span>
-<span class="c">##      http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="c">##</span>
-<span class="c">## Unless required by applicable law or agreed to in writing, software</span>
-<span class="c">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
-<span class="c">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="c">## See the License for the specific language governing permissions and</span>
-<span class="c">## limitations under the License.</span>
+<span class="c1">## Copyright 2014 Cognitect. All Rights Reserved.</span>
+<span class="c1">##</span>
+<span class="c1">## Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">## you may not use this file except in compliance with the License.</span>
+<span class="c1">## You may obtain a copy of the License at</span>
+<span class="c1">##</span>
+<span class="c1">##      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">##</span>
+<span class="c1">## Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">## distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,</span>
+<span class="c1">## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">## See the License for the specific language governing permissions and</span>
+<span class="c1">## limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">constants</span> <span class="kn">import</span> <span class="n">SUB</span><span class="p">,</span> <span class="n">MAP_AS_ARR</span>
 
@@ -70,31 +70,31 @@
 
 
 <div class="viewcode-block" id="is_cache_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cache_key">[docs]</a><span class="k">def</span> <span class="nf">is_cache_key</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SUB</span> <span class="ow">and</span> <span class="n">name</span> <span class="o">!=</span> <span class="n">MAP_AS_ARR</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">SUB</span> <span class="ow">and</span> <span class="n">name</span> <span class="o">!=</span> <span class="n">MAP_AS_ARR</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="encode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.encode_key">[docs]</a><span class="k">def</span> <span class="nf">encode_key</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
     <span class="n">lo</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">CACHE_CODE_DIGITS</span>
     <span class="n">hi</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="n">CACHE_CODE_DIGITS</span>
     <span class="k">if</span> <span class="n">hi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">hi</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;^&quot;</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">hi</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">FIRST_ORD</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="decode_key"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.decode_key">[docs]</a><span class="k">def</span> <span class="nf">decode_key</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">sz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">sz</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span>
     <span class="k">return</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">)</span> <span class="o">+</span> \
-           <span class="p">(</span><span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">))</span>
+           <span class="p">(</span><span class="n">CACHE_CODE_DIGITS</span> <span class="o">*</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">FIRST_ORD</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="is_cacheable"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.is_cacheable">[docs]</a><span class="k">def</span> <span class="nf">is_cacheable</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">string</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">MIN_SIZE_CACHEABLE</span> \
                   <span class="ow">and</span> <span class="p">(</span><span class="n">as_map_key</span> \
-                  <span class="ow">or</span> <span class="p">(</span><span class="n">string</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;~#&quot;</span><span class="p">,</span> <span class="s">&quot;~$&quot;</span><span class="p">,</span> <span class="s">&quot;~:&quot;</span><span class="p">]))</span>
+                  <span class="ow">or</span> <span class="p">(</span><span class="n">string</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;~#&quot;</span><span class="p">,</span> <span class="s2">&quot;~$&quot;</span><span class="p">,</span> <span class="s2">&quot;~:&quot;</span><span class="p">]))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="RollingCache"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache">[docs]</a><span class="k">class</span> <span class="nc">RollingCache</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is the internal cache used by python-transit for cacheing and</span>
 <span class="sd">    expanding map keys during writing and reading.  The cache enables transit</span>
@@ -106,25 +106,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="c"># if index rolls over... (bug)</span>
+    <span class="c1"># if index rolls over... (bug)</span>
 <div class="viewcode-block" id="RollingCache.decode"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.decode">[docs]</a>    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Always returns the name&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">is_cache_key</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span></div>
+
 <div class="viewcode-block" id="RollingCache.encode"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the name the first time and the key after that&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encache</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_cacheable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">as_map_key</span><span class="p">)</span> <span class="k">else</span> <span class="n">name</span></div>
+
 <div class="viewcode-block" id="RollingCache.size"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.size">[docs]</a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="RollingCache.is_cache_full"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.is_cache_full">[docs]</a>    <span class="k">def</span> <span class="nf">is_cache_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">CACHE_SIZE</span>
-</div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">CACHE_SIZE</span></div>
+
 <div class="viewcode-block" id="RollingCache.encache"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.encache">[docs]</a>    <span class="k">def</span> <span class="nf">encache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_cache_full</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -135,8 +135,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">key_to_value</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
 
-        <span class="k">return</span> <span class="n">name</span>
-</div>
+        <span class="k">return</span> <span class="n">name</span></div>
+
 <div class="viewcode-block" id="RollingCache.clear"><a class="viewcode-back" href="../../transit.html#transit.rolling_cache.RollingCache.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_to_key</span> <span class="o">=</span> <span class="p">{}</span></div></div>
 </pre></div>
@@ -178,7 +178,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Cognitect.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
     </div>
   </body>
 </html>
