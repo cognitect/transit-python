@@ -13,20 +13,22 @@
 ## limitations under the License.
 
 from transit.reader import JsonUnmarshaler
+from transit.pyversion import unicode_type
 import json
 import time
-from StringIO import StringIO
+from io import StringIO
+
 def run_tests(data):
-    datas = StringIO(data)
+    datas = StringIO(unicode_type(data))
     t = time.time()
     JsonUnmarshaler().load(datas)
     et = time.time()
-    datas = StringIO(data)
+    datas = StringIO(unicode_type(data))
     tt = time.time()
     json.load(datas)
     ett = time.time()
     read_delta = (et - t) * 1000.0
-    print "Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0)
+    print("Done: " + str(read_delta) + "  --  raw JSON in: " + str((ett - tt) * 1000.0))
     return read_delta
 
 
@@ -42,10 +44,10 @@ for jsonfile in [seattle_dir + "example.json",
     print("Running " + jsonfile)
     print("-"*50)
 
-    runs = 100
+    runs = 200
     deltas = [run_tests(data) for x in range(runs)]
     means[jsonfile] = sum(deltas)/runs
 
 for jsonfile, mean in means.items():
-    print "\nMean for" + jsonfile + ": "+str(mean)
+    print("\nMean for" + jsonfile + ": "+str(mean))
 
