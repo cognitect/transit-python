@@ -12,14 +12,27 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
+import sys
 import msgpack
 import re
-from constants import SUB, ESC, RES, MAP_AS_ARR, QUOTE
-from rolling_cache import RollingCache
-from write_handlers import WriteHandler
-from transit_types import TaggedValue
+from transit import pyversion
+from transit.constants import SUB, ESC, RES, MAP_AS_ARR, QUOTE
+from transit.rolling_cache import RollingCache
+from transit.write_handlers import WriteHandler
+from transit.transit_types import TaggedValue
 
-JSON_ESCAPED_CHARS = set([unichr(c) for c in range(0x20)] + ["\\", "\n"])
+ESCAPE_DCT = {
+    '\\': u'\\\\',
+    '"': u'\\"',
+    '\b': u'\\b',
+    '\f': u'\\f',
+    '\n': u'\\n',
+    '\r': u'\\r',
+    '\t': u'\\t',
+}
+for i in range(0x20):
+  ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
+
 
 
 class Writer(object):
@@ -118,18 +131,22 @@ class Marshaler(object):
     def emit_boolean(self, b, as_map_key, cache):
         return self.emit_string(ESC, "?", b, True, cache) if as_map_key else self.emit_object(b)
 
-    def emit_int(self, tag, i, as_map_key, cache):
-        if as_map_key or i > self.opts["max_int"] or i < self.opts["min_int"]:
-            return self.emit_string(ESC, tag, str(i), as_map_key, cache)
-        else:
+    def emit_int(self, tag, i, rep, as_map_key, cache):
+        if isinstance(rep, int):
+          if i <= self.opts["max_int"] and i >= self.opts["min_int"]:
             return self.emit_object(i, as_map_key)
+          else:
+            return self.emit_string(ESC, tag, str(rep), as_map_key, cache)
+        else:
+            return self.emit_string(ESC, tag, rep, as_map_key, cache)
 
     def emit_double(self, d, as_map_key, cache):
         return self.emit_string(ESC, "d", d, True, cache) if as_map_key else self.emit_object(d)
 
     def emit_array(self, a, _, cache):
         self.emit_array_start(len(a))
-        map(lambda x: self.marshal(x, False, cache), a)
+        for x in a:
+            self.marshal(x, False, cache)
         self.emit_array_end()
 
     def emit_map(self, m, _, cache):# use map as object from above, have to overwrite default parser.
@@ -154,11 +171,11 @@ class Marshaler(object):
     def emit_encoded(self, tag, handler, obj, as_map_key, cache):
         rep = handler.rep(obj)
         if len(tag) == 1:
-            if isinstance(rep, basestring):
+            if pyversion.isstring(rep):
                 self.emit_string(ESC, tag, rep, as_map_key, cache)
             elif as_map_key or self.opts["prefer_strings"]:
                 rep = handler.string_rep(obj)
-                if isinstance(rep, basestring):
+                if pyversion.isstring(rep):
                     self.emit_string(ESC, tag, rep, as_map_key, cache)
                 else:
                     raise AssertionError("Cannot be encoded as string: " + str({"tag": tag,
@@ -185,7 +202,7 @@ class Marshaler(object):
         f = marshal_dispatch.get(tag)
 
         if f:
-            f(self, handler.string_rep(obj) if as_map_key else handler.rep(obj), as_map_key, cache)
+            f(self, obj, handler.string_rep(obj) if as_map_key else handler.rep(obj), as_map_key, cache)
         else:
             self.emit_encoded(tag, handler, obj, as_map_key, cache)
 
@@ -226,15 +243,15 @@ class Marshaler(object):
         """
         self.handlers[obj_type] = handler_class
 
-marshal_dispatch = {"_": lambda self, rep, as_map_key, cache: self.emit_nil(rep, as_map_key, cache),
-                    "?": lambda self, rep, as_map_key, cache: self.emit_boolean(rep, as_map_key, cache),
-                    "s": lambda self, rep, as_map_key, cache: self.emit_string("", "", escape(rep), as_map_key, cache),
-                    "i": lambda self, rep, as_map_key, cache: self.emit_int("i", rep, as_map_key, cache),
-                    "n": lambda self, rep, as_map_key, cache: self.emit_int("n", rep, as_map_key, cache),
-                    "d": lambda self, rep, as_map_key, cache: self.emit_double(rep, as_map_key, cache),
-                    "'": lambda self, rep, _, cache: self.emit_tagged("'", rep, cache),
-                    "array": lambda self, rep, as_map_key, cache: self.emit_array(rep, as_map_key, cache),
-                    "map": lambda self, rep, as_map_key, cache: self.dispatch_map(rep, as_map_key, cache)}
+marshal_dispatch = {"_": lambda self, obj, rep, as_map_key, cache: self.emit_nil(rep, as_map_key, cache),
+                    "?": lambda self, obj, rep, as_map_key, cache: self.emit_boolean(rep, as_map_key, cache),
+                    "s": lambda self, obj, rep, as_map_key, cache: self.emit_string("", "", escape(rep), as_map_key, cache),
+                    "i": lambda self, i, rep, as_map_key, cache: self.emit_int("i", i, rep, as_map_key, cache),
+                    "n": lambda self, i, rep, as_map_key, cache: self.emit_int("n", i, rep, as_map_key, cache),
+                    "d": lambda self, obj, rep, as_map_key, cache: self.emit_double(rep, as_map_key, cache),
+                    "'": lambda self, obj, rep, _, cache: self.emit_tagged("'", rep, cache),
+                    "array": lambda self, obj, rep, as_map_key, cache: self.emit_array(rep, as_map_key, cache),
+                    "map": lambda self, obj, rep, as_map_key, cache: self.dispatch_map(rep, as_map_key, cache)}
 
 
 class MsgPackMarshaler(Marshaler):
@@ -354,22 +371,18 @@ class JsonMarshaler(Marshaler):
     def emit_object(self, obj, as_map_key=False):
         tp = type(obj)
         self.write_sep()
-        if tp is str or tp is unicode:
+        if tp in pyversion.string_types:
             self.io.write(u"\"")
-
-            # escapes in-line for perf
-            self.io.write(u"".join([(c.encode("unicode_escape"))
-                                    if c in JSON_ESCAPED_CHARS
-                                    else c for c in obj]).replace("\"", "\\\""))
+            self.io.write(u"".join([(ESCAPE_DCT[c]) if c in ESCAPE_DCT else c for c in obj]))
             self.io.write(u"\"")
-        elif tp is int or tp is long or tp is float:
-            self.io.write(str(obj))
+        elif pyversion.isnumber_type(tp):
+            self.io.write(pyversion.unicode_type(obj))
         elif tp is bool:
             self.io.write(u"true" if obj else u"false")
         elif obj is None:
             self.io.write(u"null")
         else:
-            raise AssertionError("Don't know how to encode: " + str(obj))
+          raise AssertionError("Don't know how to encode: " + str(obj) + " of type: " + str(type(obj)))
 
 
 class VerboseSettings(object):
@@ -378,7 +391,7 @@ class VerboseSettings(object):
     """
     @staticmethod
     def _verbose_handlers(handlers):
-        for k, v in handlers.iteritems():
+        for k, v in pyversion.iteritems(handlers):
             if hasattr(v, "verbose_handler"):
                 handlers[k] = v.verbose_handler()
         return handlers
@@ -387,7 +400,7 @@ class VerboseSettings(object):
         self.handlers = self._verbose_handlers(WriteHandler())
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
-        return self.emit_object(unicode(prefix) + tag + string, as_map_key)
+        return self.emit_object(pyversion.unicode_type(prefix) + tag + string, as_map_key)
 
     def emit_map(self, m, _, cache):
         self.emit_map_start(len(m))

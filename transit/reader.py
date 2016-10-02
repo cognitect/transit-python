@@ -13,10 +13,10 @@
 ## limitations under the License.
 
 import json
-import sosjson
 import msgpack
-from decoder import Decoder
 from collections import OrderedDict
+from transit import sosjson
+from transit.decoder import Decoder
 
 
 class Reader(object):
