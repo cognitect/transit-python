@@ -13,14 +13,15 @@
 ## limitations under the License.
 
 import itertools
+from transit.pyversion import imap, izip
 
 
 def mapcat(f, i):
-    return itertools.chain.from_iterable(itertools.imap(f, i))
+    return itertools.chain.from_iterable(imap(f, i))
 
 
 def pairs(i):
-    return itertools.izip(*[iter(i)] * 2)
+    return izip(*[iter(i)] * 2)
 
 
 cycle = itertools.cycle
