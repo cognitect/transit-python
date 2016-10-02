@@ -12,13 +12,14 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-import transit_types
-from constants import MAP_AS_ARR, ESC, SUB, RES
 from collections import OrderedDict
-from helpers import pairs
-import read_handlers as rh
-from rolling_cache import RollingCache, is_cacheable, is_cache_key
-from transit_types import true, false
+from transit import pyversion
+from transit import transit_types
+from transit.constants import MAP_AS_ARR, ESC, SUB, RES
+from transit.helpers import pairs
+from transit import read_handlers as rh
+from transit.rolling_cache import RollingCache, is_cacheable, is_cache_key
+from transit.transit_types import true, false
 
 
 class Tag(object):
@@ -83,8 +84,10 @@ class Decoder(object):
 
     def _decode(self, node, cache, as_map_key):
         tp = type(node)
-        if tp is unicode:
+        if tp is pyversion.unicode_type:
             return self.decode_string(node, cache, as_map_key)
+        elif tp is bytes:
+            return self.decode_string(node.decode("utf-8"), cache, as_map_key)
         elif tp is dict or tp is OrderedDict:
             return self.decode_hash(node, cache, as_map_key)
         elif tp is list:
@@ -150,7 +153,8 @@ class Decoder(object):
                 h[key] = val
             return transit_types.frozendict(h)
         else:
-            key, value = hash.items()[0]
+            key = list(hash)[0]
+            value = hash[key]
             key = self._decode(key, cache, True)
             if isinstance(key, Tag):
                 return self.decode_tag(key.tag,
