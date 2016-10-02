@@ -59,7 +59,6 @@ class BigDecimalHandler(object):
 class BooleanHandler(object):
     @staticmethod
     def from_rep(x):
-        print("*****Bool:", x)
         return transit_types.true if x == "t" else transit_types.false
 
 
