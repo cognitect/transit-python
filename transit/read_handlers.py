@@ -12,13 +12,14 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
-import transit_types
+from transit import pyversion
+from transit import transit_types
 import uuid
 import ctypes
 import dateutil.parser
 import datetime
 import dateutil.tz
-from helpers import pairs
+from transit.helpers import pairs
 from decimal import Decimal
 
 ## Read handlers are used by the decoder when parsing/reading in Transit
@@ -58,6 +59,7 @@ class BigDecimalHandler(object):
 class BooleanHandler(object):
     @staticmethod
     def from_rep(x):
+        print("*****Bool:", x)
         return transit_types.true if x == "t" else transit_types.false
 
 
@@ -77,7 +79,7 @@ class UuidHandler(object):
     @staticmethod
     def from_rep(u):
         """Given a string, return a UUID object."""
-        if isinstance(u, basestring):
+        if pyversion.isstring(u):
             return uuid.UUID(u)
 
         # hack to remove signs
@@ -96,11 +98,11 @@ class UriHandler(object):
 class DateHandler(object):
     @staticmethod
     def from_rep(d):
-        if isinstance(d, (long, int)):
+        if pyversion.isint(d):
             return DateHandler._convert_timestamp(d)
         if "T" in d:
             return dateutil.parser.parse(d)
-        return DateHandler._convert_timestamp(long(d))
+        return DateHandler._convert_timestamp(pyversion.long_type(d))
 
     @staticmethod
     def _convert_timestamp(ms):
@@ -108,10 +110,16 @@ class DateHandler(object):
         return datetime.datetime.fromtimestamp(ms/1000.0, dateutil.tz.tzutc())
 
 
-class BigIntegerHandler(object):
-    @staticmethod
-    def from_rep(d):
-        return long(d)
+if pyversion.PY3:
+    class BigIntegerHandler(object):
+        @staticmethod
+        def from_rep(d):
+            return int(d)
+else:
+    class BigIntegerHandler(object):
+        @staticmethod
+        def from_rep(d):
+            return long(d)
 
 
 class LinkHandler(object):
