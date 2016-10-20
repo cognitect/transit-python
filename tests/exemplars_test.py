@@ -17,8 +17,9 @@ import unittest
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
-from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, true, false
-from StringIO import StringIO
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
+from transit.transit_types import Link, true, false
+from io import StringIO, BytesIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
 from uuid import UUID
@@ -33,26 +34,26 @@ def exemplar(name, val):
     class ExemplarTest(ExemplarBaseTest):
 
         def test_json(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".json", 'r') as stream:
+            with open("../transit-format/examples/0.8/simple/" + name + ".json") as stream:
                 data = Reader(protocol="json").read(stream)
                 self.assertEqual(val, data)
 
         def test_msgpack(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".mp", 'r') as stream:
+            with open("../transit-format/examples/0.8/simple/" + name + ".mp", 'rb') as stream:
                 data = Reader(protocol="msgpack").read(stream)
                 self.assertEqual(val, data)
 
         def test_json_verbose(self):
-            with open("../transit-format/examples/0.8/simple/" + name + ".verbose.json", 'r') as stream:
+            with open("../transit-format/examples/0.8/simple/" + name + ".verbose.json") as stream:
                 data = Reader(protocol="json_verbose").read(stream)
                 self.assertEqual(val, data)
 
         def test_reencode_msgpack(self):
-            io = StringIO()
+            io = BytesIO()
             writer = Writer(io, protocol="msgpack")
             writer.write(val)
             s = io.getvalue()
-            io = StringIO(s)
+            io = BytesIO(s)
 
             reader = Reader(protocol="msgpack")
             newval = reader.read(io)
@@ -82,16 +83,16 @@ def exemplar(name, val):
             self.assertEqual(val, newval)
 
         def assertEqual(self, val, data):
-            try:
-                return unittest.TestCase.assertEqual(self, val, data)
-            except AssertionError as e:
-                if not False in [isnan(v) and isnan(d) or isnan(v) == isnan(d)
-                                 for v, d in zip (val, data)]:
-                    return unittest.TestCase.assertEqual(self, filter(lambda x: not isnan(x), val),
-                                                               filter(lambda x: not isnan(x), data))
-                else:
-                    e.args += (name, "failed")
-                    raise
+          if type(val) is float or type(data) is float:
+              if type(val) is float and type(data) is float and isnan(val) and isnan(data):
+                  return true
+              else:
+                  unittest.TestCase.assertAlmostEqual(self, val, data, places=7, msg=name)
+          elif type(val) in [list, tuple]:
+              for v, d in zip(val, data):
+                  self.assertEqual(v, d)
+          else:
+            unittest.TestCase.assertEqual(self,  val, data, name + " " +  str(val) + " vs " + str(data))
 
     globals()["test_" + name + "_json"] = ExemplarTest
 
@@ -111,6 +112,7 @@ UUIDS = (UUID('5a2cbea3-e8c6-428b-b525-21239370dd55'),
          UUID('d1dc64fa-da79-444b-9fa4-d4412f427289'),
          UUID('501a978e-3a3e-4060-b3be-1cf2bd4b1a38'),
          UUID('b3ba141a-a776-48e4-9fae-a28ea8571f58'))
+
 
 URIS = (
   URI(u'http://example.com'),
@@ -135,6 +137,8 @@ MAP_MIXED = frozendict({Keyword("a"): 1,
 
 MAP_NESTED = frozendict({Keyword("simple"): MAP_SIMPLE,
                          Keyword("mixed"): MAP_MIXED})
+
+exemplar("uris", URIS)
 
 exemplar("nil", None)
 exemplar("true", true)
@@ -180,11 +184,11 @@ exemplar("map_nested", MAP_NESTED)
 exemplar("map_string_keys", {"first": 1, "second": 2, "third": 3})
 exemplar("map_numeric_keys", {1: "one", 2: "two"})
 exemplar("map_vector_keys", frozendict([[(1, 1), "one"],
-                                        [(2, 2), "two"]]))
+                                         [(2, 2), "two"]]))
 
 
 exemplar("map_unrecognized_vals", {Keyword("key"): "~Unrecognized"})
-#exemplar("map_unrecognized_keys", )
+ #exemplar("map_unrecognized_keys", )
 exemplar("vector_unrecognized_vals", ("~Unrecognized",))
 exemplar("vector_1935_keywords_repeated_twice", tuple(array_of_symbools(1935, 1935*2)))
 exemplar("vector_1936_keywords_repeated_twice", tuple(array_of_symbools(1936, 1936*2)))
@@ -216,7 +220,7 @@ exemplar("maps_four_char_string_keys", ({"aaaa": 1, "bbbb": 2},
                                         {"aaaa": 5, "bbbb": 6}))
 
 exemplar("maps_unrecognized_keys", (TaggedValue("abcde", Keyword("anything")),
-                                   TaggedValue("fghij", Keyword("anything-else")),))
+                                    TaggedValue("fghij", Keyword("anything-else")),))
 
 exemplar("vector_special_numbers", (float("nan"), float("inf"), float("-inf")))
 
@@ -226,7 +230,8 @@ exemplar("vector_special_numbers", (float("nan"), float("inf"), float("-inf")))
 def make_hash_exemplar(n):
     exemplar("map_%s_nested" % (n,), {Keyword("f"): hash_of_size(n),
                                       Keyword("s"): hash_of_size(n)})
-map(make_hash_exemplar, [10, 1935, 1936, 1937])
+for n in [10, 1935, 1936, 1937]:
+    make_hash_exemplar(n)
 
 if __name__=='__main__':
     unittest.main()
@@ -236,4 +241,3 @@ if __name__=='__main__':
     #p = pstats.Stats('exemptests')
     #p.sort_stats('time')
     #p.print_stats()
-
