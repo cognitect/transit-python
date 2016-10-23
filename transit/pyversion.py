@@ -18,36 +18,36 @@ PY3 = sys.version_info[0] == 3
 PY2 = sys.version_info[0] == 2
 
 if PY3:
-  string_types = (str,)
-  unicode_type = str
-  unicode_f = chr
+    string_types = (str,)
+    unicode_type = str
+    unicode_f = chr
 else:
-  string_types = (str, unicode)
-  unicode_type = unicode
-  unicode_f = unichr
+    string_types = (str, unicode)
+    unicode_type = unicode
+    unicode_f = unichr
 
 if PY3:
-  long_type = int
-  int_type = int
-  int_types = (int,)
-  number_types = (int, float)
+    long_type = int
+    int_type = int
+    int_types = (int,)
+    number_types = (int, float)
 else:
-  long_type = long
-  int_type = int
-  int_types = (long, int)
-  number_types = (long, int, float)
+    long_type = long
+    int_type = int
+    int_types = (long, int)
+    number_types = (long, int, float)
 
 def isnumber_type(t):
     return t in number_types
 
 if PY3:
-  imap = map
-  izip = zip
-  def iteritems(d):
-      return d.items()
+    imap = map
+    izip = zip
+    def iteritems(d):
+        return d.items()
 else:
-  import itertools
-  imap = itertools.imap
-  izip = itertools.izip
-  def iteritems(d):
-      return d.iteritems()
+    import itertools
+    imap = itertools.imap
+    izip = itertools.izip
+    def iteritems(d):
+        return d.iteritems()

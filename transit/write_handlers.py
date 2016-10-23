@@ -89,9 +89,9 @@ class BigIntHandler(object):
 class Python3IntHandler(object):
     @staticmethod
     def tag(n):
-      if n < MAX_INT and n > MIN_INT:
-        return "i"
-      return "n"
+        if n < MAX_INT and n > MIN_INT:
+          return "i"
+        return "n"
 
     @staticmethod
     def rep(n):
@@ -346,10 +346,10 @@ class WriteHandler(ClassDict):
         self[dict] = MapHandler
 
         if pyversion.PY3:
-          self[int] = Python3IntHandler
+            self[int] = Python3IntHandler
         else:
-          self[int] = IntHandler
-          self[long] = BigIntHandler
+            self[int] = IntHandler
+            self[long] = BigIntHandler
 
         self[float] = FloatHandler
         self[Keyword] = KeywordHandler
