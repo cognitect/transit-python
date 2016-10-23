@@ -17,8 +17,7 @@ import unittest
 # then import transit stuff
 from transit.reader import Reader, JsonUnmarshaler, MsgPackUnmarshaler
 from transit.writer import Writer
-from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue
-from transit.transit_types import Link, true, false
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, true, false
 from io import StringIO, BytesIO
 from transit.helpers import mapcat
 from helpers import ints_centered_on, hash_of_size, array_of_symbools
