@@ -92,10 +92,7 @@ class BooleanTest(unittest.TestCase):
     """
     def test_write_bool(self):
         for protocol in ("json", "json_verbose", "msgpack"):
-            if protocol is "msgpack":
-              io = BytesIO()
-            else:
-              io = StringIO()
+            io = BytesIO() if  protocol is "msgpack" else String()
             w = Writer(io, protocol)
             w.write((True, False))
             r = Reader(protocol)

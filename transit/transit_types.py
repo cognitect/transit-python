@@ -13,7 +13,7 @@
 ## limitations under the License.
 
 from collections import Mapping, Hashable
-from transit.pyversion import isstring, unicode_f, unicode_type
+from transit.pyversion import string_types, unicode_f, unicode_type
 
 
 class Named(object):
@@ -39,7 +39,7 @@ class Named(object):
 
 class Keyword(Named):
     def __init__(self, value):
-        assert isstring(value)
+        assert isinstance(value, string_types)
         self.str = value
         self.hv = value.__hash__()
 
@@ -64,7 +64,7 @@ class Keyword(Named):
 
 class Symbol(Named):
     def __init__(self, value):
-        assert isstring(value)
+        assert isinstance(value, string_types)
         self.str = value
         self.hv = value.__hash__()
 

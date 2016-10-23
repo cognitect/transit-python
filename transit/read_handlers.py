@@ -78,7 +78,7 @@ class UuidHandler(object):
     @staticmethod
     def from_rep(u):
         """Given a string, return a UUID object."""
-        if pyversion.isstring(u):
+        if isinstance(u, pyversion.string_types):
             return uuid.UUID(u)
 
         # hack to remove signs
@@ -97,7 +97,7 @@ class UriHandler(object):
 class DateHandler(object):
     @staticmethod
     def from_rep(d):
-        if pyversion.isint(d):
+        if isinstance(d, pyversion.int_types):
             return DateHandler._convert_timestamp(d)
         if "T" in d:
             return dateutil.parser.parse(d)
