@@ -19,8 +19,9 @@ from transit.reader import Reader
 from transit.writer import Writer
 from transit.class_hash import ClassDict
 from transit.transit_types import Symbol, frozendict, true, false, Keyword, Named
+from transit.pyversion import unicode_type
 from decimal import Decimal
-from StringIO import StringIO
+from io import BytesIO, StringIO
 
 class RegressionBaseTest(unittest.TestCase):
     pass
@@ -78,9 +79,9 @@ def json_int_boundary(value, expected_type):
     globals()["test_json_int_boundary_" + str(value)] = JsonIntBoundaryTest
 
 json_int_boundary(2**53-1, int)
-json_int_boundary(2**53, unicode)
+json_int_boundary(2**53, unicode_type)
 json_int_boundary(-2**53+1, int)
-json_int_boundary(-2**53, unicode)
+json_int_boundary(-2**53, unicode_type)
 
 class BooleanTest(unittest.TestCase):
     """Even though we're roundtripping transit_types.true and
@@ -91,7 +92,7 @@ class BooleanTest(unittest.TestCase):
     """
     def test_write_bool(self):
         for protocol in ("json", "json_verbose", "msgpack"):
-            io = StringIO()
+            io = BytesIO() if  protocol is "msgpack" else String()
             w = Writer(io, protocol)
             w.write((True, False))
             r = Reader(protocol)

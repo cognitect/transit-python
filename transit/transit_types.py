@@ -13,6 +13,7 @@
 ## limitations under the License.
 
 from collections import Mapping, Hashable
+from transit.pyversion import string_types, unicode_f, unicode_type
 
 
 class Named(object):
@@ -38,7 +39,7 @@ class Named(object):
 
 class Keyword(Named):
     def __init__(self, value):
-        assert isinstance(value, basestring)
+        assert isinstance(value, string_types)
         self.str = value
         self.hv = value.__hash__()
 
@@ -63,7 +64,7 @@ class Keyword(Named):
 
 class Symbol(Named):
     def __init__(self, value):
-        assert isinstance(value, basestring)
+        assert isinstance(value, string_types)
         self.str = value
         self.hv = value.__hash__()
 
@@ -157,7 +158,8 @@ class List(TaggedValue):
 
 class URI(TaggedValue):
     def __init__(self, rep):
-        TaggedValue.__init__(self, "uri", rep)
+        # works p3 TaggedValue.__init__(self, "uri", (unicode(rep)))
+        TaggedValue.__init__(self, "uri", (rep))
 
 
 class frozendict(Mapping, Hashable):
@@ -252,6 +254,9 @@ class Boolean(object):
         self.v = True if name == "true" else False
         self.name = name
 
+    def __bool__(self):
+        return self.v
+
     def __nonzero__(self):
         return self.v
 
@@ -262,5 +267,6 @@ class Boolean(object):
         return self.name
 
 # lowercase rep matches java/clojure
+
 false = Boolean("false")
 true = Boolean("true")

@@ -15,11 +15,15 @@
 import uuid
 import datetime
 import struct
-from class_hash import ClassDict
-from transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
+from transit import pyversion
+from transit.class_hash import ClassDict
+from transit.transit_types import Keyword, Symbol, URI, frozendict, TaggedValue, Link, Boolean
 from decimal import Decimal
 from dateutil import tz
 from math import isnan
+
+MAX_INT = 2**63 - 1
+MIN_INT = -2**63
 
 ## This file contains Write Handlers - all the top-level objects used when
 ## writing Transit data.  These object must all be immutable and pickleable.
@@ -77,6 +81,21 @@ class BigIntHandler(object):
     @staticmethod
     def rep(n):
         return str(n)
+
+    @staticmethod
+    def string_rep(n):
+        return str(n)
+
+class Python3IntHandler(object):
+    @staticmethod
+    def tag(n):
+        if n < MAX_INT and n > MIN_INT:
+          return "i"
+        return "n"
+
+    @staticmethod
+    def rep(n):
+        return n
 
     @staticmethod
     def string_rep(n):
@@ -321,13 +340,18 @@ class WriteHandler(ClassDict):
         self[bool] = BooleanHandler
         self[Boolean] = BooleanHandler
         self[str] = StringHandler
-        self[unicode] = StringHandler
+        self[pyversion.unicode_type] = StringHandler
         self[list] = ArrayHandler
         self[tuple] = ArrayHandler
         self[dict] = MapHandler
-        self[int] = IntHandler
+
+        if pyversion.PY3:
+            self[int] = Python3IntHandler
+        else:
+            self[int] = IntHandler
+            self[long] = BigIntHandler
+
         self[float] = FloatHandler
-        self[long] = BigIntHandler
         self[Keyword] = KeywordHandler
         self[Symbol] = SymbolHandler
         self[uuid.UUID] = UuidHandler
