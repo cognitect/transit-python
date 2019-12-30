@@ -132,13 +132,10 @@ class Marshaler(object):
         return self.emit_string(ESC, "?", b, True, cache) if as_map_key else self.emit_object(b)
 
     def emit_int(self, tag, i, rep, as_map_key, cache):
-        if isinstance(rep, int):
-          if i <= self.opts["max_int"] and i >= self.opts["min_int"]:
+        if isinstance(rep, int) and i <= self.opts["max_int"] and i >= self.opts["min_int"]:
             return self.emit_object(i, as_map_key)
-          else:
-            return self.emit_string(ESC, tag, str(rep), as_map_key, cache)
         else:
-            return self.emit_string(ESC, tag, rep, as_map_key, cache)
+            return self.emit_string(ESC, tag, str(rep), as_map_key, cache)
 
     def emit_double(self, d, as_map_key, cache):
         return self.emit_string(ESC, "d", d, True, cache) if as_map_key else self.emit_object(d)
