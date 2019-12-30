@@ -119,7 +119,7 @@ class Marshaler(object):
         return True
 
     def emit_nil(self, _, as_map_key, cache):
-        return self.emit_string(ESC, "_", None, True, cache) if as_map_key else self.emit_object(None)
+        return self.emit_string(ESC, "_", "", True, cache) if as_map_key else self.emit_object(None)
 
     def emit_string(self, prefix, tag, string, as_map_key, cache):
         encoded = cache.encode(str(prefix)+tag+string, as_map_key)
