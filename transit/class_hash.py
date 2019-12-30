@@ -13,10 +13,10 @@
 ## limitations under the License.
 
 # Hash that looks up class keys with inheritance.
-import collections
+from collections.abc import MutableMapping
 
 
-class ClassDict(collections.MutableMapping):
+class ClassDict(MutableMapping):
     """A dictionary that looks up class/type keys with inheritance."""
 
     def __init__(self, *args, **kwargs):
