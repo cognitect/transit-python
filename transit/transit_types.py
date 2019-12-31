@@ -11,8 +11,10 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+from transit import pyversion
+Mapping = pyversion.abc.Mapping
+Hashable = pyversion.abc.Hashable
 
-from collections.abc import Mapping, Hashable
 from transit.pyversion import string_types, unicode_f, unicode_type
 
 
