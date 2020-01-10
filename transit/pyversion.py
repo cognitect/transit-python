@@ -18,6 +18,13 @@ PY3 = sys.version_info[0] == 3
 PY2 = sys.version_info[0] == 2
 
 if PY3:
+    import collections.abc
+    abc = collections.abc
+else:
+    import collections
+    abc = collections
+
+if PY3:
     string_types = (str,)
     unicode_type = str
     unicode_f = chr

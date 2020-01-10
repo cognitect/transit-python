@@ -11,12 +11,11 @@
 ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
+from transit import pyversion
+MutableMapping = pyversion.abc.MutableMapping
 
-# Hash that looks up class keys with inheritance.
-import collections
 
-
-class ClassDict(collections.MutableMapping):
+class ClassDict(MutableMapping):
     """A dictionary that looks up class/type keys with inheritance."""
 
     def __init__(self, *args, **kwargs):
