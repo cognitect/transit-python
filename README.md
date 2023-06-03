@@ -1,3 +1,5 @@
+# This library is no longer maintained. An unaffiliated fork exists at https://github.com/3wnbr1/transit-python2.
+
 transit-python
 ==============
 
